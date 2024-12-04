@@ -1,4 +1,4 @@
-# BST260: Introduction to Data Science
+# BST260: Introduction to Data Science: Final Project
 
 ## Project Overview
 

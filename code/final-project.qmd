@@ -1,0 +1,43 @@
+---
+title: "BST 260 Final Project - Analysis"
+author: "Weixuan Dong, Danny Lee, Bruce Zhou"
+format:
+  html:
+    toc: TRUE
+    toc_float: TRUE
+    smooth-scroll: TRUE
+---
+
+# Load libraries
+
+```{r}
+require(tidyverse)
+require(dplyr)
+require(lubridate)
+```
+
+# Load data
+
+```{r}
+load('../data/dat.rda')
+```
+
+# Analyses
+
+## Analysis 1: Trend plot
+
+The figure below displays the COVID-19 cases, deaths, and hospitalization rate per 100,000 people in each region of the US from 2020 to 2024.
+
+```{r trend plots}
+# Define custom labels for the facets
+dat.labs <- c("cases" = "Cases", "deaths" = "Deaths", "hosp" = "Hospitalizations")
+
+# Apply to the ggplot code
+dat %>%
+  pivot_longer(cols = c("cases", "deaths", "hosp"), names_to = "Type", values_to = "Count") %>%
+  mutate(rate = Count * 100000 / population) %>%
+  ggplot(aes(x = date, y = rate, group = region_name, color = region_name)) +
+  geom_line() +
+  facet_wrap(~Type, ncol = 1, scales = "free", labeller = labeller(Type = as_labeller(dat.labs))) +
+  labs(x = "Date", y = "Rate per 100,000 people", color = "Region")
+```
