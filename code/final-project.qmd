@@ -224,3 +224,97 @@ allWaves %>%
 ```
 
 We also compared the average performance of each state across all 3 waves.
+
+```{r}
+# Calculate CFR for each wave
+wave1_cfr <- dat |>
+  filter(date >= make_date(2020, 10, 1), date <= make_date(2021, 4, 1)) |>
+  group_by(state) |>
+  summarise(
+    cum_cases = sum(cases, na.rm = TRUE),
+    cum_deaths = sum(deaths, na.rm = TRUE),
+    cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
+  )
+
+wave2_cfr <- dat |>
+  filter(date >= make_date(2021, 7, 1), date <= make_date(2021, 12, 1)) |>
+  group_by(state) |>
+  summarise(
+    cum_cases = sum(cases, na.rm = TRUE),
+    cum_deaths = sum(deaths, na.rm = TRUE),
+    cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
+  )
+
+wave3_cfr <- dat |>
+  filter(date >= make_date(2021, 12, 2), date <= make_date(2022, 4, 1)) |>
+  group_by(state) |>
+  summarise(
+    cum_cases = sum(cases, na.rm = TRUE),
+    cum_deaths = sum(deaths, na.rm = TRUE),
+    cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
+  )
+
+# Combine CFR data
+wave1_cfr$wave <- "Wave 1"
+wave2_cfr$wave <- "Wave 2"
+wave3_cfr$wave <- "Wave 3"
+cfr_data <- bind_rows(wave1_cfr, wave2_cfr, wave3_cfr)
+
+# Visualize CFR trends
+cfr_data |>
+  ggplot(aes(x = wave, y = cfr, fill = wave)) +
+  geom_boxplot(outlier.shape = NA) +
+  theme_minimal(base_size = 14) +
+  labs(
+    x = "Wave",
+    y = "Case Fatality Rate (CFR) (%)",
+    title = "Case Fatality Rate by Wave",
+    subtitle = "Comparison of CFR across 3 Waves"
+  )
+```
+To evaluate virulence, we calculate Case Fatality Rate (CFR) across waves. CFR is calculated as $CFR = \frac{Cumulative Deaths}{Cumulative Cases} \cdot 100$. 
+We can clearly see from the plot that COVID-19 became less virulent across the three waves, as evidenced by the declining CFR from Wave 1 to Wave 3. While the initial wave saw a relatively high median CFR around 1.5%, this dropped progressively in subsequent waves, reaching below 1% by Wave 3. The reduction in fatality rates is likely due to increased vaccination coverage, improved medical responses, and healthcare system adaptations.
+
+```{r}
+# Aggregate data to weekly level
+weekly_data <- dat |>
+  mutate(week = floor_date(date, "week")) |>
+  group_by(state, week) |>
+  summarise(
+    observed_deaths = sum(deaths, na.rm = TRUE),
+    covid_deaths = sum(deaths, na.rm = TRUE) # Assuming "deaths" include COVID deaths
+  )
+
+# Use 2024 data to calculate the baseline expected deaths
+baseline <- weekly_data |>
+  filter(week >= make_date(2024, 1, 1), week <= make_date(2024, 12, 31)) |>
+  group_by(state) |>
+  summarise(expected = mean(observed_deaths, na.rm = TRUE))
+
+# Merge baseline expected deaths into the full dataset
+excess_mortality <- weekly_data |>
+  left_join(baseline, by = "state") |>
+  mutate(
+    excess_deaths = observed_deaths - expected,
+    covid_excess_ratio = ifelse(excess_deaths > 0, covid_deaths / excess_deaths, NA)
+  )
+
+# Visualize excess mortality by week and state
+excess_mortality |>
+  ggplot(aes(x = week, y = excess_deaths, color = state)) +
+  geom_line() +
+  theme_minimal(base_size = 14) +
+  labs(
+    x = "Week",
+    y = "Excess Mortality",
+    title = "Weekly Excess Mortality by State",
+    subtitle = "Comparison of Excess Mortality and COVID-19 Deaths"
+  )
+
+# Save results
+write_csv(excess_mortality, file = "../output/excess_mortality.csv")
+```
+
+We used the observed weekly deaths from 2024 to calculate the average weekly deaths for each state. This serves as a proxy for "expected" deaths in a stable post-pandemic period. Then we compared the observed deaths during the pandemic to the expected deaths derived from 2024 data by plotting the excess mortality.
+
+According to the line plot showing the weekly trends in excess mortality across states, we can see that there has been excess deaths during 2020 - 2022, where COVID-19 was severely affecting the death rate. Thus, we can conclude that COVID-19 deaths explain the excess mortality fairly well, assuming that 2024 (post-pandemic baseline) represents a "normalized" year.
