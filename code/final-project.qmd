@@ -14,12 +14,15 @@ format:
 require(tidyverse)
 require(dplyr)
 require(lubridate)
+require(knitr)
+require(ggsignif)
 ```
 
 # Load data
 
 ```{r}
 load('../data/dat.rda')
+write_csv(dat, file = "../output/dat.csv")
 ```
 
 # Analyses
@@ -181,9 +184,9 @@ wave3dat <- dat %>%
     death_rate = cum_death * 100000 / population
   )
 
-write_csv(wave1dat,file = "../output/wave1dat.csv")
-write_csv(wave2dat,file = "../output/wave2dat.csv")
-write_csv(wave3dat,file = "../output/wave3dat.csv")
+# write_csv(wave1dat,file = "../output/wave1dat.csv")
+# write_csv(wave2dat,file = "../output/wave2dat.csv")
+# write_csv(wave3dat,file = "../output/wave3dat.csv")
 ```
 
 From Oct 1st 2020 to Apr 1st 2021, overall this wave was arguably the most severe wave among all 3. The highest death rate per 100,000 people was reported in South Dakota (SD), with an average of 188.91 deaths among 100,000 people. Following South Dakota were North Dakota (177.97), Oklahoma (175.32), and Arkansas (150.17). There were also states which managed to contain the death rate below 50 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 9.12 deaths on average per 100,000 people, followed by Vermont (11.18), Alaska (26.48), Washington (39.58), Oregon (42.04), Puerto Rico (43.66), and Maine (47.19).
@@ -223,4 +226,104 @@ allWaves %>%
   )
 ```
 
-We also compared the average performance of each state across all 3 waves.
+We also compared the performance of each state across all 3 waves by taking the average of their death rate per 100,000 people. Results show that Oklahoma had the highest average death rate per 100,000, amounting to 120.00 deaths per 100,000 people, followed by West Virginia (115.33), Mississippi (109), Kentucky (107.42), Tennessee (106.92). There were also states which kept a relatively low death rate across waves. Namely, Vermont had an average death rate of only 17.81 per 100,000. Similarly, Hawaii had an average of 22.24 per 100,000, followed by Puerto Rico (30.94) New York (37.10), and Washington (40.07).
+
+Generally, it can be seen that states in the northeastern part or the west coast of the US performed better than those in the middle or west US. It can also be observed that less populated states such as Vermont and Washington had lower death rates. But exceptions are also evident, for New York is rather populated but it was among the states with the lowest average death rates.
+
+## COVID-19 became less or more virulent across different periods
+
+To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: cases fatality rate (CFR), hospitalization rate (HR), and death per population (DP). The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with figures and visualizations
+
+### Distribution of the rates
+
+```{r}
+pooled.dat <- dat %>%
+  mutate(Wave = case_when(
+    date >= make_date(2020, 10, 1) & date <= make_date(2021, 4, 1) ~ "Wave 1",
+    date >= make_date(2021, 7, 1) & date <= make_date(2021, 12, 1) ~ "Wave 2",
+    date >= make_date(2021, 12, 2) & date <= make_date(2022, 4, 1) ~ "Wave 3",
+    .default = NA
+  )) %>%
+  filter(!is.na(Wave)) %>%
+  group_by(Wave, state) %>%
+  summarise("Total Cases" = sum(cases, na.rm = T),
+            "Total Deaths" = sum(deaths, na.rm = T),
+            "Total Hospitalization" = sum(hosp, na.rm = T),
+            "Total Population" = mean(population, na.rm = T)) %>%
+  ungroup()
+
+metric.dat <- pooled.dat %>%
+  mutate(CFR = `Total Deaths` * 100000 / `Total Cases`,
+         HR = `Total Hospitalization` * 100000 / `Total Cases`,
+         DP = `Total Deaths` * 100000 / `Total Population`)
+
+
+metric.dat %>%
+  ggplot(aes(x = Wave, y = CFR, fill = Wave)) +
+  geom_boxplot() +
+  geom_signif(
+    comparisons = list(c("Wave 1", "Wave 2"),
+                       c("Wave 1", "Wave 3"),
+                       c("Wave 2", "Wave 3")),
+    y_position = c(2500, 2700, 3000)
+  )
+
+kruskal.test(CFR ~ Wave, data = metric.dat)
+pairwise.wilcox.test(metric.dat$CFR, metric.dat$Wave,
+                 p.adjust.method = "BH")
+```
+
+
+```{r}
+# Define custom labels for the facets
+dat.labs <- c("CFR" = "Cases Fatality Rate", "HR" = "Hospitalization Rate", "DP" = "Death per Population")
+
+pooled.dat %>%
+  group_by(Wave) %>%
+  summarise("Total Cases" = sum(`Total Cases`, na.rm = T),
+            "Total Deaths" = sum(`Total Deaths`, na.rm = T),
+            "Total Hospitalization" = sum(`Total Hospitalization`, na.rm = T),
+            "Total Population" = sum(`Total Population`, na.rm = T)) %>%
+  ungroup() %>%
+  mutate(CFR = `Total Deaths` * 100000 / `Total Cases`,
+         HR = `Total Hospitalization` * 100000 / `Total Cases`,
+         DP = `Total Deaths` * 100000 / `Total Population`) %>%
+  kable("simple")
+
+pooled.dat %>%
+  group_by(Wave) %>%
+  summarise("Total Cases" = sum(`Total Cases`, na.rm = T),
+            "Total Deaths" = sum(`Total Deaths`, na.rm = T),
+            "Total Hospitalization" = sum(`Total Hospitalization`, na.rm = T),
+            "Total Population" = sum(`Total Population`, na.rm = T)) %>%
+  ungroup() %>%
+  mutate(CFR = `Total Deaths` * 100000 / `Total Cases`,
+         HR = `Total Hospitalization` * 100000 / `Total Cases`,
+         DP = `Total Deaths` * 100000 / `Total Population`) %>%
+  pivot_longer(
+    cols = c(CFR, HR, DP),
+    names_to = "metric",
+    values_to = "rate"
+  ) %>%
+  ggplot(aes(x = Wave, y = rate, fill = metric)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(
+    ~metric, 
+    scales = "free", 
+    labeller = labeller(metric = dat.labs)
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  theme_minimal() +
+  theme(
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 12, face = "bold")
+  ) +
+  labs(
+    title = "COVID-19 Metrics by Wave",
+    x = "Wave",
+    y = "Rate (per 100,000)"
+  )
+```
+
