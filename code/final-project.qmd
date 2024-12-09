@@ -21,8 +21,8 @@ require(ggsignif)
 # Load data
 
 ```{r}
+rm(list = ls())
 load('../data/dat.rda')
-write_csv(dat, file = "../output/dat.csv")
 ```
 
 # Analyses
@@ -232,11 +232,11 @@ Generally, it can be seen that states in the northeastern part or the west coast
 
 ## COVID-19 became less or more virulent across different periods
 
-To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: cases fatality rate (CFR), hospitalization rate (HR), and death per population (DP). The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with figures and visualizations
+To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: **cases fatality rate (CFR)**, **hospitalization rate (HR)**, and **death per population (DP)**. The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with figures and visualizations.
 
-### Distribution of the rates
+### Pair-wise comparison of the key metrics
 
-```{r}
+```{r warning=FALSE}
 pooled.dat <- dat %>%
   mutate(Wave = case_when(
     date >= make_date(2020, 10, 1) & date <= make_date(2021, 4, 1) ~ "Wave 1",
@@ -249,7 +249,7 @@ pooled.dat <- dat %>%
   summarise("Total Cases" = sum(cases, na.rm = T),
             "Total Deaths" = sum(deaths, na.rm = T),
             "Total Hospitalization" = sum(hosp, na.rm = T),
-            "Total Population" = mean(population, na.rm = T)) %>%
+            "Total Population" = mean(population, na.rm = T), .groups = "drop") %>%
   ungroup()
 
 metric.dat <- pooled.dat %>%
@@ -262,17 +262,125 @@ metric.dat %>%
   ggplot(aes(x = Wave, y = CFR, fill = Wave)) +
   geom_boxplot() +
   geom_signif(
-    comparisons = list(c("Wave 1", "Wave 2"),
-                       c("Wave 1", "Wave 3"),
-                       c("Wave 2", "Wave 3")),
-    y_position = c(2500, 2700, 3000)
+    comparisons = list(
+      c("Wave 1", "Wave 2"),
+      c("Wave 1", "Wave 3"),
+      c("Wave 2", "Wave 3")
+    ),
+    y_position = c(2500, 2700, 3000), # Adjust for clear separation
+    test = wilcox.test,
+    map_signif_level = function(p) {
+      if (p >= 0.001) {
+        sprintf("p-value = %.3f", p)
+      } else {
+        "p < 0.001"
+      }
+    }
+  ) +
+  theme_minimal(base_size = 14) + # Slightly increase the base font size
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+  ) +
+  labs(
+    title = "Case Fatality Rate (CFR) Across Waves",
+    x = "Wave",
+    y = "Case Fatality Rate (per 100,000)"
+  ) +
+  annotate(
+    "text",
+    x = 0, y = 3200, # Adjust position based on your data range
+    label = "Test: Wilcoxon Rank-Sum Test",
+    hjust = 0, size = 3, color = "black", fontface = "italic"
   )
 
-kruskal.test(CFR ~ Wave, data = metric.dat)
-pairwise.wilcox.test(metric.dat$CFR, metric.dat$Wave,
-                 p.adjust.method = "BH")
+metric.dat %>%
+  ggplot(aes(x = Wave, y = HR, fill = Wave)) +
+  geom_boxplot() +
+  geom_signif(
+    comparisons = list(
+      c("Wave 1", "Wave 2"),
+      c("Wave 1", "Wave 3"),
+      c("Wave 2", "Wave 3")
+    ),
+    y_position = c(16000, 18000, 20000), # Adjust for clear separation
+    test = wilcox.test,
+    map_signif_level = function(p) {
+      if (p >= 0.001) {
+        sprintf("p-value = %.3f", p)
+      } else {
+        "p < 0.001"
+      }
+    }
+  ) +
+  theme_minimal(base_size = 14) + # Slightly increase the base font size
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+  ) +
+  labs(
+    title = "Hospitalization Rate (HR) Across Waves",
+    x = "Wave",
+    y = "Hospitalization Rate (per 100,000)"
+  ) +
+  annotate(
+    "text",
+    x = 0, y = 21000, # Adjust position based on your data range
+    label = "Test: Wilcoxon Rank-Sum Test",
+    hjust = 0, size = 3, color = "black", fontface = "italic"
+  )
+
+metric.dat %>%
+  ggplot(aes(x = Wave, y = DP, fill = Wave)) +
+  geom_boxplot() +
+  geom_signif(
+    comparisons = list(
+      c("Wave 1", "Wave 2"),
+      c("Wave 1", "Wave 3"),
+      c("Wave 2", "Wave 3")
+    ),
+    y_position = c(200, 220, 240), # Adjust for clear separation
+    test = wilcox.test,
+    map_signif_level = function(p) {
+      if (p >= 0.001) {
+        sprintf("p-value = %.3f", p)
+      } else {
+        "p < 0.001"
+      }
+    }
+  ) +
+  theme_minimal(base_size = 14) + # Slightly increase the base font size
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+  ) +
+  labs(
+    title = "Death per Population (DP) Across Waves",
+    x = "Wave",
+    y = "Death per Population (per 100,000)"
+  ) +
+  annotate(
+    "text",
+    x = 0, y = 250, # Adjust position based on your data range
+    label = "Test: Wilcoxon Rank-Sum Test",
+    hjust = 0, size = 3, color = "black", fontface = "italic"
+  )
+
+# kruskal.test(CFR ~ Wave, data = metric.dat)
+# pairwise.wilcox.test(metric.dat$CFR, metric.dat$Wave,
+#                  p.adjust.method = "BH")
 ```
 
+### Aggregated Metrics Across Wave
 
 ```{r}
 # Define custom labels for the facets
@@ -308,7 +416,7 @@ pooled.dat %>%
   ggplot(aes(x = Wave, y = rate, fill = metric)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(
-    ~metric, 
+    ~ metric, 
     scales = "free", 
     labeller = labeller(metric = dat.labs)
   ) +
@@ -321,7 +429,7 @@ pooled.dat %>%
     axis.title = element_text(size = 12, face = "bold")
   ) +
   labs(
-    title = "COVID-19 Metrics by Wave",
+    title = "COVID-19 Aggregated Virulence Metrics by Wave",
     x = "Wave",
     y = "Rate (per 100,000)"
   )
@@ -379,6 +487,8 @@ cfr_data |>
 
 To evaluate virulence, we calculate Case Fatality Rate (CFR) across waves. CFR is calculated as $CFR = \frac{Cumulative Deaths}{Cumulative Cases} \cdot 100$. 
 We can clearly see from the plot that COVID-19 became less virulent across the three waves, as evidenced by the declining CFR from Wave 1 to Wave 3. While the initial wave saw a relatively high median CFR around 1.5%, this dropped progressively in subsequent waves, reaching below 1% by Wave 3. The reduction in fatality rates is likely due to increased vaccination coverage, improved medical responses, and healthcare system adaptations.
+
+## Estimate excess mortality for each week for each state.
 
 ```{r}
 # Aggregate data to weekly level
