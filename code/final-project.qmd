@@ -23,6 +23,7 @@ require(ggsignif)
 ```{r}
 rm(list = ls())
 load('../data/dat.rda')
+load('../data/deaths_all.rda')
 ```
 
 # Analyses
@@ -488,48 +489,220 @@ cfr_data |>
 To evaluate virulence, we calculate Case Fatality Rate (CFR) across waves. CFR is calculated as $CFR = \frac{Cumulative Deaths}{Cumulative Cases} \cdot 100$. 
 We can clearly see from the plot that COVID-19 became less virulent across the three waves, as evidenced by the declining CFR from Wave 1 to Wave 3. While the initial wave saw a relatively high median CFR around 1.5%, this dropped progressively in subsequent waves, reaching below 1% by Wave 3. The reduction in fatality rates is likely due to increased vaccination coverage, improved medical responses, and healthcare system adaptations.
 
-## Estimate excess mortality for each week for each state.
+## Q4: Estimate excess mortality for each week for each state. Check if excess mortality can be explained by COVID-19
 
 ```{r}
-# Aggregate data to weekly level
-weekly_data <- dat |>
-  mutate(week = floor_date(date, "week")) |>
-  group_by(state, week) |>
-  summarise(
-    observed_deaths = sum(deaths, na.rm = TRUE),
-    covid_deaths = sum(deaths, na.rm = TRUE) # Assuming "deaths" include COVID deaths
+library(tidyr)
+library(purrr)
+library(broom)
+library(ggplot2)
+
+dat <- dat %>% 
+  rename(covid_deaths = deaths) # renaming for clarity
+
+##############################
+# 1. Prepare historical data (2015-2019)
+##############################
+
+# Filter historical period
+historical_data <- deaths %>%
+  filter(mmwr_year >= 2015 & mmwr_year <= 2019) 
+
+##############################
+# 2. Fit Linear Models to Estimate Baseline
+##############################
+
+# We'll fit a simple linear model per state predicting all_cause_deaths
+# from mmwr_year and mmwr_week. You could add more complex seasonality terms,
+# such as using sin/cos of week or factorized weeks, but here's a simple approach.
+
+models <- historical_data %>%
+  group_by(state_name) %>%
+  do(
+    model = lm(all_cause_deaths ~ mmwr_year + mmwr_week, data = .)
   )
 
-# Use 2024 data to calculate the baseline expected deaths
-baseline <- weekly_data |>
-  filter(week >= make_date(2024, 1, 1), week <= make_date(2024, 12, 31)) |>
-  group_by(state) |>
-  summarise(expected = mean(observed_deaths, na.rm = TRUE))
+##############################
+# 3. Predicting Expected Deaths for 2020–2024
+##############################
 
-# Merge baseline expected deaths into the full dataset
-excess_mortality <- weekly_data |>
-  left_join(baseline, by = "state") |>
-  mutate(
-    excess_deaths = observed_deaths - expected,
-    covid_excess_ratio = ifelse(excess_deaths > 0, covid_deaths / excess_deaths, NA)
-  )
+# Filter data for prediction period (2020+)
+future_data <- deaths %>%
+  filter(mmwr_year >= 2020)
 
-# Visualize excess mortality by week and state
-excess_mortality |>
-  ggplot(aes(x = week, y = excess_deaths, color = state)) +
-  geom_line() +
-  theme_minimal(base_size = 14) +
-  labs(
-    x = "Week",
-    y = "Excess Mortality",
-    title = "Weekly Excess Mortality by State",
-    subtitle = "Comparison of Excess Mortality and COVID-19 Deaths"
-  )
+# Generate predictions by applying each state's model to its future_data
+future_predictions <- future_data %>%
+  group_by(state_name) %>%
+  nest() %>%
+  left_join(models, by = "state_name") %>%
+  mutate(predictions = map2(data, model, ~augment(.y, newdata = .x))) %>%
+  unnest(predictions) %>%
+  ungroup()
 
-# Save results
-write_csv(excess_mortality, file = "../output/excess_mortality.csv")
+# Now `future_predictions` contains:
+# - all original columns from `future_data`
+# - .fitted: predicted (expected) deaths
+# - .se.fit, .resid, etc., if needed
+
+##############################
+# 4. Calculate Excess Mortality
+##############################
+
+future_predictions <- future_predictions %>%
+  mutate(excess_deaths = all_cause_deaths - .fitted)
+
+##############################
+# 5. Merge With COVID-19 Deaths
+##############################
+
+# Ensure `dat` also has mmwr_year, mmwr_week, and state_name for the same weeks
+analysis_data <- future_predictions %>%
+  left_join(dat %>% select(state_name, mmwr_year, mmwr_week, covid_deaths),
+            by = c("state_name", "mmwr_year", "mmwr_week"))
+
+# Now `analysis_data` has: all_cause_deaths, expected deaths (.fitted), excess_deaths, and covid_deaths
+
+##############################
+# 6. Visualizations
+##############################
+
+analysis_data <- analysis_data %>%
+  filter(!state_name %in% c("New York City", "United States")) %>%
+  # Approximate a date from mmwr_year and mmwr_week:
+  mutate(approx_date = as.Date(paste(mmwr_year, mmwr_week, 1, sep="-"), "%Y-%U-%u"))
+
+# Facet by state to get a quick overview:
+p_all_states <- analysis_data %>%
+  ggplot(aes(x = approx_date)) +
+  geom_line(aes(y = excess_deaths, color = "Excess Deaths")) +
+  geom_line(aes(y = covid_deaths, color = "COVID-19 Deaths")) +
+  facet_wrap(~ state_name, scales = "free_y") +
+  labs(title = "Excess vs. COVID-19 Deaths by State",
+       x = "Date", 
+       y = "Number of Deaths",
+       color = "") +
+  theme_minimal()
+
+print(p_all_states)
+
+# If you have many states and the plot looks crowded, consider plotting one state at a time or saving to a file:
+# Example of saving one plot per state:
+# unique_states <- unique(analysis_data$state_name)
+# for (st in unique_states) {
+#   p_state <- analysis_data %>%
+#     filter(state_name == st) %>%
+#     ggplot(aes(x = approx_date)) +
+#     geom_line(aes(y = excess_deaths, color = "Excess Deaths")) +
+#     geom_line(aes(y = covid_deaths, color = "COVID-19 Deaths")) +
+#     labs(title = paste("Excess vs. COVID-19 Deaths:", st),
+#          x = "Date",
+#          y = "Number of Deaths",
+#          color = "") +
+#     theme_minimal()
+#   
+#   ggsave(filename = paste0("excess_vs_covid_", st, ".png"), plot = p_state, width = 8, height = 5)
+# }
+
+##############################
+# 7. Statistical Tests by State
+##############################
+all_states <- unique(analysis_data$state_name)
+
+# Initialize a list to store the combined results for each state
+all_state_results <- list()
+
+for (st in all_states) {
+  # Filter data for this state
+  state_data <- analysis_data %>%
+    filter(state_name == st)
+  
+  # Check if there's enough data for a model
+  valid_points <- sum(!is.na(state_data$excess_deaths) & !is.na(state_data$covid_deaths))
+  if (valid_points < 2) {
+    # Not enough data to run a model, store placeholder
+    all_state_results[[st]] <- data.frame(
+      state_name = st,
+      term = NA_character_,
+      estimate = NA_real_,
+      std.error = NA_real_,
+      statistic = NA_real_,
+      p.value = NA_real_,
+      r.squared = NA_real_
+    )
+    next
+  }
+  
+  # Try fitting the model
+  fit_result <- tryCatch({
+    lm(excess_deaths ~ covid_deaths, data = state_data)
+  }, error = function(e) NULL)
+  
+  if (is.null(fit_result)) {
+    # Model failed, store placeholder
+    all_state_results[[st]] <- data.frame(
+      state_name = st,
+      term = NA_character_,
+      estimate = NA_real_,
+      std.error = NA_real_,
+      statistic = NA_real_,
+      p.value = NA_real_,
+      r.squared = NA_real_
+    )
+    next
+  }
+  
+  # Get coefficient details
+  tidied <- broom::tidy(fit_result)
+  # Get model-level statistics (including r.squared)
+  glanced <- broom::glance(fit_result)
+  
+  # Add state_name and r.squared to each coefficient row
+  tidied$state_name <- st
+  tidied$r.squared <- glanced$r.squared
+  
+  all_state_results[[st]] <- tidied
+}
+
+# Combine all states into one data frame
+final_results <- do.call(rbind, all_state_results)
+
+# `final_results` now contains:
+# state_name, term (Intercept or covid_deaths), estimate, std.error, statistic, p.value, and r.squared
+
+final_results <- final_results %>%
+  filter(!state_name %in% c("New York City", "United States"))
+library(knitr)
+
+final_results <- final_results %>%
+  select(state_name, term, estimate, std.error, statistic, p.value, r.squared)
+
+# Now neatly display the table
+final_results %>%
+  kable(digits = 3, caption = "Model Results by State") 
+
+# Save plot to figs folder as a PNG
+# ggsave(filename = "../output/excess_vs_covid_all_states.png", plot = p_all_states, width = 10, height = 8)
+# write.csv(final_results, "../output/excess_mortality_models.csv", row.names = FALSE)
+
+
+##############################
+# 8. Interpret Results
+##############################
+
+# If the summary of lm_result shows covid_deaths is a strong predictor (high R-squared, significant p-value),
+# this indicates COVID-19 deaths explain a large portion of excess mortality.
+# If correlation is high and the slope ~ 1, it suggests a strong direct relationship.
+
+##############################
+# Additional Considerations:
+##############################
+
+### might want to incorporate seasonality more explicitly (e.g., factor(mmwr_week)) in the baseline model.
+### Try more advanced models (ARIMA, GAM) for better baseline estimation?
 ```
 
-We used the observed weekly deaths from 2024 to calculate the average weekly deaths for each state. This serves as a proxy for "expected" deaths in a stable post-pandemic period. Then we compared the observed deaths during the pandemic to the expected deaths derived from 2024 data by plotting the excess mortality.
+We are first using 2015-2019 US mortality data grouped by states to estimate the 2020-2023 mortality by all causes (not limited to deaths caused by Covid-19). Then we calculate excess mortality by subtracting the estimated deaths from observed deaths of 2020-2023. This is depicted as blue line in the plot. Now, we plot the deaths which the culprit is Covid-19 via red line to see whether the excess mortality is well explained by Covid-19. We can see that in most of the states, COVId-19 is indeed the main culprit of excess mortality from 2020-2023. However, some states such as New Hampshire, Oregon, Puerto Rico, and Washington do not have a similar trend of lines between COVID-19 deaths and Excess deaths, meaning COVID-19 does not explain the excess mortality that well.
 
-According to the line plot showing the weekly trends in excess mortality across states, we can see that there has been excess deaths during 2020 - 2022, where COVID-19 was severely affecting the death rate. Thus, we can conclude that COVID-19 deaths explain the excess mortality fairly well, assuming that 2024 (post-pandemic baseline) represents a "normalized" year.
+Second, we conducted additional analysis of fitting the linear model with COVID-19 deaths being the covariate and excess deaths being the outcome variable. The results of the model advocated the findings that we have roughly found from the plot. The R-squared values of each state's model showed that New Hampshire(0.236), Oregon(0.301), Puerto Rico(0.194), and Washington(0.257)'s respective R-squared values were all low compared to other states. Some states such as New Jersey, North Dakota, and South Dakota showed very high R-squared values of 0.851, 0.849, and 0.857 respectively which corresponded to the alignment of Covid caused deaths and excess deaths in the plot.
+
+Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!

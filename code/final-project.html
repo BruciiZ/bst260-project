@@ -118,8 +118,10 @@ window.Quarto = {
   <li><a href="#deaths-rate-by-state-during-each-time-period" id="toc-deaths-rate-by-state-during-each-time-period" class="nav-link" data-scroll-target="#deaths-rate-by-state-during-each-time-period">Deaths rate by state during each time period</a></li>
   <li><a href="#covid-19-became-less-or-more-virulent-across-different-periods" id="toc-covid-19-became-less-or-more-virulent-across-different-periods" class="nav-link" data-scroll-target="#covid-19-became-less-or-more-virulent-across-different-periods">COVID-19 became less or more virulent across different periods</a>
   <ul class="collapse">
-  <li><a href="#distribution-of-the-rates" id="toc-distribution-of-the-rates" class="nav-link" data-scroll-target="#distribution-of-the-rates">Distribution of the rates</a></li>
+  <li><a href="#pair-wise-comparison-of-the-key-metrics" id="toc-pair-wise-comparison-of-the-key-metrics" class="nav-link" data-scroll-target="#pair-wise-comparison-of-the-key-metrics">Pair-wise comparison of the key metrics</a></li>
+  <li><a href="#aggregated-metrics-across-wave" id="toc-aggregated-metrics-across-wave" class="nav-link" data-scroll-target="#aggregated-metrics-across-wave">Aggregated Metrics Across Wave</a></li>
   </ul></li>
+  <li><a href="#q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" id="toc-q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" class="nav-link" data-scroll-target="#q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19">Q4: Estimate excess mortality for each week for each state. Check if excess mortality can be explained by COVID-19</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -186,7 +188,8 @@ window.Quarto = {
 <h1>Load data</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">'../data/dat.rda'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">'../data/dat.rda'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">'../data/deaths_all.rda'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="analyses" class="level1">
@@ -422,9 +425,9 @@ window.Quarto = {
 </section>
 <section id="covid-19-became-less-or-more-virulent-across-different-periods" class="level2">
 <h2 class="anchored" data-anchor-id="covid-19-became-less-or-more-virulent-across-different-periods">COVID-19 became less or more virulent across different periods</h2>
-<p>To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: <strong>cases fatality rate (CFR)</strong>, <strong>hospitalization rate (HR)</strong>, and <strong>death per population (DP)</strong>. The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with figures and visualizations</p>
-<section id="distribution-of-the-rates" class="level3">
-<h3 class="anchored" data-anchor-id="distribution-of-the-rates">Distribution of the rates</h3>
+<p>To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: <strong>cases fatality rate (CFR)</strong>, <strong>hospitalization rate (HR)</strong>, and <strong>death per population (DP)</strong>. The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with figures and visualizations.</p>
+<section id="pair-wise-comparison-of-the-key-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="pair-wise-comparison-of-the-key-metrics">Pair-wise comparison of the key metrics</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pooled.dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Wave =</span> <span class="fu">case_when</span>(</span>
@@ -586,6 +589,9 @@ window.Quarto = {
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pairwise.wilcox.test(metric.dat$CFR, metric.dat$Wave,</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                  p.adjust.method = "BH")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="aggregated-metrics-across-wave" class="level3">
+<h3 class="anchored" data-anchor-id="aggregated-metrics-across-wave">Aggregated Metrics Across Wave</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define custom labels for the facets</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dat.labs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CFR"</span> <span class="ot">=</span> <span class="st">"Cases Fatality Rate"</span>, <span class="st">"HR"</span> <span class="ot">=</span> <span class="st">"Hospitalization Rate"</span>, <span class="st">"DP"</span> <span class="ot">=</span> <span class="st">"Death per Population"</span>)</span>
@@ -748,44 +754,119 @@ window.Quarto = {
 </div>
 </div>
 <p>To evaluate virulence, we calculate Case Fatality Rate (CFR) across waves. CFR is calculated as <span class="math inline">\(CFR = \frac{Cumulative Deaths}{Cumulative Cases} \cdot 100\)</span>. We can clearly see from the plot that COVID-19 became less virulent across the three waves, as evidenced by the declining CFR from Wave 1 to Wave 3. While the initial wave saw a relatively high median CFR around 1.5%, this dropped progressively in subsequent waves, reaching below 1% by Wave 3. The reduction in fatality rates is likely due to increased vaccination coverage, improved medical responses, and healthcare system adaptations.</p>
+</section>
+</section>
+<section id="q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" class="level2">
+<h2 class="anchored" data-anchor-id="q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19">Q4: Estimate excess mortality for each week for each state. Check if excess mortality can be explained by COVID-19</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate data to weekly level</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>weekly_data <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">week =</span> <span class="fu">floor_date</span>(date, <span class="st">"week"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state, week) <span class="sc">|&gt;</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">observed_deaths =</span> <span class="fu">sum</span>(deaths, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">covid_deaths =</span> <span class="fu">sum</span>(deaths, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="co"># Assuming "deaths" include COVID deaths</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span> </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">covid_deaths =</span> deaths) <span class="co"># renaming for clarity</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prepare historical data (2015-2019)</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter historical period</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>historical_data <span class="ot">&lt;-</span> deaths <span class="sc">%&gt;%</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mmwr_year <span class="sc">&gt;=</span> <span class="dv">2015</span> <span class="sc">&amp;</span> mmwr_year <span class="sc">&lt;=</span> <span class="dv">2019</span>) </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Fit Linear Models to Estimate Baseline</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll fit a simple linear model per state predicting all_cause_deaths</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co"># from mmwr_year and mmwr_week. You could add more complex seasonality terms,</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="co"># such as using sin/cos of week or factorized weeks, but here's a simple approach.</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> historical_data <span class="sc">%&gt;%</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state_name) <span class="sc">%&gt;%</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> <span class="fu">lm</span>(all_cause_deaths <span class="sc">~</span> mmwr_year <span class="sc">+</span> mmwr_week, <span class="at">data =</span> .)</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Predicting Expected Deaths for 2020–2024</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data for prediction period (2020+)</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>future_data <span class="ot">&lt;-</span> deaths <span class="sc">%&gt;%</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mmwr_year <span class="sc">&gt;=</span> <span class="dv">2020</span>)</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate predictions by applying each state's model to its future_data</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>future_predictions <span class="ot">&lt;-</span> future_data <span class="sc">%&gt;%</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state_name) <span class="sc">%&gt;%</span></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(models, <span class="at">by =</span> <span class="st">"state_name"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">predictions =</span> <span class="fu">map2</span>(data, model, <span class="sc">~</span><span class="fu">augment</span>(.y, <span class="at">newdata =</span> .x))) <span class="sc">%&gt;%</span></span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(predictions) <span class="sc">%&gt;%</span></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Now `future_predictions` contains:</span></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a><span class="co"># - all original columns from `future_data`</span></span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a><span class="co"># - .fitted: predicted (expected) deaths</span></span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a><span class="co"># - .se.fit, .resid, etc., if needed</span></span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Calculate Excess Mortality</span></span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>future_predictions <span class="ot">&lt;-</span> future_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_deaths =</span> all_cause_deaths <span class="sc">-</span> .fitted)</span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Merge With COVID-19 Deaths</span></span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure `dat` also has mmwr_year, mmwr_week, and state_name for the same weeks</span></span>
+<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>analysis_data <span class="ot">&lt;-</span> future_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dat <span class="sc">%&gt;%</span> <span class="fu">select</span>(state_name, mmwr_year, mmwr_week, covid_deaths),</span>
+<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"state_name"</span>, <span class="st">"mmwr_year"</span>, <span class="st">"mmwr_week"</span>))</span>
+<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Now `analysis_data` has: all_cause_deaths, expected deaths (.fitted), excess_deaths, and covid_deaths</span></span>
+<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-72"><a href="#cb24-72" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Visualizations</span></span>
+<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb24-74"><a href="#cb24-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-75"><a href="#cb24-75" aria-hidden="true" tabindex="-1"></a>analysis_data <span class="ot">&lt;-</span> analysis_data <span class="sc">%&gt;%</span></span>
+<span id="cb24-76"><a href="#cb24-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>state_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"New York City"</span>, <span class="st">"United States"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-77"><a href="#cb24-77" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Approximate a date from mmwr_year and mmwr_week:</span></span>
+<span id="cb24-78"><a href="#cb24-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">approx_date =</span> <span class="fu">as.Date</span>(<span class="fu">paste</span>(mmwr_year, mmwr_week, <span class="dv">1</span>, <span class="at">sep=</span><span class="st">"-"</span>), <span class="st">"%Y-%U-%u"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has grouped output by 'state'. You can override using the
-`.groups` argument.</code></pre>
+<pre><code>Warning: There were 52 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `approx_date = as.Date(paste(mmwr_year, mmwr_week, 1, sep =
+  "-"), "%Y-%U-%u")`.
+Caused by warning in `strptime()`:
+! (0-based) yday 367 in year 2021 is invalid
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 51 remaining warnings.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use 2024 data to calculate the baseline expected deaths</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>baseline <span class="ot">&lt;-</span> weekly_data <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(week <span class="sc">&gt;=</span> <span class="fu">make_date</span>(<span class="dv">2024</span>, <span class="dv">1</span>, <span class="dv">1</span>), week <span class="sc">&lt;=</span> <span class="fu">make_date</span>(<span class="dv">2024</span>, <span class="dv">12</span>, <span class="dv">31</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">expected =</span> <span class="fu">mean</span>(observed_deaths, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge baseline expected deaths into the full dataset</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>excess_mortality <span class="ot">&lt;-</span> weekly_data <span class="sc">|&gt;</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(baseline, <span class="at">by =</span> <span class="st">"state"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">excess_deaths =</span> observed_deaths <span class="sc">-</span> expected,</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">covid_excess_ratio =</span> <span class="fu">ifelse</span>(excess_deaths <span class="sc">&gt;</span> <span class="dv">0</span>, covid_deaths <span class="sc">/</span> excess_deaths, <span class="cn">NA</span>)</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize excess mortality by week and state</span></span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>excess_mortality <span class="sc">|&gt;</span></span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> week, <span class="at">y =</span> excess_deaths, <span class="at">color =</span> state)) <span class="sc">+</span></span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Week"</span>,</span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Excess Mortality"</span>,</span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Weekly Excess Mortality by State"</span>,</span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Comparison of Excess Mortality and COVID-19 Deaths"</span></span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Facet by state to get a quick overview:</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>p_all_states <span class="ot">&lt;-</span> analysis_data <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> approx_date)) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> excess_deaths, <span class="at">color =</span> <span class="st">"Excess Deaths"</span>)) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> covid_deaths, <span class="at">color =</span> <span class="st">"COVID-19 Deaths"</span>)) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> state_name, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Excess vs. COVID-19 Deaths by State"</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>, </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Deaths"</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_all_states)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_line()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 7 rows containing missing values or values outside the scale range
+(`geom_line()`).</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -793,12 +874,1086 @@ window.Quarto = {
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save results</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(excess_mortality, <span class="at">file =</span> <span class="st">"../output/excess_mortality.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If you have many states and the plot looks crowded, consider plotting one state at a time or saving to a file:</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of saving one plot per state:</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># unique_states &lt;- unique(analysis_data$state_name)</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for (st in unique_states) {</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   p_state &lt;- analysis_data %&gt;%</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     filter(state_name == st) %&gt;%</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     ggplot(aes(x = approx_date)) +</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     geom_line(aes(y = excess_deaths, color = "Excess Deaths")) +</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     geom_line(aes(y = covid_deaths, color = "COVID-19 Deaths")) +</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     labs(title = paste("Excess vs. COVID-19 Deaths:", st),</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co">#          x = "Date",</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co">#          y = "Number of Deaths",</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co">#          color = "") +</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="co">#     theme_minimal()</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   ggsave(filename = paste0("excess_vs_covid_", st, ".png"), plot = p_state, width = 8, height = 5)</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 7. Statistical Tests by State</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>all_states <span class="ot">&lt;-</span> <span class="fu">unique</span>(analysis_data<span class="sc">$</span>state_name)</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize a list to store the combined results for each state</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>all_state_results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (st <span class="cf">in</span> all_states) {</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter data for this state</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>  state_data <span class="ot">&lt;-</span> analysis_data <span class="sc">%&gt;%</span></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(state_name <span class="sc">==</span> st)</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if there's enough data for a model</span></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>  valid_points <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(state_data<span class="sc">$</span>excess_deaths) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(state_data<span class="sc">$</span>covid_deaths))</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (valid_points <span class="sc">&lt;</span> <span class="dv">2</span>) {</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Not enough data to run a model, store placeholder</span></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    all_state_results[[st]] <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">state_name =</span> st,</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">term =</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">estimate =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">std.error =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">statistic =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">p.value =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">r.squared =</span> <span class="cn">NA_real_</span></span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span></span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Try fitting the model</span></span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>  fit_result <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>({</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lm</span>(excess_deaths <span class="sc">~</span> covid_deaths, <span class="at">data =</span> state_data)</span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(fit_result)) {</span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Model failed, store placeholder</span></span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>    all_state_results[[st]] <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a>      <span class="at">state_name =</span> st,</span>
+<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>      <span class="at">term =</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a>      <span class="at">estimate =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a>      <span class="at">std.error =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a>      <span class="at">statistic =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">p.value =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">r.squared =</span> <span class="cn">NA_real_</span></span>
+<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span></span>
+<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-66"><a href="#cb29-66" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-67"><a href="#cb29-67" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get coefficient details</span></span>
+<span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a>  tidied <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(fit_result)</span>
+<span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get model-level statistics (including r.squared)</span></span>
+<span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a>  glanced <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">glance</span>(fit_result)</span>
+<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add state_name and r.squared to each coefficient row</span></span>
+<span id="cb29-73"><a href="#cb29-73" aria-hidden="true" tabindex="-1"></a>  tidied<span class="sc">$</span>state_name <span class="ot">&lt;-</span> st</span>
+<span id="cb29-74"><a href="#cb29-74" aria-hidden="true" tabindex="-1"></a>  tidied<span class="sc">$</span>r.squared <span class="ot">&lt;-</span> glanced<span class="sc">$</span>r.squared</span>
+<span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a>  all_state_results[[st]] <span class="ot">&lt;-</span> tidied</span>
+<span id="cb29-77"><a href="#cb29-77" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb29-78"><a href="#cb29-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all states into one data frame</span></span>
+<span id="cb29-80"><a href="#cb29-80" aria-hidden="true" tabindex="-1"></a>final_results <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, all_state_results)</span>
+<span id="cb29-81"><a href="#cb29-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a><span class="co"># `final_results` now contains:</span></span>
+<span id="cb29-83"><a href="#cb29-83" aria-hidden="true" tabindex="-1"></a><span class="co"># state_name, term (Intercept or covid_deaths), estimate, std.error, statistic, p.value, and r.squared</span></span>
+<span id="cb29-84"><a href="#cb29-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-85"><a href="#cb29-85" aria-hidden="true" tabindex="-1"></a>final_results <span class="ot">&lt;-</span> final_results <span class="sc">%&gt;%</span></span>
+<span id="cb29-86"><a href="#cb29-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>state_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"New York City"</span>, <span class="st">"United States"</span>))</span>
+<span id="cb29-87"><a href="#cb29-87" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb29-88"><a href="#cb29-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-89"><a href="#cb29-89" aria-hidden="true" tabindex="-1"></a>final_results <span class="ot">&lt;-</span> final_results <span class="sc">%&gt;%</span></span>
+<span id="cb29-90"><a href="#cb29-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state_name, term, estimate, std.error, statistic, p.value, r.squared)</span>
+<span id="cb29-91"><a href="#cb29-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-92"><a href="#cb29-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Now neatly display the table</span></span>
+<span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a>final_results <span class="sc">%&gt;%</span></span>
+<span id="cb29-94"><a href="#cb29-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Model Results by State"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Model Results by State</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 16%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">state_name</th>
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">r.squared</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Alabama</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">16.015</td>
+<td style="text-align: right;">24.090</td>
+<td style="text-align: right;">0.665</td>
+<td style="text-align: right;">0.507</td>
+<td style="text-align: right;">0.656</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alabama</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.520</td>
+<td style="text-align: right;">0.136</td>
+<td style="text-align: right;">18.515</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.656</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Alaska</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">10.342</td>
+<td style="text-align: right;">4.749</td>
+<td style="text-align: right;">2.178</td>
+<td style="text-align: right;">0.033</td>
+<td style="text-align: right;">0.745</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alaska</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.907</td>
+<td style="text-align: right;">0.211</td>
+<td style="text-align: right;">13.767</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.745</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Arizona</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">66.662</td>
+<td style="text-align: right;">32.297</td>
+<td style="text-align: right;">2.064</td>
+<td style="text-align: right;">0.040</td>
+<td style="text-align: right;">0.667</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Arizona</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.468</td>
+<td style="text-align: right;">0.129</td>
+<td style="text-align: right;">19.207</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.667</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Arkansas</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">50.810</td>
+<td style="text-align: right;">17.269</td>
+<td style="text-align: right;">2.942</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.521</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Arkansas</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.246</td>
+<td style="text-align: right;">0.166</td>
+<td style="text-align: right;">13.523</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.521</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">124.611</td>
+<td style="text-align: right;">122.045</td>
+<td style="text-align: right;">1.021</td>
+<td style="text-align: right;">0.309</td>
+<td style="text-align: right;">0.683</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.453</td>
+<td style="text-align: right;">0.123</td>
+<td style="text-align: right;">19.878</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.683</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Colorado</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">42.375</td>
+<td style="text-align: right;">21.729</td>
+<td style="text-align: right;">1.950</td>
+<td style="text-align: right;">0.053</td>
+<td style="text-align: right;">0.499</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Colorado</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.352</td>
+<td style="text-align: right;">0.177</td>
+<td style="text-align: right;">13.290</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.499</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Connecticut</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-26.603</td>
+<td style="text-align: right;">17.044</td>
+<td style="text-align: right;">-1.561</td>
+<td style="text-align: right;">0.121</td>
+<td style="text-align: right;">0.671</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Connecticut</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.142</td>
+<td style="text-align: right;">0.121</td>
+<td style="text-align: right;">17.738</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.671</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Delaware</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">4.135</td>
+<td style="text-align: right;">5.807</td>
+<td style="text-align: right;">0.712</td>
+<td style="text-align: right;">0.478</td>
+<td style="text-align: right;">0.682</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Delaware</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.434</td>
+<td style="text-align: right;">0.164</td>
+<td style="text-align: right;">14.867</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.682</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">District of Columbia</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">7.151</td>
+<td style="text-align: right;">7.928</td>
+<td style="text-align: right;">0.902</td>
+<td style="text-align: right;">0.370</td>
+<td style="text-align: right;">0.475</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">District of Columbia</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.311</td>
+<td style="text-align: right;">0.272</td>
+<td style="text-align: right;">8.513</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.475</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Florida</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">66.037</td>
+<td style="text-align: right;">84.759</td>
+<td style="text-align: right;">0.779</td>
+<td style="text-align: right;">0.437</td>
+<td style="text-align: right;">0.631</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Florida</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.251</td>
+<td style="text-align: right;">0.126</td>
+<td style="text-align: right;">17.793</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.631</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Georgia</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">55.093</td>
+<td style="text-align: right;">42.792</td>
+<td style="text-align: right;">1.287</td>
+<td style="text-align: right;">0.200</td>
+<td style="text-align: right;">0.629</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Georgia</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.559</td>
+<td style="text-align: right;">0.145</td>
+<td style="text-align: right;">17.678</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.629</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hawaii</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-3.694</td>
+<td style="text-align: right;">6.379</td>
+<td style="text-align: right;">-0.579</td>
+<td style="text-align: right;">0.564</td>
+<td style="text-align: right;">0.577</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hawaii</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.719</td>
+<td style="text-align: right;">0.265</td>
+<td style="text-align: right;">10.252</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.577</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Idaho</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">14.203</td>
+<td style="text-align: right;">10.208</td>
+<td style="text-align: right;">1.391</td>
+<td style="text-align: right;">0.167</td>
+<td style="text-align: right;">0.559</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Idaho</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.311</td>
+<td style="text-align: right;">0.180</td>
+<td style="text-align: right;">12.833</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.559</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Illinois</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-30.451</td>
+<td style="text-align: right;">52.705</td>
+<td style="text-align: right;">-0.578</td>
+<td style="text-align: right;">0.564</td>
+<td style="text-align: right;">0.552</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Illinois</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.538</td>
+<td style="text-align: right;">0.169</td>
+<td style="text-align: right;">15.045</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.552</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Indiana</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-54.247</td>
+<td style="text-align: right;">33.394</td>
+<td style="text-align: right;">-1.624</td>
+<td style="text-align: right;">0.106</td>
+<td style="text-align: right;">0.568</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Indiana</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.509</td>
+<td style="text-align: right;">0.160</td>
+<td style="text-align: right;">15.650</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.568</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Iowa</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-20.996</td>
+<td style="text-align: right;">17.459</td>
+<td style="text-align: right;">-1.203</td>
+<td style="text-align: right;">0.231</td>
+<td style="text-align: right;">0.492</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Iowa</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.228</td>
+<td style="text-align: right;">0.177</td>
+<td style="text-align: right;">12.608</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.492</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Kansas</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">6.016</td>
+<td style="text-align: right;">16.337</td>
+<td style="text-align: right;">0.368</td>
+<td style="text-align: right;">0.713</td>
+<td style="text-align: right;">0.544</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kansas</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.440</td>
+<td style="text-align: right;">0.178</td>
+<td style="text-align: right;">13.728</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.544</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Kentucky</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-4.659</td>
+<td style="text-align: right;">26.144</td>
+<td style="text-align: right;">-0.178</td>
+<td style="text-align: right;">0.859</td>
+<td style="text-align: right;">0.521</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kentucky</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.417</td>
+<td style="text-align: right;">0.171</td>
+<td style="text-align: right;">14.096</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.521</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Louisiana</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">12.740</td>
+<td style="text-align: right;">22.704</td>
+<td style="text-align: right;">0.561</td>
+<td style="text-align: right;">0.575</td>
+<td style="text-align: right;">0.612</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Louisiana</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.539</td>
+<td style="text-align: right;">0.154</td>
+<td style="text-align: right;">16.459</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.612</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Maine</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">24.393</td>
+<td style="text-align: right;">13.605</td>
+<td style="text-align: right;">1.793</td>
+<td style="text-align: right;">0.076</td>
+<td style="text-align: right;">0.238</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Maine</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.596</td>
+<td style="text-align: right;">0.437</td>
+<td style="text-align: right;">5.943</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.238</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Maryland</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-92.502</td>
+<td style="text-align: right;">24.689</td>
+<td style="text-align: right;">-3.747</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.558</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Maryland</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.600</td>
+<td style="text-align: right;">0.173</td>
+<td style="text-align: right;">15.036</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.558</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Massachusetts</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-80.090</td>
+<td style="text-align: right;">27.111</td>
+<td style="text-align: right;">-2.954</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.660</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Massachusetts</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.225</td>
+<td style="text-align: right;">0.121</td>
+<td style="text-align: right;">18.426</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.660</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Michigan</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-75.675</td>
+<td style="text-align: right;">47.842</td>
+<td style="text-align: right;">-1.582</td>
+<td style="text-align: right;">0.115</td>
+<td style="text-align: right;">0.601</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Michigan</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.659</td>
+<td style="text-align: right;">0.161</td>
+<td style="text-align: right;">16.546</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.601</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Minnesota</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-31.590</td>
+<td style="text-align: right;">23.156</td>
+<td style="text-align: right;">-1.364</td>
+<td style="text-align: right;">0.174</td>
+<td style="text-align: right;">0.471</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Minnesota</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.393</td>
+<td style="text-align: right;">0.190</td>
+<td style="text-align: right;">12.584</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.471</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mississippi</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">8.756</td>
+<td style="text-align: right;">16.797</td>
+<td style="text-align: right;">0.521</td>
+<td style="text-align: right;">0.603</td>
+<td style="text-align: right;">0.635</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mississippi</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.481</td>
+<td style="text-align: right;">0.142</td>
+<td style="text-align: right;">17.435</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.635</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Missouri</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-44.197</td>
+<td style="text-align: right;">33.234</td>
+<td style="text-align: right;">-1.330</td>
+<td style="text-align: right;">0.185</td>
+<td style="text-align: right;">0.534</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Missouri</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.536</td>
+<td style="text-align: right;">0.178</td>
+<td style="text-align: right;">14.231</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.534</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Montana</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">11.332</td>
+<td style="text-align: right;">4.937</td>
+<td style="text-align: right;">2.295</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.835</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Montana</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.410</td>
+<td style="text-align: right;">0.106</td>
+<td style="text-align: right;">22.641</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.835</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nebraska</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-0.944</td>
+<td style="text-align: right;">10.989</td>
+<td style="text-align: right;">-0.086</td>
+<td style="text-align: right;">0.932</td>
+<td style="text-align: right;">0.503</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Nebraska</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.364</td>
+<td style="text-align: right;">0.198</td>
+<td style="text-align: right;">11.954</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.503</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nevada</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">4.124</td>
+<td style="text-align: right;">15.928</td>
+<td style="text-align: right;">0.259</td>
+<td style="text-align: right;">0.796</td>
+<td style="text-align: right;">0.560</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Nevada</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.351</td>
+<td style="text-align: right;">0.160</td>
+<td style="text-align: right;">14.724</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New Hampshire</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">12.934</td>
+<td style="text-align: right;">12.054</td>
+<td style="text-align: right;">1.073</td>
+<td style="text-align: right;">0.286</td>
+<td style="text-align: right;">0.236</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Hampshire</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.150</td>
+<td style="text-align: right;">0.382</td>
+<td style="text-align: right;">5.621</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.236</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New Jersey</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-192.886</td>
+<td style="text-align: right;">32.751</td>
+<td style="text-align: right;">-5.889</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.851</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Jersey</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.630</td>
+<td style="text-align: right;">0.082</td>
+<td style="text-align: right;">32.217</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.851</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New Mexico</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">24.966</td>
+<td style="text-align: right;">12.325</td>
+<td style="text-align: right;">2.026</td>
+<td style="text-align: right;">0.044</td>
+<td style="text-align: right;">0.576</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Mexico</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.330</td>
+<td style="text-align: right;">0.158</td>
+<td style="text-align: right;">14.784</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.576</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New York</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-75.879</td>
+<td style="text-align: right;">46.889</td>
+<td style="text-align: right;">-1.618</td>
+<td style="text-align: right;">0.107</td>
+<td style="text-align: right;">0.692</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New York</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.433</td>
+<td style="text-align: right;">0.120</td>
+<td style="text-align: right;">20.199</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.692</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">North Carolina</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">24.244</td>
+<td style="text-align: right;">46.224</td>
+<td style="text-align: right;">0.524</td>
+<td style="text-align: right;">0.601</td>
+<td style="text-align: right;">0.526</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">North Carolina</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.503</td>
+<td style="text-align: right;">0.176</td>
+<td style="text-align: right;">14.239</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.526</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">North Dakota</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-6.396</td>
+<td style="text-align: right;">4.148</td>
+<td style="text-align: right;">-1.542</td>
+<td style="text-align: right;">0.127</td>
+<td style="text-align: right;">0.849</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">North Dakota</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.026</td>
+<td style="text-align: right;">0.093</td>
+<td style="text-align: right;">21.759</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.849</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ohio</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-232.900</td>
+<td style="text-align: right;">63.633</td>
+<td style="text-align: right;">-3.660</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.598</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ohio</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.615</td>
+<td style="text-align: right;">0.158</td>
+<td style="text-align: right;">16.575</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.598</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Oklahoma</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-13.884</td>
+<td style="text-align: right;">20.507</td>
+<td style="text-align: right;">-0.677</td>
+<td style="text-align: right;">0.499</td>
+<td style="text-align: right;">0.642</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Oklahoma</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.356</td>
+<td style="text-align: right;">0.132</td>
+<td style="text-align: right;">17.811</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.642</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Oregon</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">77.838</td>
+<td style="text-align: right;">22.253</td>
+<td style="text-align: right;">3.498</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.301</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Oregon</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.692</td>
+<td style="text-align: right;">0.311</td>
+<td style="text-align: right;">8.655</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.301</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pennsylvania</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-180.602</td>
+<td style="text-align: right;">66.304</td>
+<td style="text-align: right;">-2.724</td>
+<td style="text-align: right;">0.007</td>
+<td style="text-align: right;">0.589</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pennsylvania</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.560</td>
+<td style="text-align: right;">0.157</td>
+<td style="text-align: right;">16.319</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.589</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Puerto Rico</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">61.637</td>
+<td style="text-align: right;">18.592</td>
+<td style="text-align: right;">3.315</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.194</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Puerto Rico</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.378</td>
+<td style="text-align: right;">0.384</td>
+<td style="text-align: right;">6.195</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.194</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rhode Island</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">6.376</td>
+<td style="text-align: right;">9.703</td>
+<td style="text-align: right;">0.657</td>
+<td style="text-align: right;">0.513</td>
+<td style="text-align: right;">0.447</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rhode Island</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">1.784</td>
+<td style="text-align: right;">0.198</td>
+<td style="text-align: right;">9.027</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.447</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">South Carolina</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">62.602</td>
+<td style="text-align: right;">24.499</td>
+<td style="text-align: right;">2.555</td>
+<td style="text-align: right;">0.011</td>
+<td style="text-align: right;">0.581</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">South Carolina</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.352</td>
+<td style="text-align: right;">0.148</td>
+<td style="text-align: right;">15.931</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.581</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">South Dakota</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-3.886</td>
+<td style="text-align: right;">4.347</td>
+<td style="text-align: right;">-0.894</td>
+<td style="text-align: right;">0.374</td>
+<td style="text-align: right;">0.857</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">South Dakota</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.176</td>
+<td style="text-align: right;">0.091</td>
+<td style="text-align: right;">23.974</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.857</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tennessee</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-12.193</td>
+<td style="text-align: right;">34.120</td>
+<td style="text-align: right;">-0.357</td>
+<td style="text-align: right;">0.721</td>
+<td style="text-align: right;">0.626</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tennessee</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.478</td>
+<td style="text-align: right;">0.141</td>
+<td style="text-align: right;">17.553</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.626</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Texas</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">141.292</td>
+<td style="text-align: right;">90.272</td>
+<td style="text-align: right;">1.565</td>
+<td style="text-align: right;">0.119</td>
+<td style="text-align: right;">0.713</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Texas</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.298</td>
+<td style="text-align: right;">0.107</td>
+<td style="text-align: right;">21.424</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.713</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Utah</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">27.348</td>
+<td style="text-align: right;">13.171</td>
+<td style="text-align: right;">2.076</td>
+<td style="text-align: right;">0.040</td>
+<td style="text-align: right;">0.388</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Utah</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.334</td>
+<td style="text-align: right;">0.250</td>
+<td style="text-align: right;">9.320</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.388</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Vermont</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">14.422</td>
+<td style="text-align: right;">3.972</td>
+<td style="text-align: right;">3.631</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.507</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Vermont</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">3.512</td>
+<td style="text-align: right;">0.427</td>
+<td style="text-align: right;">8.232</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.507</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Virginia</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">32.897</td>
+<td style="text-align: right;">35.446</td>
+<td style="text-align: right;">0.928</td>
+<td style="text-align: right;">0.355</td>
+<td style="text-align: right;">0.462</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Virginia</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.584</td>
+<td style="text-align: right;">0.206</td>
+<td style="text-align: right;">12.545</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.462</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Washington</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">50.657</td>
+<td style="text-align: right;">33.487</td>
+<td style="text-align: right;">1.513</td>
+<td style="text-align: right;">0.132</td>
+<td style="text-align: right;">0.257</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Washington</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.550</td>
+<td style="text-align: right;">0.319</td>
+<td style="text-align: right;">8.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.257</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">West Virginia</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">21.232</td>
+<td style="text-align: right;">15.280</td>
+<td style="text-align: right;">1.390</td>
+<td style="text-align: right;">0.167</td>
+<td style="text-align: right;">0.493</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">West Virginia</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.564</td>
+<td style="text-align: right;">0.211</td>
+<td style="text-align: right;">12.145</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.493</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Wisconsin</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-42.048</td>
+<td style="text-align: right;">27.464</td>
+<td style="text-align: right;">-1.531</td>
+<td style="text-align: right;">0.128</td>
+<td style="text-align: right;">0.527</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wisconsin</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.594</td>
+<td style="text-align: right;">0.186</td>
+<td style="text-align: right;">13.935</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.527</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Wyoming</td>
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-1.791</td>
+<td style="text-align: right;">4.104</td>
+<td style="text-align: right;">-0.436</td>
+<td style="text-align: right;">0.664</td>
+<td style="text-align: right;">0.757</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wyoming</td>
+<td style="text-align: left;">covid_deaths</td>
+<td style="text-align: right;">2.458</td>
+<td style="text-align: right;">0.163</td>
+<td style="text-align: right;">15.086</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.757</td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>We used the observed weekly deaths from 2024 to calculate the average weekly deaths for each state. This serves as a proxy for “expected” deaths in a stable post-pandemic period. Then we compared the observed deaths during the pandemic to the expected deaths derived from 2024 data by plotting the excess mortality.</p>
-<p>According to the line plot showing the weekly trends in excess mortality across states, we can see that there has been excess deaths during 2020 - 2022, where COVID-19 was severely affecting the death rate. Thus, we can conclude that COVID-19 deaths explain the excess mortality fairly well, assuming that 2024 (post-pandemic baseline) represents a “normalized” year.</p>
-</section>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save plot to figs folder as a PNG</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave(filename = "../output/excess_vs_covid_all_states.png", plot = p_all_states, width = 10, height = 8)</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(final_results, "../output/excess_mortality_models.csv", row.names = FALSE)</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 8. Interpret Results</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co"># If the summary of lm_result shows covid_deaths is a strong predictor (high R-squared, significant p-value),</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co"># this indicates COVID-19 deaths explain a large portion of excess mortality.</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># If correlation is high and the slope ~ 1, it suggests a strong direct relationship.</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Additional Considerations:</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="do">### might want to incorporate seasonality more explicitly (e.g., factor(mmwr_week)) in the baseline model.</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="do">### Try more advanced models (ARIMA, GAM) for better baseline estimation?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We are first using 2015-2019 US mortality data grouped by states to estimate the 2020-2023 mortality by all causes (not limited to deaths caused by Covid-19). Then we calculate excess mortality by subtracting the estimated deaths from observed deaths of 2020-2023. This is depicted as blue line in the plot. Now, we plot the deaths which the culprit is Covid-19 via red line to see whether the excess mortality is well explained by Covid-19. We can see that in most of the states, COVId-19 is indeed the main culprit of excess mortality from 2020-2023. However, some states such as New Hampshire, Oregon, Puerto Rico, and Washington do not have a similar trend of lines between COVID-19 deaths and Excess deaths, meaning COVID-19 does not explain the excess mortality that well.</p>
+<p>Second, we conducted additional analysis of fitting the linear model with COVID-19 deaths being the covariate and excess deaths being the outcome variable. The results of the model advocated the findings that we have roughly found from the plot. The R-squared values of each state’s model showed that New Hampshire(0.236), Oregon(0.301), Puerto Rico(0.194), and Washington(0.257)’s respective R-squared values were all low compared to other states. Some states such as New Jersey, North Dakota, and South Dakota showed very high R-squared values of 0.851, 0.849, and 0.857 respectively which corresponded to the alignment of Covid caused deaths and excess deaths in the plot.</p>
+<p>Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!</p>
 </section>
 </section>
 
