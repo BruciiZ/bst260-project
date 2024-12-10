@@ -205,3 +205,22 @@ save(cases_raw, file = "../data/cases_raw.rda")
 save(deaths_raw, file = "../data/deaths_raw.rda")
 save(hosp_raw, file = "../data/hosp_raw.rda")
 save(vax_raw, file = "../data/vax_raw.rda")
+
+
+### weekly all-cause mortality data before 2019
+deaths <- read_csv('../data/Weekly_Counts_of_Deaths_by_Jurisdiction_and_Age.csv')
+
+library(lubridate)
+
+deaths <- deaths %>%
+  mutate(date = as.Date(`Week Ending Date`, format = "%m/%d/%Y")) %>%
+  select(-`Week Ending Date`) %>%  
+  mutate(mmwr_week = epiweek(date),
+         mmwr_year = year(date)) %>%
+  rename(state_name = Jurisdiction) %>%
+  group_by(state_name, mmwr_year, mmwr_week) %>%
+  summarise(all_cause_deaths = sum(`Number of Deaths`, na.rm = TRUE), .groups = "drop")
+
+save(deaths, file = "../data/deaths_all.rda")
+
+
