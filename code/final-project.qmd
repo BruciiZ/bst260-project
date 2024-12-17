@@ -1,11 +1,12 @@
 ---
-title: "BST 260 Final Project - Analysis"
+title: "BST 260 Final Project - COVID-19 Data"
 author: "Weixuan Dong, Danny Lee, Bruce Zhou"
 format:
   html:
     toc: TRUE
     toc_float: TRUE
     smooth-scroll: TRUE
+bibliography: references.bib
 ---
 
 # Load libraries
@@ -25,6 +26,16 @@ rm(list = ls())
 load('../data/dat.rda')
 load('../data/deaths_all.rda')
 ```
+
+# Introduction
+
+The COVID-19 pandemic, first reported in Wuhan in late 2019, is a respiratory disease caused by the severe acute respiratory syndrome coronavirus 2 (SARS-Cov-2) [@shi_2020_an; @covid2021modeling]. The SAR-Cov-2 virus rapidly spread from China to the rest of the world in early 2020, and has constituted arguably the most severe global health crisis the 21st century has seen so far. Beyond its direct impact on human health, the outbreak of COVID-19 has exerted indelible influence on societies, economies, and the healthcare systems. In the early phase of the COVID-19 pandemic, it was known to cause irreversible pneumonia, high fever, and dry cough [@madabhavi2020covid]. Silvestri et al. (2020) identified four stages of the early variants of the SARS-Cov-2 virus: upper respiratory infection, pneumonia, cytokine storm, and in the worse scenario, death [@stasi2020treatment].
+
+The rapid transmission of the COVID-19 virus was possibly due to its unique characteristic: asymptomatic transmission. Compared with coronaviruses identified previously such as the MERS-Cov, many of the COVID-19 infected patients did not show any symptoms when they first contracted the virus. However, they already became carriers, and the virus already started spreading from them through air, body fluid exchange, or aerosols [@gao2021systematic]. The asymptomatic transmission feature accelerated the wide spread of the COVID-19 virus, and at the same time hindered the containment efforts led by the healthcare agencies. What's more, as the pandemic progressed and vaccines were developed, the SARS-Cov-2 virus exhibited a high rate of escape and mutation, leading to a variety of variants including alpha, beta, delta, and omicron. These variants showed differences in their transmissibility, virulence, and ability to evade the immune system. Because of this, even vaccines, which used to be taken as the ultimate measure to end any pandemic, proved to fall short of people's expectation in controlling this worldwise crisis [@vasireddy2021review]. As a result, the majority of the governments announced emergency measures ranging from mask mandates, social distancing, regular sterilization, and even full lock-down of cities [@koh2020covid].
+
+Globally, what the COVID-19 imposed was not simply a public health challenge, but also a multi-faceted catastrophe. The restrictions on freight transport wreaked great havoc on international transactions and businesses. Consequently, the economic systems of many countries were heavily struck, especially for those who rely on exports. The cascade of such adverse effects further led to higher rate of unemployment, corporation bankrupcy, and disruptions to supply chains.
+
+Especially in the United States, the COVID-19 pandemic has been complicated and worsened by various factors. Significant variations could be seen across states due to discrepancies in regional public health policies, demographics, economy
 
 # Analyses
 

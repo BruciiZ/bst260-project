@@ -8,7 +8,7 @@
 
 <meta name="author" content="Weixuan Dong, Danny Lee, Bruce Zhou">
 
-<title>BST 260 Final Project - Analysis</title>
+<title>BST 260 Final Project - COVID-19 Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="final-project_files/libs/clipboard/clipboard.min.js"></script>
@@ -112,6 +132,7 @@ window.Quarto = {
   <ul>
   <li><a href="#load-libraries" id="toc-load-libraries" class="nav-link active" data-scroll-target="#load-libraries">Load libraries</a></li>
   <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#analyses" id="toc-analyses" class="nav-link" data-scroll-target="#analyses">Analyses</a>
   <ul class="collapse">
   <li><a href="#pandemic-period-from-jan-2020-to-nov-2024" id="toc-pandemic-period-from-jan-2020-to-nov-2024" class="nav-link" data-scroll-target="#pandemic-period-from-jan-2020-to-nov-2024">Pandemic period from Jan 2020 to Nov 2024</a></li>
@@ -130,7 +151,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">BST 260 Final Project - Analysis</h1>
+<h1 class="title">BST 260 Final Project - COVID-19 Data</h1>
 </div>
 
 
@@ -191,6 +212,10 @@ window.Quarto = {
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">'../data/dat.rda'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">'../data/deaths_all.rda'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The COVID-19 pandemic, first reported in Wuhan in late 2019, is a respiratory disease caused by the severe acute respiratory syndrome coronavirus 2 (SARS-Cov-2) <span class="citation" data-cites="shi_2020_an covid2021modeling">(<a href="#ref-shi_2020_an" role="doc-biblioref">Shi et al. 2020</a>; <a href="#ref-covid2021modeling" role="doc-biblioref">Covid and Team 2021</a>)</span>. The SAR-Cov-2 virus rapidly spread from China to the rest of the world in early 2020, and has constituted arguably the most severe global health crisis the 21st century has seen so far. Beyond its direct impact on human health, the outbreak of COVID-19 has exerted indelible influence on societies, economies, and the healthcare systems. In the early phase of the COVID-19 pandemic, it was known to cause irreversible pneumonia, high fever, and dry cough <span class="citation" data-cites="madabhavi2020covid">(<a href="#ref-madabhavi2020covid" role="doc-biblioref">Madabhavi, Sarkar, and Kadakol 2020</a>)</span>. Silvestri et al.&nbsp;(2020) identified four stages of the early variants of the SARS-Cov-2 virus: upper respiratory infection, peumonia, cytokine storm, and finally death <span class="citation" data-cites="stasi2020treatment">(<a href="#ref-stasi2020treatment" role="doc-biblioref">Stasi et al. 2020</a>)</span>.</p>
 </section>
 <section id="analyses" class="level1">
 <h1>Analyses</h1>
@@ -1954,10 +1979,24 @@ Caused by warning in `strptime()`:
 <p>We are first using 2015-2019 US mortality data grouped by states to estimate the 2020-2023 mortality by all causes (not limited to deaths caused by Covid-19). Then we calculate excess mortality by subtracting the estimated deaths from observed deaths of 2020-2023. This is depicted as blue line in the plot. Now, we plot the deaths which the culprit is Covid-19 via red line to see whether the excess mortality is well explained by Covid-19. We can see that in most of the states, COVId-19 is indeed the main culprit of excess mortality from 2020-2023. However, some states such as New Hampshire, Oregon, Puerto Rico, and Washington do not have a similar trend of lines between COVID-19 deaths and Excess deaths, meaning COVID-19 does not explain the excess mortality that well.</p>
 <p>Second, we conducted additional analysis of fitting the linear model with COVID-19 deaths being the covariate and excess deaths being the outcome variable. The results of the model advocated the findings that we have roughly found from the plot. The R-squared values of each state’s model showed that New Hampshire(0.236), Oregon(0.301), Puerto Rico(0.194), and Washington(0.257)’s respective R-squared values were all low compared to other states. Some states such as New Jersey, North Dakota, and South Dakota showed very high R-squared values of 0.851, 0.849, and 0.857 respectively which corresponded to the alignment of Covid caused deaths and excess deaths in the plot.</p>
 <p>Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!</p>
+
 </section>
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-covid2021modeling" class="csl-entry" role="listitem">
+Covid, IHME, and Forecasting Team. 2021. <span>“Modeling COVID-19 Scenarios for the United States.”</span> <em>Nature Medicine</em> 27 (1): 94.
+</div>
+<div id="ref-madabhavi2020covid" class="csl-entry" role="listitem">
+Madabhavi, Irappa, Malay Sarkar, and Nagaveni Kadakol. 2020. <span>“COVID-19: A Review.”</span> <em>Monaldi Archives for Chest Disease</em> 90 (2).
+</div>
+<div id="ref-shi_2020_an" class="csl-entry" role="listitem">
+Shi, Yu, Gang Wang, Xiao-peng Cai, Jing-wen Deng, Lin Zheng, Hai-hong Zhu, Min Zheng, Bo Yang, and Zhi Chen. 2020. <span>“An Overview of COVID-19.”</span> <em>Journal of Zhejiang University-SCIENCE B</em> 21 (May): 343–60. <a href="https://doi.org/10.1631/jzus.b2000083">https://doi.org/10.1631/jzus.b2000083</a>.
+</div>
+<div id="ref-stasi2020treatment" class="csl-entry" role="listitem">
+Stasi, Cristina, Silvia Fallani, Fabio Voller, and Caterina Silvestri. 2020. <span>“Treatment for COVID-19: An Overview.”</span> <em>European Journal of Pharmacology</em> 889: 173644.
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
