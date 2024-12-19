@@ -6,6 +6,9 @@ format:
     toc: TRUE
     toc_float: TRUE
     smooth-scroll: TRUE
+execute:
+  echo: false
+  warning: false
 bibliography: references.bib
 ---
 
@@ -59,7 +62,7 @@ dat %>%
   geom_line(linewidth = 1, alpha = 0.7) + # Thicker lines for better visibility
   facet_wrap(~outcome, ncol = 1, scales = "free", labeller = labeller(outcome = as_labeller(dat.labs))) +
   scale_x_date(
-    breaks = "3 months", # Show a date label every 6 months
+    breaks = "6 months", # Show a date label every 6 months
     date_labels = "%b %Y" # Format the labels as "Month Year" (e.g., Jan 2021)
   ) +
   theme_minimal(base_size = 14) + # Use a cleaner theme with larger base font
@@ -84,6 +87,18 @@ dat %>%
 ```
 
 As can be seen from the trend plot which depicts the rates of COVID-19 cases, deaths, and hospitalizations from 01/25/2021 to 11/30/2024, there seems to be 3 waves of COVID-19 spread. The first one occurs from Oct 2020 to Apr 2021, where a peak in cases, deaths, and hospitalizations can be observed. Likewise, it appears that there was another wave between Jul 2021 to early Dec 2021. Lastly, there was a wave from early Dec 2021 to Apr 2022.
+
+**First Wave**
+
+This period marked the first significant rise in COVID-19 rates, with sharp increases across all metrics—cases, deaths, and hospitalizations. The wave coincides with the colder months when indoor gatherings increased and may also reflect the impact of delayed public health measures or variants circulating during this time. The peak of this wave aligns with the early rollout of vaccines, which likely contributed to its decline as more people gained access to immunization.
+
+**Second Wave**
+
+The summer and early winter of 2021 saw a resurgence in COVID-19 activity, driven largely by the spread of the Delta variant. This wave demonstrates a rapid increase in hospitalizations and deaths following the initial rise in cases. Despite vaccination efforts, breakthrough infections and the highly contagious nature of Delta played significant roles in this period. Public health measures such as mask mandates were reinstituted in some areas, but the surge continued through the fall.
+
+**Third Wave**
+
+The final and most intense wave depicted occurred during the winter of 2021-2022, fueled by the Omicron variant. While cases skyrocketed to unprecedented levels due to Omicron's transmissibility, deaths and hospitalizations rose less dramatically than in previous waves, likely reflecting the variant's comparatively milder effects and increased vaccination coverage. However, the healthcare system faced immense strain due to the sheer number of cases.
 
 ## Deaths rate by state during each time period
 
@@ -127,7 +142,11 @@ From Oct 1st 2020 to Apr 1st 2021, overall this wave was arguably the most sever
 
 From July 1st 2021 to Dec 1st 2021, the COVID-19 variant seemed to be less virulent. The highest death rate per 100,000 people was reported in West Virginia (WV), with an average of 113.13 deaths among 100,000 people. Following West Virginia were Florida  (111.62), Montana (111.30), and Wyoming (109.88). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Washington D.C., which was only 12.09 deaths on average per 100,000 people, followed by Vermont (12.39), Connecticut (12.39), New York (17.04), and Hawaii (36.83).
 
-For the third wave, the COVID-19 variant during the period seemed to grow more infectious and deadly. The highest death rate per 100,000 people was reported in West Virginia (WV) again, with an average of 103.73 deaths among 100,000 people. Following West Virginia were Ohio (102.05), New Mexico (96.78), and Kentucky (93.82). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 20.76 deaths on average per 100,000 people, followed by Alaska (27.69), Puerto Rico (28.21), Vermont (29.85), and Utah (33.22). Figures can be found in *Supplementary Methods*.
+For the third wave, the COVID-19 variant during the period seemed to grow more infectious and deadly. The highest death rate per 100,000 people was reported in West Virginia (WV) again, with an average of 103.73 deaths among 100,000 people. Following West Virginia were Ohio (102.05), New Mexico (96.78), and Kentucky (93.82). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 20.76 deaths on average per 100,000 people, followed by Alaska (27.69), Puerto Rico (28.21), Vermont (29.85), and Utah (33.22). Figures can be found in **Supplementary Methods**.
+
+We also compared the performance of each state across all 3 waves by taking the average of their death rate per 100,000 people. Results show that Oklahoma had the highest average death rate per 100,000, amounting to 120.00 deaths per 100,000 people, followed by West Virginia (115.33), Mississippi (109), Kentucky (107.42), Tennessee (106.92). There were also states which kept a relatively low death rate across waves. Namely, Vermont had an average death rate of only 17.81 per 100,000. Similarly, Hawaii had an average of 22.24 per 100,000, followed by Puerto Rico (30.94) New York (37.10), and Washington (40.07).
+
+Generally, it can be seen that states in the northeastern part or the west coast of the US performed better than those in the middle or west US. It can also be observed that less populated states such as Vermont and Washington had lower death rates. But exceptions are also evident, for New York is rather populated but it was among the states with the lowest average death rates.
 
 ```{r}
 wave1dat$wave <- "Wave 1"
@@ -159,10 +178,6 @@ allWaves %>%
     subtitle = "Data from Oct 1st 2020 to Apr 1st 2022"
   )
 ```
-
-We also compared the performance of each state across all 3 waves by taking the average of their death rate per 100,000 people. Results show that Oklahoma had the highest average death rate per 100,000, amounting to 120.00 deaths per 100,000 people, followed by West Virginia (115.33), Mississippi (109), Kentucky (107.42), Tennessee (106.92). There were also states which kept a relatively low death rate across waves. Namely, Vermont had an average death rate of only 17.81 per 100,000. Similarly, Hawaii had an average of 22.24 per 100,000, followed by Puerto Rico (30.94) New York (37.10), and Washington (40.07).
-
-Generally, it can be seen that states in the northeastern part or the west coast of the US performed better than those in the middle or west US. It can also be observed that less populated states such as Vermont and Washington had lower death rates. But exceptions are also evident, for New York is rather populated but it was among the states with the lowest average death rates.
 
 ## COVID-19 became less or more virulent across different periods
 
