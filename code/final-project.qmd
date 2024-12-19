@@ -47,7 +47,7 @@ In this project, we examined the COVID-19 data provided by the CDC COVID-19 Resp
 
 The figure below displays the COVID-19 cases, deaths, and hospitalization rate per 100,000 people in each region of the US from 2020 to 2024.
 
-```{r trend plots}
+```{r trend plots, echo=FALSE, warning=FALSE}
 # Define custom labels for the facets
 dat.labs <- c("cases" = "COVID-19 Cases", "deaths" = "Deaths", "hosp" = "Hospitalizations")
 
@@ -56,7 +56,7 @@ dat %>%
   pivot_longer(cols = c("cases", "deaths", "hosp"), names_to = "outcome", values_to = "count") %>%
   mutate(rate = count * 100000 / population) %>%
   ggplot(aes(x = date, y = rate, group = state, color = region_name)) +
-  geom_line(linewidth = 1) + # Thicker lines for better visibility
+  geom_line(linewidth = 1, alpha = 0.7) + # Thicker lines for better visibility
   facet_wrap(~outcome, ncol = 1, scales = "free", labeller = labeller(outcome = as_labeller(dat.labs))) +
   scale_x_date(
     breaks = "3 months", # Show a date label every 6 months
@@ -87,92 +87,7 @@ As can be seen from the trend plot which depicts the rates of COVID-19 cases, de
 
 ## Deaths rate by state during each time period
 
-```{r}
-
-dat %>%
-  filter(date >= make_date(2020, 10, 1), date <= make_date(2021, 4, 1)) %>%
-  group_by(state) %>%
-  summarise(
-    cum_death = sum(deaths, na.rm = TRUE),
-    population = mean(population, na.rm = TRUE),
-    death_rate = cum_death * 100000 / population
-  ) %>%
-  ggplot(aes(x = reorder(state, death_rate), y = death_rate, fill = death_rate)) + # Add `fill` aesthetic
-  geom_col() +
-  scale_fill_gradient(low = "#FFA5A5", high = "#AA0000") + # Define gradient colors
-  coord_flip() +
-  theme_minimal(base_size = 14) + # Minimal theme for better readability
-  theme(
-    axis.title.y = element_blank(), # Remove y-axis title for a cleaner look
-    axis.title.x = element_text(face = "bold"), # Bold x-axis title
-    axis.text = element_text(size = 6), # Slightly larger axis text
-    legend.title = element_text(face = "bold"), # Bold legend title
-    panel.grid.minor = element_blank(),
-    legend.position = "right" # Position legend to the right
-  ) +
-  labs(
-    y = "Death Rate (per 100,000)",
-    fill = "Death Rate",
-    title = "Cumulative COVID-19 Death Rates by State",
-    subtitle = "Data from Oct 1st 2020 to Apr 1st 2021"
-  )
-
-dat %>%
-  filter(date >= make_date(2021, 7, 1), date <= make_date(2021, 12, 1)) %>%
-  group_by(state) %>%
-  summarise(
-    cum_death = sum(deaths, na.rm = TRUE),
-    population = mean(population, na.rm = TRUE),
-    death_rate = cum_death * 100000 / population
-  ) %>%
-  ggplot(aes(x = reorder(state, death_rate), y = death_rate, fill = death_rate)) + # Add `fill` aesthetic
-  geom_col() +
-  scale_fill_gradient(low = "#FFA5A5", high = "#AA0000") + # Define gradient colors
-  coord_flip() +
-  theme_minimal(base_size = 14) + # Minimal theme for better readability
-  theme(
-    axis.title.y = element_blank(), # Remove y-axis title for a cleaner look
-    axis.title.x = element_text(face = "bold"), # Bold x-axis title
-    axis.text = element_text(size = 6), # Slightly larger axis text
-    legend.title = element_text(face = "bold"), # Bold legend title
-    panel.grid.minor = element_blank(),
-    legend.position = "right" # Position legend to the right
-  ) +
-  labs(
-    y = "Death Rate (per 100,000)",
-    fill = "Death Rate",
-    title = "Cumulative COVID-19 Death Rates by State",
-    subtitle = "Data from Jul 1st 2021 to Dec 1st 2021"
-  )
-
-dat %>%
-  filter(date >= make_date(2021, 12, 2), date <= make_date(2022, 4, 1)) %>%
-  group_by(state) %>%
-  summarise(
-    cum_death = sum(deaths, na.rm = TRUE),
-    population = mean(population, na.rm = TRUE),
-    death_rate = cum_death * 100000 / population
-  ) %>%
-  ggplot(aes(x = reorder(state, death_rate), y = death_rate, fill = death_rate)) + # Add `fill` aesthetic
-  geom_col() +
-  scale_fill_gradient(low = "#FFA5A5", high = "#AA0000") + # Define gradient colors
-  coord_flip() +
-  theme_minimal(base_size = 14) + # Minimal theme for better readability
-  theme(
-    axis.title.y = element_blank(), # Remove y-axis title for a cleaner look
-    axis.title.x = element_text(face = "bold"), # Bold x-axis title
-    axis.text = element_text(size = 6), # Slightly larger axis text
-    legend.title = element_text(face = "bold"), # Bold legend title
-    panel.grid.minor = element_blank(),
-    legend.position = "right" # Position legend to the right
-  ) +
-  labs(
-    y = "Death Rate (per 100,000)",
-    fill = "Death Rate",
-    title = "Cumulative COVID-19 Death Rates by State",
-    subtitle = "Data from Dec 2nd 2021 to Apr 1st 2022"
-  )
-
+```{r separately save each time period}
 wave1dat <- dat %>%
   filter(date >= make_date(2020, 10, 1), date <= make_date(2021, 4, 1)) %>%
   group_by(state) %>%
@@ -180,7 +95,8 @@ wave1dat <- dat %>%
     cum_death = sum(deaths, na.rm = TRUE),
     population = mean(population, na.rm = TRUE),
     death_rate = cum_death * 100000 / population
-  )
+  ) %>%
+  ungroup()
 
 wave2dat <- dat %>%
   filter(date >= make_date(2021, 7, 1), date <= make_date(2021, 12, 1)) %>%
@@ -189,7 +105,8 @@ wave2dat <- dat %>%
     cum_death = sum(deaths, na.rm = TRUE),
     population = mean(population, na.rm = TRUE),
     death_rate = cum_death * 100000 / population
-  )
+  ) %>%
+  ungroup()
 
 wave3dat <- dat %>%
   filter(date >= make_date(2021, 12, 2), date <= make_date(2022, 4, 1)) %>%
@@ -198,7 +115,8 @@ wave3dat <- dat %>%
     cum_death = sum(deaths, na.rm = TRUE),
     population = mean(population, na.rm = TRUE),
     death_rate = cum_death * 100000 / population
-  )
+  ) %>%
+  ungroup()
 
 # write_csv(wave1dat,file = "../output/wave1dat.csv")
 # write_csv(wave2dat,file = "../output/wave2dat.csv")
@@ -209,7 +127,7 @@ From Oct 1st 2020 to Apr 1st 2021, overall this wave was arguably the most sever
 
 From July 1st 2021 to Dec 1st 2021, the COVID-19 variant seemed to be less virulent. The highest death rate per 100,000 people was reported in West Virginia (WV), with an average of 113.13 deaths among 100,000 people. Following West Virginia were Florida  (111.62), Montana (111.30), and Wyoming (109.88). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Washington D.C., which was only 12.09 deaths on average per 100,000 people, followed by Vermont (12.39), Connecticut (12.39), New York (17.04), and Hawaii (36.83).
 
-For the third wave, the COVID-19 variant during the period seemed to grow more infectious and deadly. The highest death rate per 100,000 people was reported in West Virginia (WV) again, with an average of 103.73 deaths among 100,000 people. Following West Virginia were Ohio (102.05), New Mexico (96.78), and Kentucky (93.82). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 20.76 deaths on average per 100,000 people, followed by Alaska (27.69), Puerto Rico (28.21), Vermont (29.85), and Utah (33.22).
+For the third wave, the COVID-19 variant during the period seemed to grow more infectious and deadly. The highest death rate per 100,000 people was reported in West Virginia (WV) again, with an average of 103.73 deaths among 100,000 people. Following West Virginia were Ohio (102.05), New Mexico (96.78), and Kentucky (93.82). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 20.76 deaths on average per 100,000 people, followed by Alaska (27.69), Puerto Rico (28.21), Vermont (29.85), and Utah (33.22). Figures can be found in *Supplementary Methods*.
 
 ```{r}
 wave1dat$wave <- "Wave 1"
@@ -223,7 +141,7 @@ allWaves %>%
   ungroup() %>%
   ggplot(aes(x = reorder(state, avg_death_rate), y = avg_death_rate, fill = avg_death_rate)) + # Add `fill` aesthetic
   geom_col() +
-  scale_fill_gradient2(low = "#A5D8FF", high = "#002D80") + # Define gradient colors
+  scale_fill_gradient2(low = "#FFE5B4", mid = "#FFA500", high = "#800000") + # Define gradient colors
   coord_flip() +
   theme_minimal(base_size = 14) + # Minimal theme for better readability
   theme(
@@ -414,41 +332,41 @@ pooled.dat %>%
          DP = `Total Deaths` * 100000 / `Total Population`) %>%
   kable("simple")
 
-pooled.dat %>%
-  group_by(Wave) %>%
-  summarise("Total Cases" = sum(`Total Cases`, na.rm = T),
-            "Total Deaths" = sum(`Total Deaths`, na.rm = T),
-            "Total Hospitalization" = sum(`Total Hospitalization`, na.rm = T),
-            "Total Population" = sum(`Total Population`, na.rm = T)) %>%
-  ungroup() %>%
-  mutate(CFR = `Total Deaths` * 100000 / `Total Cases`,
-         HR = `Total Hospitalization` * 100000 / `Total Cases`,
-         DP = `Total Deaths` * 100000 / `Total Population`) %>%
-  pivot_longer(
-    cols = c(CFR, HR, DP),
-    names_to = "metric",
-    values_to = "rate"
-  ) %>%
-  ggplot(aes(x = Wave, y = rate, fill = metric)) +
-  geom_col(show.legend = FALSE) +
-  facet_wrap(
-    ~ metric, 
-    scales = "free", 
-    labeller = labeller(metric = dat.labs)
-  ) +
-  scale_fill_brewer(palette = "Set2") +
-  theme_minimal() +
-  theme(
-    strip.text = element_text(size = 12, face = "bold"),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
-    axis.title = element_text(size = 12, face = "bold")
-  ) +
-  labs(
-    title = "COVID-19 Aggregated Virulence Metrics by Wave",
-    x = "Wave",
-    y = "Rate (per 100,000)"
-  )
+# pooled.dat %>%
+#   group_by(Wave) %>%
+#   summarise("Total Cases" = sum(`Total Cases`, na.rm = T),
+#             "Total Deaths" = sum(`Total Deaths`, na.rm = T),
+#             "Total Hospitalization" = sum(`Total Hospitalization`, na.rm = T),
+#             "Total Population" = sum(`Total Population`, na.rm = T)) %>%
+#   ungroup() %>%
+#   mutate(CFR = `Total Deaths` * 100000 / `Total Cases`,
+#          HR = `Total Hospitalization` * 100000 / `Total Cases`,
+#          DP = `Total Deaths` * 100000 / `Total Population`) %>%
+#   pivot_longer(
+#     cols = c(CFR, HR, DP),
+#     names_to = "metric",
+#     values_to = "rate"
+#   ) %>%
+#   ggplot(aes(x = Wave, y = rate, fill = metric)) +
+#   geom_col(show.legend = FALSE) +
+#   facet_wrap(
+#     ~ metric, 
+#     scales = "free", 
+#     labeller = labeller(metric = dat.labs)
+#   ) +
+#   scale_fill_brewer(palette = "Set2") +
+#   theme_minimal() +
+#   theme(
+#     strip.text = element_text(size = 12, face = "bold"),
+#     axis.text.x = element_text(angle = 45, hjust = 1),
+#     plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+#     axis.title = element_text(size = 12, face = "bold")
+#   ) +
+#   labs(
+#     title = "COVID-19 Aggregated Virulence Metrics by Wave",
+#     x = "Wave",
+#     y = "Rate (per 100,000)"
+#   )
 ```
 
 We also compared the average performance of each state across all 3 waves.
@@ -721,3 +639,73 @@ We are first using 2015-2019 US mortality data grouped by states to estimate the
 Second, we conducted additional analysis of fitting the linear model with COVID-19 deaths being the covariate and excess deaths being the outcome variable. The results of the model advocated the findings that we have roughly found from the plot. The R-squared values of each state's model showed that New Hampshire(0.236), Oregon(0.301), Puerto Rico(0.194), and Washington(0.257)'s respective R-squared values were all low compared to other states. Some states such as New Jersey, North Dakota, and South Dakota showed very high R-squared values of 0.851, 0.849, and 0.857 respectively which corresponded to the alignment of Covid caused deaths and excess deaths in the plot.
 
 Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!
+
+# Supplementary Methods
+
+## Death rate of each state (3 waves)
+
+```{r death rate by state}
+
+wave1dat %>%
+  ggplot(aes(x = reorder(state, death_rate), y = death_rate, fill = death_rate)) + # Add `fill` aesthetic
+  geom_col() +
+  scale_fill_gradient(low = "#FFA5A5", high = "#AA0000") + # Define gradient colors
+  coord_flip() +
+  theme_minimal(base_size = 14) + # Minimal theme for better readability
+  theme(
+    axis.title.y = element_blank(), # Remove y-axis title for a cleaner look
+    axis.title.x = element_text(face = "bold"), # Bold x-axis title
+    axis.text = element_text(size = 6), # Slightly larger axis text
+    legend.title = element_text(face = "bold"), # Bold legend title
+    panel.grid.minor = element_blank(),
+    legend.position = "right" # Position legend to the right
+  ) +
+  labs(
+    y = "Death Rate (per 100,000)",
+    fill = "Death Rate",
+    title = "Cumulative COVID-19 Death Rates by State",
+    subtitle = "Data from Oct 1st 2020 to Apr 1st 2021"
+  )
+
+wave2dat %>%
+  ggplot(aes(x = reorder(state, death_rate), y = death_rate, fill = death_rate)) + # Add `fill` aesthetic
+  geom_col() +
+  scale_fill_gradient(low = "#FFA5A5", high = "#AA0000") + # Define gradient colors
+  coord_flip() +
+  theme_minimal(base_size = 14) + # Minimal theme for better readability
+  theme(
+    axis.title.y = element_blank(), # Remove y-axis title for a cleaner look
+    axis.title.x = element_text(face = "bold"), # Bold x-axis title
+    axis.text = element_text(size = 6), # Slightly larger axis text
+    legend.title = element_text(face = "bold"), # Bold legend title
+    panel.grid.minor = element_blank(),
+    legend.position = "right" # Position legend to the right
+  ) +
+  labs(
+    y = "Death Rate (per 100,000)",
+    fill = "Death Rate",
+    title = "Cumulative COVID-19 Death Rates by State",
+    subtitle = "Data from Jul 1st 2021 to Dec 1st 2021"
+  )
+
+wave3dat %>%
+  ggplot(aes(x = reorder(state, death_rate), y = death_rate, fill = death_rate)) + # Add `fill` aesthetic
+  geom_col() +
+  scale_fill_gradient(low = "#FFA5A5", high = "#AA0000") + # Define gradient colors
+  coord_flip() +
+  theme_minimal(base_size = 14) + # Minimal theme for better readability
+  theme(
+    axis.title.y = element_blank(), # Remove y-axis title for a cleaner look
+    axis.title.x = element_text(face = "bold"), # Bold x-axis title
+    axis.text = element_text(size = 6), # Slightly larger axis text
+    legend.title = element_text(face = "bold"), # Bold legend title
+    panel.grid.minor = element_blank(),
+    legend.position = "right" # Position legend to the right
+  ) +
+  labs(
+    y = "Death Rate (per 100,000)",
+    fill = "Death Rate",
+    title = "Cumulative COVID-19 Death Rates by State",
+    subtitle = "Data from Dec 2nd 2021 to Apr 1st 2022"
+  )
+```
