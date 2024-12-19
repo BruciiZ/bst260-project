@@ -655,7 +655,7 @@ Second, we conducted additional analysis of fitting the linear model with COVID-
 
 Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!
 
-Q5. For each period compute the excess mortality rates by state. Describe which states did better or worse during the different periods.
+## Q5. For each period compute the excess mortality rates by state. Describe which states did better or worse during the different periods.
 ```{r}
 analysis_data <- analysis_data %>%
   left_join(dat %>% distinct(state_name, population), by = "state_name", relationship = "many-to-many")
@@ -743,6 +743,22 @@ bottom5_wave2
 top5_wave3
 bottom5_wave3
 ```
+Wave 1 (Oct 1, 2020 – Apr 1, 2021):
+Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico
+Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts
+Wave 2 (Jul 1, 2021 – Dec 1, 2021):
+Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi
+Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York
+Wave 3 (Dec 2, 2021 – Apr 1, 2022):
+Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona
+Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington
+Overall Patterns:
+Consistently High Excess Mortality States:
+States like Oklahoma, Mississippi, and West Virginia frequently appeared among the highest excess mortality ranks. Possible reasons include challenges such as lower vaccination uptake, fewer healthcare resources in rural regions, delayed or less stringent public health measures, and possibly higher prevalence of pre-existing health conditions.
+Consistently Low Excess Mortality States:
+Hawaii, Washington, and Massachusetts repeatedly ranked among the states with the lowest excess mortality. These states are known for stronger healthcare infrastructure, better access to medical services, early and sustained public health interventions, and higher vaccination rates. Compliance with mitigation measures and strategic public policies likely helped keep mortality rates lower.
+Influence of Public Health Policies and Vaccination:
+Over time, the availability and uptake of vaccines played a crucial role. States that improved vaccine coverage tended to see decreasing excess mortality in later waves, while states slower to vaccinate or implement effective preventive measures often struggled.
 
 # Supplementary Methods
 
