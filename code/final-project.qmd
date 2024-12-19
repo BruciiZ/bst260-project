@@ -684,6 +684,10 @@ wave1_excess <- compute_excess_rate(analysis_data, wave_periods$Wave1[1], wave_p
 wave2_excess <- compute_excess_rate(analysis_data, wave_periods$Wave2[1], wave_periods$Wave2[2])
 wave3_excess <- compute_excess_rate(analysis_data, wave_periods$Wave3[1], wave_periods$Wave3[2])
 
+write_csv(wave1_excess,file = "../output/wave1_excess.csv")
+write_csv(wave2_excess,file = "../output/wave2_excess.csv")
+write_csv(wave3_excess,file = "../output/wave3_excess.csv")
+
 # Visualization for excess mortality rate for all states across 3 waves
 # Combine all waves into one data frame with a "Wave" column
 wave1_excess$Wave <- "Wave 1"
