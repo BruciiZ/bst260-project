@@ -724,3 +724,54 @@ wave3dat %>%
     subtitle = "Data from Dec 2nd 2021 to Apr 1st 2022"
   )
 ```
+
+Q5. For each period compute the excess mortality rates by state. Describe which states did better or worse during the different periods.
+```{r}
+analysis_data <- analysis_data %>%
+  left_join(dat %>% distinct(state_name, population), by = "state_name")
+
+# Define wave periods
+wave_periods <- list(
+  Wave1 = c("2020-10-01", "2021-04-01"),
+  Wave2 = c("2021-07-01", "2021-12-01"),
+  Wave3 = c("2021-12-02", "2022-04-01")
+)
+
+# Helper function to compute excess mortality rate by wave
+compute_excess_rate <- function(data, start_date, end_date) {
+  data %>%
+    filter(approx_date >= as.Date(start_date) & approx_date <= as.Date(end_date)) %>%
+    group_by(state_name) %>%
+    summarise(
+      total_excess_deaths = sum(excess_deaths, na.rm = TRUE),
+      population = mean(population, na.rm = TRUE)
+    ) %>%
+    mutate(excess_death_rate = total_excess_deaths * 100000 / population) %>%
+    ungroup()
+}
+
+wave1_excess <- compute_excess_rate(analysis_data, wave_periods$Wave1[1], wave_periods$Wave1[2])
+wave2_excess <- compute_excess_rate(analysis_data, wave_periods$Wave2[1], wave_periods$Wave2[2])
+wave3_excess <- compute_excess_rate(analysis_data, wave_periods$Wave3[1], wave_periods$Wave3[2])
+
+# We can then identify top 5 and bottom 5 states by excess mortality rate for each wave
+top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
+bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+
+top5_wave2 <- wave2_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
+bottom5_wave2 <- wave2_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+
+top5_wave3 <- wave3_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
+bottom5_wave3 <- wave3_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+
+# Print out summaries
+top5_wave1
+bottom5_wave1
+
+top5_wave2
+bottom5_wave2
+
+top5_wave3
+bottom5_wave3
+```
+
