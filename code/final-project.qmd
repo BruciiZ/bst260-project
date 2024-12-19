@@ -753,7 +753,42 @@ compute_excess_rate <- function(data, start_date, end_date) {
 wave1_excess <- compute_excess_rate(analysis_data, wave_periods$Wave1[1], wave_periods$Wave1[2])
 wave2_excess <- compute_excess_rate(analysis_data, wave_periods$Wave2[1], wave_periods$Wave2[2])
 wave3_excess <- compute_excess_rate(analysis_data, wave_periods$Wave3[1], wave_periods$Wave3[2])
+```
+```{r}
+# Visualization for excess mortality rate for all states across 3 waves
+# Combine all waves into one data frame with a "Wave" column
+wave1_excess$Wave <- "Wave 1"
+wave2_excess$Wave <- "Wave 2"
+wave3_excess$Wave <- "Wave 3"
 
+all_excess <- bind_rows(wave1_excess, wave2_excess, wave3_excess)
+
+# Create a factor for Wave to control the order in the plot if desired
+all_excess$Wave <- factor(all_excess$Wave, levels = c("Wave 1", "Wave 2", "Wave 3"))
+
+# Plot: Bar plot of excess death rates for all states, faceted by Wave
+ggplot(all_excess, aes(x = reorder(state_name, excess_death_rate), y = excess_death_rate, fill = excess_death_rate)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~Wave, scales = "free_y") +
+  scale_fill_gradient(low = "#FFDDC1", high = "#AE0000") +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_text(face = "bold"),
+    strip.text = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 7),
+    panel.grid.minor = element_blank(),
+    legend.position = "right"
+  ) +
+  labs(
+    y = "Excess Mortality Rate (per 100,000)",
+    fill = "Excess Mortality",
+    title = "Excess Mortality Rates by State Across 3 Waves",
+    subtitle = "Each facet shows a different wave period"
+  )
+```
+```{r}
 # We can then identify top 5 and bottom 5 states by excess mortality rate for each wave
 top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
 bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
