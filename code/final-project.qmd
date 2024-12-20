@@ -655,10 +655,115 @@ Second, we conducted additional analysis of fitting the linear model with COVID-
 
 Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!
 
-# Supplementary Methods {#sec-introduction}
+## Q5. For each period compute the excess mortality rates by state. Describe which states did better or worse during the different periods.
+
+```{r}
+analysis_data <- analysis_data %>%
+  left_join(dat %>% distinct(state_name, population), by = "state_name", relationship = "many-to-many")
+
+# Define wave periods
+wave_periods <- list(
+  Wave1 = c("2020-10-01", "2021-04-01"),
+  Wave2 = c("2021-07-01", "2021-12-01"),
+  Wave3 = c("2021-12-02", "2022-04-01")
+)
+
+# Helper function to compute excess mortality rate by wave
+compute_excess_rate <- function(data, start_date, end_date) {
+  data %>%
+    filter(approx_date >= as.Date(start_date) & approx_date <= as.Date(end_date)) %>%
+    group_by(state_name) %>%
+    summarise(
+      total_excess_deaths = sum(excess_deaths, na.rm = TRUE),
+      population = mean(population, na.rm = TRUE)
+    ) %>%
+    mutate(excess_death_rate = total_excess_deaths * 100000 / population) %>%
+    ungroup()
+}
+
+wave1_excess <- compute_excess_rate(analysis_data, wave_periods$Wave1[1], wave_periods$Wave1[2])
+wave2_excess <- compute_excess_rate(analysis_data, wave_periods$Wave2[1], wave_periods$Wave2[2])
+wave3_excess <- compute_excess_rate(analysis_data, wave_periods$Wave3[1], wave_periods$Wave3[2])
+
+write_csv(wave1_excess,file = "../output/wave1_excess.csv")
+write_csv(wave2_excess,file = "../output/wave2_excess.csv")
+write_csv(wave3_excess,file = "../output/wave3_excess.csv")
+
+# Visualization for excess mortality rate for all states across 3 waves
+# Combine all waves into one data frame with a "Wave" column
+wave1_excess$Wave <- "Wave 1"
+wave2_excess$Wave <- "Wave 2"
+wave3_excess$Wave <- "Wave 3"
+
+all_excess <- bind_rows(wave1_excess, wave2_excess, wave3_excess)
+
+# Create a factor for Wave to control the order in the plot if desired
+all_excess$Wave <- factor(all_excess$Wave, levels = c("Wave 1", "Wave 2", "Wave 3"))
+
+# Plot: Bar plot of excess death rates for all states, faceted by Wave
+ggplot(all_excess, aes(x = reorder(state_name, excess_death_rate), y = excess_death_rate, fill = excess_death_rate)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~Wave, scales = "free_y") +
+  scale_fill_gradient(low = "#FFDDC1", high = "#AE0000") +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_text(face = "bold"),
+    strip.text = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 7),
+    panel.grid.minor = element_blank(),
+    legend.position = "right"
+  ) +
+  labs(
+    y = "Excess Mortality Rate (per 100,000)",
+    fill = "Excess Mortality",
+    title = "Excess Mortality Rates by State Across 3 Waves",
+    subtitle = "Each facet shows a different wave period"
+  )
+```
+
+```{r}
+# We can then identify top 5 and bottom 5 states by excess mortality rate for each wave
+top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
+bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+
+top5_wave2 <- wave2_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
+bottom5_wave2 <- wave2_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+
+top5_wave3 <- wave3_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
+bottom5_wave3 <- wave3_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+
+# Print out summaries
+top5_wave1
+bottom5_wave1
+
+top5_wave2
+bottom5_wave2
+
+top5_wave3
+bottom5_wave3
+```
+Wave 1 (Oct 1, 2020 – Apr 1, 2021):
+Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico
+Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts
+Wave 2 (Jul 1, 2021 – Dec 1, 2021):
+Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi
+Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York
+Wave 3 (Dec 2, 2021 – Apr 1, 2022):
+Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona
+Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington
+Overall Patterns:
+Consistently High Excess Mortality States:
+States like Oklahoma, Mississippi, and West Virginia frequently appeared among the highest excess mortality ranks. Possible reasons include challenges such as lower vaccination uptake, fewer healthcare resources in rural regions, delayed or less stringent public health measures, and possibly higher prevalence of pre-existing health conditions.
+Consistently Low Excess Mortality States:
+Hawaii, Washington, and Massachusetts repeatedly ranked among the states with the lowest excess mortality. These states are known for stronger healthcare infrastructure, better access to medical services, early and sustained public health interventions, and higher vaccination rates. Compliance with mitigation measures and strategic public policies likely helped keep mortality rates lower.
+Influence of Public Health Policies and Vaccination:
+Over time, the availability and uptake of vaccines played a crucial role. States that improved vaccine coverage tended to see decreasing excess mortality in later waves, while states slower to vaccinate or implement effective preventive measures often struggled.
+
+# Supplementary Methods
 
 ## Death rate of each state (3 waves)
-
 ```{r death rate by state}
 
 wave1dat %>%
