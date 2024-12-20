@@ -56,6 +56,35 @@ div.csl-indent {
 <link href="final-project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -126,10 +155,19 @@ div.csl-indent {
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
-<p>First, we constructed a population matrix using two datasets from the United States Census Bureau (USCB). For the years 2020 and 2021, we used observed annual population data for all states. For the years 2022 and 2023, we used the Annual National Population Estimates data, which includes both national and state-level population estimates. These were combined to form a comprehensive population matrix. Finally, we applied a simple linear regression model to predict state-level population figures for 2024 based on trends observed in the preceding years, completing the dataset for 2020-2024. Our extrapolation stands under the assumption that the trends observed in preceding years would similarly be observed in 2024. This potentially poses some limitations of using linear regression model as there could be possible non-linear dynamics for year 2024 such as natural disasters in some states.</p>
-<p>Next, we used the dataset from the Centers for Disease Control and Prevention (CDC), containing COVID-19 cases, COVID-related deaths, hospitalization, and vaccination data from January 25th, 2020 to November 30th, 2024. Data wrangling was conducted to store them as either weekly or daily data, enabling more interpretable analysis going forward.</p>
+<p>First, we constructed a population matrix using two datasets from the United States Census Bureau (USCB). For the years 2020 and 2021, we used observed annual population data for all states, which is available here <a href="https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html" class="uri">https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html</a>. For the years 2022 and 2023, we used the Annual National Population Estimates data, which includes both national and state-level population estimates. It can be assessed through: <a href="https://www.census.gov/data/tables/time-series/demo/popest/2020s-state-total.html" class="uri">https://www.census.gov/data/tables/time-series/demo/popest/2020s-state-total.html</a>. These were combined to form a comprehensive population matrix. Finally, we applied a simple linear regression model to predict state-level population figures for 2024 based on trends observed in the preceding years, completing the dataset for 2020-2024. Our extrapolation stands under the assumption that the trends observed in preceding years would similarly be observed in 2024. This potentially poses some limitations of using linear regression model as there could be possible non-linear dynamics for year 2024 such as natural disasters in some states.</p>
+<p>Next, we used the dataset from the Centers for Disease Control and Prevention (CDC), containing COVID-19 cases, COVID-related deaths, hospitalization, and vaccination data from January 25th, 2020 to November 30th, 2024. Data wrangling was conducted to store them as either weekly or daily data, enabling more interpretable analysis going forward. The corresponding wrangling scripts could be found in <code>code/wrangle.R</code>.</p>
 <p>Finally, we constructed a deaths data for all causes for year 2020-2024 as this was salient in estimating the excess mortalities of the COVID-19 in the period of our interest. We first used the Weekly counts of deaths by Jurisdiction and Age data provided by National Center for Health Statistics (NCHS) to extract the historical data of “all-cause deaths” from years 2015-2019. Then, we fit a simple linear regression model per state predicting all-cause deaths by utilizing yearly trends and weekly trends for extrapolating 2020-2023 mortality by all causes (not limited to deaths caused by COVID-19). During the process of extrapolation, we fit other linear models by adding more complex seasonality terms such as sine / cosine of week or factorized weeks, but just simply fitting the simple linear model provided the most parsimonious and interpretable model. Similar to the estimation of the total population in 2024, this estimation is also based on the assumption that the all-cause mortality is linear on yearly trends and weekly trends.</p>
-<p>Our analysis uses several analytical metrics mainly Case Fatality Rate (CFR), Hospitalization Rate (HR) and Death Proportion (DP). The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population.</p>
+<p>Our analysis of COVID-19 virulence uses several analytic metrics, primarily <strong>Case Fatality Rate (CFR)</strong>, <strong>Hospitalization Rate (HR)</strong>, and <strong>Death Proportion (DP)</strong>. These metrics are defined as follows:</p>
+<p><span class="math display">\[
+\text{CFR} = \frac{\text{Total Deaths}}{\text{Total Cases}} \times 100,000
+\]</span></p>
+<p><span class="math display">\[
+\text{HR} = \frac{\text{Total Hospitalizations}}{\text{Total Cases}} \times 100,000
+\]</span></p>
+<p><span class="math display">\[
+\text{DP} = \frac{\text{Total Deaths}}{\text{Total Population}} \times 100,000
+\]</span></p>
 <p>Also, to compare the three metrics stated above across waves, we used Wilcoxon rank-sum test for non-parametric comparisons. It assesses whether the distribution of a particular variable is significantly different between the two groups when the data does not meet the assumptions of normality required for a t-test. We set the null hypothesis to “the two groups come from populations with the same distribution”, and the alternative as “the two groups come from populations with different distributions”. In our research project, this would be interpreted as testing whether COVID-19 metrics (e.g.&nbsp;CFR, HR, DP) during Wave 1 vs.&nbsp;Wave 2 show significant difference between the two waves.</p>
 <p>Our excess mortality analysis uses the definition Excess Mortality = Observed Deaths – Estimated Deaths to calculate excess mortality. Our methodology is that after fitting the linear model with outcome variable being excess deaths and predictor being covid deaths, if the summary statistics show high R-squared or significant p-value, we conclude that covid deaths is a strong predictor, advocating the COVID-19 was indeed the culprit of the excess deaths in US states. We also visually check whether the COVID-19 is the cause of excess mortalities by drawing a weekly excess mortality plot with COVID-19 caused deaths plotted on top of it.</p>
 <p>Our methods is robust since it divides the pandemic into specific waves, thus acknowledges the temporal and dynamic nature of the pandemic, allowing for contextual insights.</p>
@@ -1609,6 +1647,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
+
 
 </section>
 </section>
