@@ -562,14 +562,14 @@ ggplot(all_excess, aes(x = reorder(state_name, excess_death_rate), y = excess_de
 
 ```{r}
 # Top and bottom 5 for each wave
-top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(rank = row_number())
-bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(rank = 53 - row_number())
+top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(Rank = row_number())
+bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(Rank = 53 - row_number())
 
-top5_wave2 <- wave2_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(rank = row_number())
-bottom5_wave2 <- wave2_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(rank = 53 - row_number())
+top5_wave2 <- wave2_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(Rank = row_number())
+bottom5_wave2 <- wave2_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(Rank = 53 - row_number())
 
-top5_wave3 <- wave3_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(rank = row_number())
-bottom5_wave3 <- wave3_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(rank = 53 - row_number())
+top5_wave3 <- wave3_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(Rank = row_number())
+bottom5_wave3 <- wave3_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(Rank = 53 - row_number())
 
 # Combine all data
 combined_data <- bind_rows(
@@ -582,28 +582,33 @@ combined_data <- bind_rows(
 )
 combined_data <- combined_data |>
   rename(
-    state = state_name,
-    excess_mortality = total_excess_deaths,
-    excess_mortality_rate = excess_death_rate
+    State = state_name,
+    Excess_mortality = total_excess_deaths,
+    Excess_mortality_rate_per100k = excess_death_rate,
 ) 
 
 # View the combined data
-kable(combined_data, digit = 3)
+kable(combined_data, digit = 3, align = "c")
 ```
 We calculated each state's excess mortality during three waves by estimating mortality based on the linear model fitted with the 2015-2019 mortality data and subtracting this from observed deaths. 
 
 For the first wave(Oct 1, 2020 – Apr 1, 2021): South Dakota, Mississippi, Oklahoma, Arkansas, and New Mexico had highest excess mortality rates. Hawaii, Washington, New Hampshire, Maine, and Massachusetts had lowest excess mortality rates. South Dakota and Mississippi showed significant excess mortality, because in these areas, they have limited healthcare access. And, Hawaii and Washington showed lower rates which they had early public health interventions and stronger healthcare systems.
 
-For the second wave(Jul 1, 2021 – Dec 1, 2021): starting from wave 2, the Covid_19 vaccine came out. West Virginia, Alaska, Montana, Wyoming, and Mississippi had the highest rates. New Jersey, Massachusetts, Maryland, Connecticut, and New York had the lowest rates. West Virginia and Mississippi had highest excess mortality rates because they have limited healthcare infrastructure and lower vaccine rate. States like New Jersey and Massachusetts have access to various healthcare resources where higher vaccination rates and effective policy which contributed to their lower rates.
+For the second wave(Jul 1, 2021 – Dec 1, 2021): Starting from wave 2, the Covid_19 vaccine came out. West Virginia, Alaska, Montana, Wyoming, and Mississippi had the highest rates. New Jersey, Massachusetts, Maryland, Connecticut, and New York had the lowest rates. West Virginia and Mississippi had highest excess mortality rates because they have limited healthcare infrastructure and lower vaccine rate. States like New Jersey and Massachusetts have access to various healthcare resources where higher vaccination rates and effective policy which contributed to their lower rates.
 
-For the third wave(Dec 2, 2021 – Apr 1, 2022): West Virginia, New Mexico, Oklahoma, Kentucky, and Arizona had the highest excess mortality rates. States with the lowest rates were Hawaii, New York, Utah, Massachusetts, and Washington. West Virginia and Oklahoma continued to have highest excess mortality. On the other hand, Hawaii and Massachusetts consistently performed well due to their effective public health policies.
+For the third wave(Dec 2, 2021 – Apr 1, 2022): Fueled by the Omicron variant, West Virginia, New Mexico, Oklahoma, Kentucky, and Arizona had the highest excess mortality rates. States with the lowest rates were Hawaii, New York, Utah, Massachusetts, and Washington. West Virginia and Oklahoma continued to have highest excess mortality. On the other hand, Hawaii and Massachusetts consistently performed well due to their effective public health policies.
 
 Overall, the results above shows that COVID-19 explains excess mortality in the United States during 3 waves and also how vaccination and public health systems are involved in the prevention of excess deaths during the pandemic.
 
 # Discussion
 
-In this study, we analyzed COVID-19 data across the United States from January 2020 to November 2024, focusing on evaluating state-level performance during the pandemic. Our approach combined statistical modeling, excess mortality estimation, and comparisons across three defined pandemic waves.
+In this study, we analyzed COVID-19 data across the United States from January 2020 to November 2024, focusing on evaluating state-level performance during the pandemic. Our approach combined statistical modeling, excess mortality estimation, and comparisons across three defined pandemic waves. By integrating case fatality rates (CFR), hospitalization rates (HR), and death proportions (DP), we separate the entire periods into 3 waves where a peak in cases, deaths, and hospitalizations can be observed. The first one occurs from Oct 2020 to Apr 2021, there are other waves between Jul 2021 to early Dec 2021 and between from early Dec 2021 to Apr 2022. We used pre-pandemic mortality trends (2015–2019) to estimate expected deaths if no Covid-19 happened, which we provided a standard to identify excess mortality caused by Covid-19.
 
+Our analysis showed big differences between states and waves. In Wave 1, excess mortality was highest in states like South Dakota and Mississippi where structural issues like limited healthcare resources made the virus worse. Hawaii and Washington had much lower excess mortality likely due to strong healthcare systems and early interventions. Under Wave 2, mortality metrics improve in many states due to Covid-19 vaccines came out. But challenges remained especially in rural states like West Virginia and Alaska where healthcare access and vaccine distribution were limited. Massachusetts and New Jersey did well due to good public health policies and higher vaccination rates. Wave 3 showed the impact of the super spreader Omicron variant. While cases skyrocketed to record levels, mortality and hospitalization rates didn’t rise as much, due to the protection of vaccines. But West Virginia and New Mexico still had high excess mortality, highlighting the persistent healthcare infrastructure disparities. Hawaii and New York had lower mortality rates, due to sustained public health policies. Our results show that public health policies, vaccination campaigns and healthcare infrastructure matter. States with strong and sustained interventions did well across all waves. States with structural challenges like limited healthcare capacity and delayed public health response had more mortality.
+
+While our analysis provided valuable insights, it also has limitations. First, our excess mortality estimates used linear trends from historical data which may not capture non-linear or seasonal patterns. Second, the indirect effects of the pandemic like delayed medical care or socioeconomic stressors were not modeled but likely contributed to excess mortality in some states. Third, variations in reporting practices across states may have introduced inconsistencies in the data.
+
+When doing similar analysis in the future, it’s necessary to consider the assumptions behind the mortality trend extrapolations especially when there are big disruptions like the pandemic. Sensitivity analysis and model diagnostics are crucial to check the results. Future studies should also look into the long term effects of the pandemic including the indirect effects of delayed care and economic stressors and how healthcare inequities contributed to the observed disparities.
 
 # Supplementary Methods
 
