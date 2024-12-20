@@ -10,6 +10,7 @@ format:
 execute:
   echo: false
   warning: false
+theme: journal
 bibliography: references.bib
 ---
 
@@ -27,19 +28,25 @@ load('../data/dat.rda')
 load('../data/deaths_all.rda')
 ```
 
+# Abstract
+
+The COVID-19 pandemic has greatly impacted global health. Especially within the United States, different states experienced significant variations in outcomes over time due to regional differences. This study examines the evolution of COVID-19 virulence and its effects from January 2020 to November 2024, leveraging data from the US Census Bureau and the Centers for Disease Control and Prevention on population estimates, cases, deaths, and hospitalizations. We identified three pandemic waves and assessed state-level performance using metrics such as Case Fatality Rate (CFR), Hospitalization Rate (HR), and Death Proportion (DP).
+
+Our analysis results revealed a pronounced decline in virulence of the COVID-19 virus across three waves, as evidenced by significant reductions in CFR and DP across waves, despite slightly increased transmissibility in later variants. States with stronger healthcare infrastructure and proactive public health policies, such as Hawaii and Massachusetts, generally exhibited lower mortality rates on average. On the contrary, regions with limited resources, like South Dakota and West Virginia, faced higher excess mortality.
+
+Statistical modeling and excess mortality analysis confirm that COVID-19 was the primary driver of increased deaths, and regional disparities were evident. These results underscore the importance of public health systems and targeted interventions in mitigating the impact of pandemics.
+
 # Introduction
 
-The COVID-19 pandemic, first reported in Wuhan in late 2019, is a respiratory disease caused by the severe acute respiratory syndrome coronavirus 2 (SARS-Cov-2) [@shi_2020_an; @covid2021modeling]. The SAR-Cov-2 virus rapidly spread from China to the rest of the world in early 2020, and has constituted arguably the most severe global health crisis the 21st century has seen so far. Beyond its direct impact on human health, the outbreak of COVID-19 has exerted indelible influence on societies, economies, and the healthcare systems. In the early phase of the COVID-19 pandemic, it was known to cause irreversible pneumonia, high fever, and dry cough [@madabhavi2020covid]. Silvestri et al. (2020) identified four stages of the early variants of the SARS-Cov-2 virus: upper respiratory infection, pneumonia, cytokine storm, and in the worse scenario, death [@stasi2020treatment].
+The COVID-19 pandemic, first reported in Wuhan in late 2019, is a respiratory disease caused by the severe acute respiratory syndrome coronavirus 2 (SARS-Cov-2) [@shi_2020_an; @covid2021modeling]. The SAR-Cov-2 virus rapidly spread from China to the rest of the world in early 2020, and has arguably constituted the most severe global health crisis the 21st century has seen so far. Beyond its direct impact on human health, the outbreak of COVID-19 has exerted an indelible influence on societies, economies, and the healthcare systems. In the early phase of the COVID-19 pandemic, it was known to cause irreversible pneumonia, high fever, and dry cough [@madabhavi2020covid]. Silvestri et al. (2020) identified four stages of the early variants of the SARS-Cov-2 virus: upper respiratory infection, pneumonia, cytokine storm, and in the worse scenario, death [@stasi2020treatment].
 
-The rapid transmission of the COVID-19 virus was possibly due to its unique characteristic: asymptomatic transmission. Compared with coronaviruses identified previously such as the MERS-Cov, many of the COVID-19 infected patients did not show any symptoms when they first contracted the virus. However, they already became carriers, and the virus already started spreading from them through air, body fluid exchange, or aerosols [@gao2021systematic]. The asymptomatic transmission feature accelerated the wide spread of the COVID-19 virus, and at the same time hindered the containment efforts led by the healthcare agencies. What's more, as the pandemic progressed and vaccines were developed, the SARS-Cov-2 virus exhibited a high rate of escape and mutation, leading to a variety of variants including alpha, beta, delta, and omicron. These variants showed differences in their transmissibility, virulence, and the ability to evade the immune system. Because of this, even vaccines, which used to be taken as the ultimate measure to end any pandemic, proved to fall short of people's expectation in controlling this worldwise crisis [@vasireddy2021review]. As a result, the majority of the governments announced emergency measures ranging from mask mandates, social distancing, regular sterilization, and even full lock-down of cities [@koh2020covid].
+The rapid transmission of the COVID-19 virus was possibly due to its unique characteristic: asymptomatic transmission. Compared with coronaviruses identified previously such as the MERS-Cov, many of the COVID-19 infected patients showed no symptoms during the initial stages of the infection. Despite being asymptomatic, these individuals could unknowingly act as carriers, spreading the virus through aerosols, bodily fluids, or airborne particles [@gao2021systematic]. The feature accelerated the global spread of the COVID-19 virus, and simultaneously hindered the containment efforts led by the healthcare agencies. What's more, as the pandemic progressed and vaccines were developed, the SARS-Cov-2 virus exhibited a high rate of mutation, leading to variants including Alpha, Beta, Delta, and Omicron.  These variants showed differences in their transmissibility, virulence, and the ability to evade the immune system. Because of this, even vaccines, which used to be taken as the ultimate measure to end any pandemic, proved to fall short of people's expectation in controlling this worldwide crisis [@vasireddy2021review]. As a result, the majority of the governments announced emergency measures such as mask mandates, social distancing, regular sterilization, and even full lock-down of cities [@koh2020covid].
 
-Globally, what the COVID-19 imposed was not merely a challenge in the field of public health, but also a multi-faceted catastrophe. For instance, restrictions on freight transport wreaked great havoc on international transactions and businesses. Consequently, the economic systems of countries around the globe were heavily struck, especially for those which rely greatly on exports. A cascade of its adverse effects was reflected by high rate of unemployment, corporation bankruptcy, disruptions to supply chains, and a switch in working/learning mode. To the healthcare system, COVID-19 meant extraordinary pressure on the infrastructures. Hospitals were often confronted with an overwhelming number of infected patients, while experiencing a lack of medical professionals also due to COVID-19 transmission.
-
-Especially in the United States, the COVID-19 pandemic has been complicated and exacerbated by various factors [@omer2020covid; @covid2021modeling]. Given the high degree of autonomy of each state in the US, significant variations could be seen across states due to discrepancies in regional public health policies, demographics, and economic development. Previous studies have suggested that the ethnic minorities, middle- and low-income populations, and the rural communities were relatively more vulnerable to this emergency. These populations often suffer from pre-existing health inequities and consequently disproportional rates of mortality were reported [@alcendor2020racial; @wilder2021disproportionate].
+Especially in the United States, the COVID-19 pandemic has been complicated and exacerbated by various factors [@omer2020covid; @covid2021modeling]. Given the high degree of autonomy of each state in the US, significant variations could be seen across states due to discrepancies in regional public health policies, demographics, and economic development. Previous studies have suggested that the ethnic minorities, middle- and low-income populations, and rural communities were particularly more vulnerable to this emergency. These populations often suffer from pre-existing health inequities and consequently disproportional rates of mortality were reported [@alcendor2020racial; @wilder2021disproportionate].
 
 The US Centers for Disease Control and Prevention (CDC) provides an excellent platform for collecting and sharing COVID-19 related data. These data enable us to study the progression and impact of COVID-19 throughout the pandemic period. We can expect that different states might have responded differently: adopting distinct strategies for containment and mitigation. Additionally, as the COVID-19 virus mutated, multiple waves could be identified, which were driven by seasonal changes, vaccine effectiveness, and the fatality rate. Understanding these patterns is vital to assessing the evolution of the SARS-Cov-2 virus, regional differences, and the virulence over time.
 
-In this project, we examined the COVID-19 data provided by the CDC COVID-19 Response, including COVID-19 cases, COVID-related deaths, and hospitalization from Jan 25th, 2020 to Nov 30th, 2024. Leveraging data analysis and visualization, this study aims to identify major waves of the COVID-19 pandemic in the US, and answer the following questions 1) which states generally responded to the pandemic better, 2) how the virulence of the SARS-Cov-2 virus evolved to understand the regional differences and seasonal changes in the transmissibility of the virus. In addition, we also seek to estimate the weekly excess mortality for each state during the pandemic period, and investigate whether the regional differences could be observed and whether COVID-19 was the driving factor. We hypothesize that states along the west and east coasts would generally have better performance during the pandemic due to stronger healthcare infrastructure. We also hypothesize that the COVID-19 virus became less virulent over time as typically viruses do not possess high virulence and high contagiousness.
+In this project, we examined the COVID-19 data provided by the CDC COVID-19 Response, including COVID-19 cases, COVID-related deaths, and hospitalization from Jan 25th, 2020 to Nov 30th, 2024. Using data analysis and visualization, this study aims to identify major waves of the COVID-19 pandemic in the US, and answer the following questions 1) which states generally responded to the pandemic better, 2) how the virulence of the SARS-Cov-2 virus evolved and examine regional differences and seasonal changes in the transmissibility of the virus. In addition, we also seek to estimate weekly excess mortality for each state during the pandemic period and investigate whether regional differences could be observed and COVID-19 was the driving factor. We hypothesize that states along the West and East Coasts would generally perform better during the pandemic due to stronger healthcare infrastructure. We also hypothesize that the COVID-19 virus became less virulent over time as viruses typically do not exhibit both high virulence and high transmissibility.
 
 # Methods
 
@@ -68,7 +75,6 @@ Also, to compare the three metrics stated above across waves, we used Wilcoxon r
 Our excess mortality analysis uses the definition Excess Mortality = Observed Deaths – Estimated Deaths to calculate excess mortality. Our methodology is that after fitting the linear model with outcome variable being excess deaths and predictor being covid deaths, if the summary statistics show high R-squared or significant p-value, we conclude that covid deaths is a strong predictor, advocating the COVID-19 was indeed the culprit of the excess deaths in US states. We also visually check whether the COVID-19 is the cause of excess mortalities by drawing a weekly excess mortality plot with COVID-19 caused deaths plotted on top of it. 
 
 Our methods is robust since it divides the pandemic into specific waves, thus acknowledges the temporal and dynamic nature of the pandemic, allowing for contextual insights. 
-
 
 # Analyses
 
@@ -172,7 +178,7 @@ From Oct 1st 2020 to Apr 1st 2021, overall this wave was arguably the most sever
 
 From July 1st 2021 to Dec 1st 2021, the COVID-19 variant seemed to be less virulent. The highest death rate per 100,000 people was reported in West Virginia (WV), with an average of 113.13 deaths among 100,000 people. Following West Virginia were Florida  (111.62), Montana (111.30), and Wyoming (109.88). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Washington D.C., which was only 12.09 deaths on average per 100,000 people, followed by Vermont (12.39), Connecticut (12.39), New York (17.04), and Hawaii (36.83).
 
-For the third wave, the COVID-19 variant during the period seemed to grow more infectious and deadly. The highest death rate per 100,000 people was reported in West Virginia (WV) again, with an average of 103.73 deaths among 100,000 people. Following West Virginia were Ohio (102.05), New Mexico (96.78), and Kentucky (93.82). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 20.76 deaths on average per 100,000 people, followed by Alaska (27.69), Puerto Rico (28.21), Vermont (29.85), and Utah (33.22). Figures can be found in **Supplementary Methods**.
+For the third wave, the COVID-19 variant during the period seemed to grow more infectious and deadly. The highest death rate per 100,000 people was reported in West Virginia (WV) again, with an average of 103.73 deaths among 100,000 people. Following West Virginia were Ohio (102.05), New Mexico (96.78), and Kentucky (93.82). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 20.76 deaths on average per 100,000 people, followed by Alaska (27.69), Puerto Rico (28.21), Vermont (29.85), and Utah (33.22). Figures can be found in **Supplementary Methods: Death rate of each state (3 waves)**.
 
 We also compared the performance of each state across all 3 waves by taking the average of their death rate per 100,000 people. Results show that Oklahoma had the highest average death rate per 100,000, amounting to 120.00 deaths per 100,000 people, followed by West Virginia (115.33), Mississippi (109), Kentucky (107.42), Tennessee (106.92). There were also states which kept a relatively low death rate across waves. Namely, Vermont had an average death rate of only 17.81 per 100,000. Similarly, Hawaii had an average of 22.24 per 100,000, followed by Puerto Rico (30.94) New York (37.10), and Washington (40.07).
 
@@ -208,8 +214,7 @@ allWaves %>%
   labs(
     y = "Average Death Rate (per 100,000)",
     fill = "Average Death Rate",
-    title = "Average COVID-19 Death Rates by State across 3 Waves",
-    subtitle = "Data from Oct 1st 2020 to Apr 1st 2022"
+    title = "Average COVID-19 Death Rates by State across 3 Waves"
   )
 ```
 
@@ -338,7 +343,7 @@ We conducted pairwise statistical tests on the CFR, HR, and DP metrics to evalua
 
 For the HR, there was no statistically significant difference between Wave 1 and Wave 2, as indicated by a p-value of 0.757. However, a notable decline in HR was observed in Wave 3 compared to both Wave 1 and Wave 2, with p-values of less than 0.001. These findings demonstrate a clear downward trend in the CFR across all three waves, while the HR remained relatively stable between the first two waves before showing a significant reduction in the third wave.
 
-Finally for the DP, there was a statistically significant difference between Wave 1 and Wave 2, with a p-value of less than 0.001. A highly significant difference was also observed between Wave 1 and Wave 3, indicating a sharp decline in DP over time. However, the comparison between Wave 2 and Wave 3 revealed no statistically significant difference, as evidenced by a p-value of 0.647.
+Finally for the DP, there was a statistically significant difference between Wave 1 and Wave 2, with a p-value of less than 0.001. A highly significant difference was also observed between Wave 1 and Wave 3, indicating a sharp decline in DP over time. However, the comparison between Wave 2 and Wave 3 revealed no statistically significant difference, as evidenced by a p-value of 0.647. Figures can be found in **Supplementary Methods: Pair-wise comparison of the CFR, HR, and DP using statistical tests**.
 
 ## Q4: Estimate excess mortality for each week for each state. Check if excess mortality can be explained by COVID-19
 
@@ -484,7 +489,7 @@ print(p_all_states)
 
 We are first using 2015-2019 US mortality data grouped by states to estimate the 2020-2023 mortality by all causes (not limited to deaths caused by Covid-19). Then we calculate excess mortality by subtracting the estimated deaths from observed deaths of 2020-2023. This is depicted as blue line in the plot. Now, we plot the deaths which the culprit is Covid-19 via red line to see whether the excess mortality is well explained by Covid-19. We can see that in most of the states, COVId-19 is indeed the main culprit of excess mortality from 2020-2023. However, some states such as New Hampshire, Oregon, Puerto Rico, and Washington do not have a similar trend of lines between COVID-19 deaths and Excess deaths, meaning COVID-19 does not explain the excess mortality that well.
 
-Second, we conducted additional analysis of fitting the linear model with COVID-19 deaths being the covariate and excess deaths being the outcome variable. The results of the model advocated the findings that we have roughly found from the plot. The R-squared values of each state's model showed that New Hampshire(0.236), Oregon(0.301), Puerto Rico(0.194), and Washington(0.257)'s respective R-squared values were all low compared to other states. Some states such as New Jersey, North Dakota, and South Dakota showed very high R-squared values of 0.851, 0.849, and 0.857 respectively which corresponded to the alignment of Covid caused deaths and excess deaths in the plot.
+Second, we conducted additional analysis of fitting the linear model with COVID-19 deaths being the covariate and excess deaths being the outcome variable. The results of the model advocated the findings that we have roughly found from the plot. The R-squared values of each state's model showed that New Hampshire(0.236), Oregon(0.301), Puerto Rico(0.194), and Washington(0.257)'s respective R-squared values were all low compared to other states. Some states such as New Jersey, North Dakota, and South Dakota showed very high R-squared values of 0.851, 0.849, and 0.857 respectively which corresponded to the alignment of Covid caused deaths and excess deaths in the plot. Detailed regression ouputs can be found in **Supplementary Methods: Regression (fitted) table of all states in the U.S.**.
 
 Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!
 
@@ -541,7 +546,7 @@ all_excess$Wave <- factor(all_excess$Wave, levels = c("Wave 1", "Wave 2", "Wave 
 ggplot(all_excess, aes(x = reorder(state_name, excess_death_rate), y = excess_death_rate, fill = excess_death_rate)) +
   geom_col() +
   coord_flip() +
-  facet_wrap(~Wave, scales = "free_y") +
+  facet_wrap(~Wave, scales = "free") +
   scale_fill_gradient(low = "#FFDDC1", high = "#AE0000") +
   theme_minimal(base_size = 12) +
   theme(
@@ -549,6 +554,7 @@ ggplot(all_excess, aes(x = reorder(state_name, excess_death_rate), y = excess_de
     axis.title.x = element_text(face = "bold"),
     strip.text = element_text(size = 14, face = "bold"),
     axis.text.y = element_text(size = 7),
+    title = element_text(face = "bold"),
     panel.grid.minor = element_blank(),
     legend.position = "right"
   ) +
@@ -583,13 +589,15 @@ combined_data <- bind_rows(
 combined_data <- combined_data |>
   rename(
     State = state_name,
-    Excess_mortality = total_excess_deaths,
-    Excess_mortality_rate_per100k = excess_death_rate,
+    "Excess Mortality" = total_excess_deaths,
+    " Excess Mortality Rate per 100,000" = excess_death_rate,
+    Population = population
 ) 
 
 # View the combined data
 kable(combined_data, digit = 3, align = "c")
 ```
+
 We calculated each state's excess mortality during three waves by estimating mortality based on the linear model fitted with the 2015-2019 mortality data and subtracting this from observed deaths. 
 
 For the first wave(Oct 1, 2020 – Apr 1, 2021): South Dakota, Mississippi, Oklahoma, Arkansas, and New Mexico had highest excess mortality rates. Hawaii, Washington, New Hampshire, Maine, and Massachusetts had lowest excess mortality rates. South Dakota and Mississippi showed significant excess mortality, because in these areas, they have limited healthcare access. And, Hawaii and Washington showed lower rates which they had early public health interventions and stronger healthcare systems.
