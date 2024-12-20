@@ -1231,68 +1231,315 @@ div.csl-indent {
 </div>
 </div>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name   total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                      &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 South Dakota              16419.    908473              1807. Wave 1
-2 Mississippi               51634.   2943234.             1754. Wave 1
-3 Oklahoma                  70165.   4020842.             1745. Wave 1
-4 Arkansas                  52177.   3047415.             1712. Wave 1
-5 New Mexico                35110.   2114723.             1660. Wave 1</code></pre>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 24%">
+<col style="width: 13%">
+<col style="width: 21%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">state_name</th>
+<th style="text-align: right;">total_excess_deaths</th>
+<th style="text-align: right;">population</th>
+<th style="text-align: right;">excess_death_rate</th>
+<th style="text-align: left;">Wave</th>
+<th style="text-align: left;">wave</th>
+<th style="text-align: right;">rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">South Dakota</td>
+<td style="text-align: right;">16419.314</td>
+<td style="text-align: right;">908473.0</td>
+<td style="text-align: right;">1807.353</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mississippi</td>
+<td style="text-align: right;">51633.512</td>
+<td style="text-align: right;">2943234.4</td>
+<td style="text-align: right;">1754.312</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Oklahoma</td>
+<td style="text-align: right;">70164.746</td>
+<td style="text-align: right;">4020841.8</td>
+<td style="text-align: right;">1745.026</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Arkansas</td>
+<td style="text-align: right;">52176.618</td>
+<td style="text-align: right;">3047415.4</td>
+<td style="text-align: right;">1712.160</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New Mexico</td>
+<td style="text-align: right;">35110.491</td>
+<td style="text-align: right;">2114723.2</td>
+<td style="text-align: right;">1660.288</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hawaii</td>
+<td style="text-align: right;">1447.598</td>
+<td style="text-align: right;">1439376.6</td>
+<td style="text-align: right;">100.571</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Washington</td>
+<td style="text-align: right;">34028.332</td>
+<td style="text-align: right;">7780112.0</td>
+<td style="text-align: right;">437.376</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">51</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Hampshire</td>
+<td style="text-align: right;">6775.909</td>
+<td style="text-align: right;">1396105.8</td>
+<td style="text-align: right;">485.344</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Maine</td>
+<td style="text-align: right;">6793.006</td>
+<td style="text-align: right;">1385767.6</td>
+<td style="text-align: right;">490.198</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Massachusetts</td>
+<td style="text-align: right;">37083.374</td>
+<td style="text-align: right;">6994548.2</td>
+<td style="text-align: right;">530.175</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">West Virginia</td>
+<td style="text-align: right;">29595.602</td>
+<td style="text-align: right;">1775810.4</td>
+<td style="text-align: right;">1666.597</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alaska</td>
+<td style="text-align: right;">11892.841</td>
+<td style="text-align: right;">733124.0</td>
+<td style="text-align: right;">1622.214</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Montana</td>
+<td style="text-align: right;">17743.049</td>
+<td style="text-align: right;">1119461.6</td>
+<td style="text-align: right;">1584.963</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wyoming</td>
+<td style="text-align: right;">8220.787</td>
+<td style="text-align: right;">581598.8</td>
+<td style="text-align: right;">1413.481</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mississippi</td>
+<td style="text-align: right;">41573.242</td>
+<td style="text-align: right;">2943234.4</td>
+<td style="text-align: right;">1412.502</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Jersey</td>
+<td style="text-align: right;">13175.832</td>
+<td style="text-align: right;">9275981.8</td>
+<td style="text-align: right;">142.042</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Massachusetts</td>
+<td style="text-align: right;">11776.964</td>
+<td style="text-align: right;">6994548.2</td>
+<td style="text-align: right;">168.373</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">51</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Maryland</td>
+<td style="text-align: right;">11487.566</td>
+<td style="text-align: right;">6171589.2</td>
+<td style="text-align: right;">186.136</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Connecticut</td>
+<td style="text-align: right;">8306.713</td>
+<td style="text-align: right;">3610627.6</td>
+<td style="text-align: right;">230.063</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New York</td>
+<td style="text-align: right;">50117.643</td>
+<td style="text-align: right;">19713122.4</td>
+<td style="text-align: right;">254.235</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">West Virginia</td>
+<td style="text-align: right;">22867.470</td>
+<td style="text-align: right;">1775810.4</td>
+<td style="text-align: right;">1287.720</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Mexico</td>
+<td style="text-align: right;">23042.651</td>
+<td style="text-align: right;">2114723.2</td>
+<td style="text-align: right;">1089.630</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Oklahoma</td>
+<td style="text-align: right;">41694.305</td>
+<td style="text-align: right;">4020841.8</td>
+<td style="text-align: right;">1036.955</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kentucky</td>
+<td style="text-align: right;">45350.159</td>
+<td style="text-align: right;">4516205.0</td>
+<td style="text-align: right;">1004.165</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Arizona</td>
+<td style="text-align: right;">70906.708</td>
+<td style="text-align: right;">7355304.6</td>
+<td style="text-align: right;">964.021</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hawaii</td>
+<td style="text-align: right;">4758.577</td>
+<td style="text-align: right;">1439376.6</td>
+<td style="text-align: right;">330.600</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New York</td>
+<td style="text-align: right;">66754.672</td>
+<td style="text-align: right;">19713122.4</td>
+<td style="text-align: right;">338.631</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">51</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Utah</td>
+<td style="text-align: right;">13825.447</td>
+<td style="text-align: right;">3377227.8</td>
+<td style="text-align: right;">409.373</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Massachusetts</td>
+<td style="text-align: right;">29029.613</td>
+<td style="text-align: right;">6994548.2</td>
+<td style="text-align: right;">415.032</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Washington</td>
+<td style="text-align: right;">36644.443</td>
+<td style="text-align: right;">7780112.0</td>
+<td style="text-align: right;">471.001</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">48</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 Hawaii                      1448.   1439377.              101. Wave 1
-2 Washington                 34028.   7780112               437. Wave 1
-3 New Hampshire               6776.   1396106.              485. Wave 1
-4 Maine                       6793.   1385768.              490. Wave 1
-5 Massachusetts              37083.   6994548.              530. Wave 1</code></pre>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 West Virginia              29596.   1775810.             1667. Wave 2
-2 Alaska                     11893.    733124              1622. Wave 2
-3 Montana                    17743.   1119462.             1585. Wave 2
-4 Wyoming                     8221.    581599.             1413. Wave 2
-5 Mississippi                41573.   2943234.             1413. Wave 2</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 New Jersey                 13176.   9275982.              142. Wave 2
-2 Massachusetts              11777.   6994548.              168. Wave 2
-3 Maryland                   11488.   6171589.              186. Wave 2
-4 Connecticut                 8307.   3610628.              230. Wave 2
-5 New York                   50118.  19713122.              254. Wave 2</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 West Virginia              22867.   1775810.             1288. Wave 3
-2 New Mexico                 23043.   2114723.             1090. Wave 3
-3 Oklahoma                   41694.   4020842.             1037. Wave 3
-4 Kentucky                   45350.   4516205              1004. Wave 3
-5 Arizona                    70907.   7355305.              964. Wave 3</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 Hawaii                      4759.   1439377.              331. Wave 3
-2 New York                   66755.  19713122.              339. Wave 3
-3 Utah                       13825.   3377228.              409. Wave 3
-4 Massachusetts              29030.   6994548.              415. Wave 3
-5 Washington                 36644.   7780112               471. Wave 3</code></pre>
-</div>
-</div>
-<p>Wave 1 (Oct 1, 2020 – Apr 1, 2021): Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts Wave 2 (Jul 1, 2021 – Dec 1, 2021): Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York Wave 3 (Dec 2, 2021 – Apr 1, 2022): Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington Overall Patterns: Consistently High Excess Mortality States: States like Oklahoma, Mississippi, and West Virginia frequently appeared among the highest excess mortality ranks. Possible reasons include challenges such as lower vaccination uptake, fewer healthcare resources in rural regions, delayed or less stringent public health measures, and possibly higher prevalence of pre-existing health conditions. Consistently Low Excess Mortality States: Hawaii, Washington, and Massachusetts repeatedly ranked among the states with the lowest excess mortality. These states are known for stronger healthcare infrastructure, better access to medical services, early and sustained public health interventions, and higher vaccination rates. Compliance with mitigation measures and strategic public policies likely helped keep mortality rates lower. Influence of Public Health Policies and Vaccination: Over time, the availability and uptake of vaccines played a crucial role. States that improved vaccine coverage tended to see decreasing excess mortality in later waves, while states slower to vaccinate or implement effective preventive measures often struggled.</p>
+<p>Wave 1 (Oct 1, 2020 – Apr 1, 2021):</p>
+<p>Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico</p>
+<p>Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts</p>
+<p>Wave 2 (Jul 1, 2021 – Dec 1, 2021):</p>
+<p>Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi</p>
+<p>Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York</p>
+<p>Wave 3 (Dec 2, 2021 – Apr 1, 2022):</p>
+<p>Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona</p>
+<p>Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington</p>
+<p>Throughout the pandemic, certain states consistently experienced higher excess mortality rates, notably Oklahoma, Mississippi, and West Virginia. These states faced unique challenges, including lower vaccination uptake, limited access to healthcare in rural areas, and delayed or less stringent public health measures. Additionally, a higher prevalence of pre-existing health conditions such as obesity, diabetes, and cardiovascular diseases likely exacerbated the impact of COVID-19. These structural and behavioral factors contributed to their frequent appearance among the states with the highest excess mortality across all waves.</p>
+<p>In contrast, states like Hawaii, Washington, and Massachusetts consistently ranked among those with the lowest excess mortality rates. These states benefitted from strong healthcare systems, better access to medical resources, and early implementation of comprehensive public health strategies. High vaccination rates, coupled with effective public policies and greater compliance with mitigation measures, played a critical role in reducing mortality. These factors highlight how proactive and sustained public health interventions can mitigate the toll of the pandemic, even in the face of widespread challenges.</p>
+<p>The availability and uptake of vaccines emerged as a decisive factor influencing trends in excess mortality over time. States that prioritized vaccine distribution and achieved higher coverage witnessed declining excess mortality rates in later waves. Conversely, states slower to adopt widespread vaccination or preventive measures often struggled to control mortality rates. These findings underscore the vital role of public health policies and vaccination in shaping outcomes during a public health crisis, emphasizing the importance of equitable and efficient health resource allocation to protect vulnerable populations.</p>
 </section>
 </section>
 <section id="supplementary-methods" class="level1">

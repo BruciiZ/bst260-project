@@ -605,42 +605,52 @@ ggplot(all_excess, aes(x = reorder(state_name, excess_death_rate), y = excess_de
 ```
 
 ```{r}
-# We can then identify top 5 and bottom 5 states by excess mortality rate for each wave
-top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
-bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+# Top and bottom 5 for each wave
+top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(wave = "Wave 1", rank = row_number())
+bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(wave = "Wave 1", rank = 53 - row_number())
 
-top5_wave2 <- wave2_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
-bottom5_wave2 <- wave2_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+top5_wave2 <- wave2_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(wave = "Wave 2", rank = row_number())
+bottom5_wave2 <- wave2_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(wave = "Wave 2", rank = 53 - row_number())
 
-top5_wave3 <- wave3_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
-bottom5_wave3 <- wave3_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+top5_wave3 <- wave3_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(wave = "Wave 3", rank = row_number())
+bottom5_wave3 <- wave3_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(wave = "Wave 3", rank = 53 - row_number())
 
-# Print out summaries
-top5_wave1
-bottom5_wave1
+# Combine all data
+combined_data <- bind_rows(
+  top5_wave1,
+  bottom5_wave1,
+  top5_wave2,
+  bottom5_wave2,
+  top5_wave3,
+  bottom5_wave3
+)
 
-top5_wave2
-bottom5_wave2
-
-top5_wave3
-bottom5_wave3
+# View the combined data
+kable(combined_data, digit = 3)
 ```
 Wave 1 (Oct 1, 2020 – Apr 1, 2021):
+
 Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico
+
 Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts
+
 Wave 2 (Jul 1, 2021 – Dec 1, 2021):
+
 Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi
+
 Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York
+
 Wave 3 (Dec 2, 2021 – Apr 1, 2022):
+
 Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona
+
 Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington
-Overall Patterns:
-Consistently High Excess Mortality States:
-States like Oklahoma, Mississippi, and West Virginia frequently appeared among the highest excess mortality ranks. Possible reasons include challenges such as lower vaccination uptake, fewer healthcare resources in rural regions, delayed or less stringent public health measures, and possibly higher prevalence of pre-existing health conditions.
-Consistently Low Excess Mortality States:
-Hawaii, Washington, and Massachusetts repeatedly ranked among the states with the lowest excess mortality. These states are known for stronger healthcare infrastructure, better access to medical services, early and sustained public health interventions, and higher vaccination rates. Compliance with mitigation measures and strategic public policies likely helped keep mortality rates lower.
-Influence of Public Health Policies and Vaccination:
-Over time, the availability and uptake of vaccines played a crucial role. States that improved vaccine coverage tended to see decreasing excess mortality in later waves, while states slower to vaccinate or implement effective preventive measures often struggled.
+
+Throughout the pandemic, certain states consistently experienced higher excess mortality rates, notably Oklahoma, Mississippi, and West Virginia. These states faced unique challenges, including lower vaccination uptake, limited access to healthcare in rural areas, and delayed or less stringent public health measures. Additionally, a higher prevalence of pre-existing health conditions such as obesity, diabetes, and cardiovascular diseases likely exacerbated the impact of COVID-19. These structural and behavioral factors contributed to their frequent appearance among the states with the highest excess mortality across all waves.
+
+In contrast, states like Hawaii, Washington, and Massachusetts consistently ranked among those with the lowest excess mortality rates. These states benefitted from strong healthcare systems, better access to medical resources, and early implementation of comprehensive public health strategies. High vaccination rates, coupled with effective public policies and greater compliance with mitigation measures, played a critical role in reducing mortality. These factors highlight how proactive and sustained public health interventions can mitigate the toll of the pandemic, even in the face of widespread challenges.
+
+The availability and uptake of vaccines emerged as a decisive factor influencing trends in excess mortality over time. States that prioritized vaccine distribution and achieved higher coverage witnessed declining excess mortality rates in later waves. Conversely, states slower to adopt widespread vaccination or preventive measures often struggled to control mortality rates. These findings underscore the vital role of public health policies and vaccination in shaping outcomes during a public health crisis, emphasizing the importance of equitable and efficient health resource allocation to protect vulnerable populations.
 
 # Supplementary Methods
 
