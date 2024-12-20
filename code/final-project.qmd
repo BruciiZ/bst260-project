@@ -858,7 +858,8 @@ metric.dat %>%
 #   )
 ```
 
-##Regression (fitted) table of all states
+## Regression (fitted) table of all states in the U.S.
+
 ```{r warning = FALSE}
 ##############################
 # 7. Statistical Tests by State
