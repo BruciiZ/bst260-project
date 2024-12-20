@@ -655,7 +655,7 @@ Second, we conducted additional analysis of fitting the linear model with COVID-
 
 Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!
 
-# Supplementary Methods
+# Supplementary Methods {#sec-introduction}
 
 ## Death rate of each state (3 waves)
 
