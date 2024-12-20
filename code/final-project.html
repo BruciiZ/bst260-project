@@ -56,35 +56,6 @@ div.csl-indent {
 <link href="final-project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -96,17 +67,14 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#load-libraries" id="toc-load-libraries" class="nav-link active" data-scroll-target="#load-libraries">Load libraries</a></li>
-  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#analyses" id="toc-analyses" class="nav-link" data-scroll-target="#analyses">Analyses</a>
   <ul class="collapse">
-  <li><a href="#pandemic-period-from-jan-2020-to-nov-2024" id="toc-pandemic-period-from-jan-2020-to-nov-2024" class="nav-link" data-scroll-target="#pandemic-period-from-jan-2020-to-nov-2024">Pandemic period from Jan 2020 to Nov 2024</a></li>
-  <li><a href="#deaths-rate-by-state-during-each-time-period" id="toc-deaths-rate-by-state-during-each-time-period" class="nav-link" data-scroll-target="#deaths-rate-by-state-during-each-time-period">Deaths rate by state during each time period</a></li>
-  <li><a href="#covid-19-became-less-or-more-virulent-across-different-periods" id="toc-covid-19-became-less-or-more-virulent-across-different-periods" class="nav-link" data-scroll-target="#covid-19-became-less-or-more-virulent-across-different-periods">COVID-19 became less or more virulent across different periods</a>
+  <li><a href="#q1-pandemic-period-from-jan-2020-to-nov-2024" id="toc-q1-pandemic-period-from-jan-2020-to-nov-2024" class="nav-link" data-scroll-target="#q1-pandemic-period-from-jan-2020-to-nov-2024">Q1: Pandemic period from Jan 2020 to Nov 2024</a></li>
+  <li><a href="#q2-deaths-rate-by-state-during-each-time-period" id="toc-q2-deaths-rate-by-state-during-each-time-period" class="nav-link" data-scroll-target="#q2-deaths-rate-by-state-during-each-time-period">Q2: Deaths rate by state during each time period</a></li>
+  <li><a href="#q3-covid-19-became-less-or-more-virulent-across-different-periods" id="toc-q3-covid-19-became-less-or-more-virulent-across-different-periods" class="nav-link" data-scroll-target="#q3-covid-19-became-less-or-more-virulent-across-different-periods">Q3: COVID-19 became less or more virulent across different periods</a>
   <ul class="collapse">
-  <li><a href="#pair-wise-comparison-of-the-key-metrics" id="toc-pair-wise-comparison-of-the-key-metrics" class="nav-link" data-scroll-target="#pair-wise-comparison-of-the-key-metrics">Pair-wise comparison of the key metrics</a></li>
-  <li><a href="#aggregated-metrics-across-wave" id="toc-aggregated-metrics-across-wave" class="nav-link" data-scroll-target="#aggregated-metrics-across-wave">Aggregated Metrics Across Wave</a></li>
+  <li><a href="#cases-fatality-rate-hospitalization-rate-and-death-per-population" id="toc-cases-fatality-rate-hospitalization-rate-and-death-per-population" class="nav-link" data-scroll-target="#cases-fatality-rate-hospitalization-rate-and-death-per-population">Cases fatality rate, hospitalization rate, and death per population</a></li>
   </ul></li>
   <li><a href="#q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" id="toc-q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" class="nav-link" data-scroll-target="#q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19">Q4: Estimate excess mortality for each week for each state. Check if excess mortality can be explained by COVID-19</a></li>
   <li><a href="#q5.-for-each-period-compute-the-excess-mortality-rates-by-state.-describe-which-states-did-better-or-worse-during-the-different-periods." id="toc-q5.-for-each-period-compute-the-excess-mortality-rates-by-state.-describe-which-states-did-better-or-worse-during-the-different-periods." class="nav-link" data-scroll-target="#q5.-for-each-period-compute-the-excess-mortality-rates-by-state.-describe-which-states-did-better-or-worse-during-the-different-periods.">Q5. For each period compute the excess mortality rates by state. Describe which states did better or worse during the different periods.</a></li>
@@ -114,6 +82,7 @@ window.Quarto = {
   <li><a href="#supplementary-methods" id="toc-supplementary-methods" class="nav-link" data-scroll-target="#supplementary-methods">Supplementary Methods</a>
   <ul class="collapse">
   <li><a href="#death-rate-of-each-state-3-waves" id="toc-death-rate-of-each-state-3-waves" class="nav-link" data-scroll-target="#death-rate-of-each-state-3-waves">Death rate of each state (3 waves)</a></li>
+  <li><a href="#pair-wise-comparison-of-the-cfr-hr-and-dp-using-statistical-tests" id="toc-pair-wise-comparison-of-the-cfr-hr-and-dp-using-statistical-tests" class="nav-link" data-scroll-target="#pair-wise-comparison-of-the-cfr-hr-and-dp-using-statistical-tests">Pair-wise comparison of the CFR, HR, and DP using statistical tests</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -145,12 +114,6 @@ window.Quarto = {
 </header>
 
 
-<section id="load-libraries" class="level1">
-<h1>Load libraries</h1>
-</section>
-<section id="load-data" class="level1">
-<h1>Load data</h1>
-</section>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>The COVID-19 pandemic, first reported in Wuhan in late 2019, is a respiratory disease caused by the severe acute respiratory syndrome coronavirus 2 (SARS-Cov-2) <span class="citation" data-cites="shi_2020_an covid2021modeling">(<a href="#ref-shi_2020_an" role="doc-biblioref">Shi et al. 2020</a>; <a href="#ref-covid2021modeling" role="doc-biblioref">Covid and Team 2021</a>)</span>. The SAR-Cov-2 virus rapidly spread from China to the rest of the world in early 2020, and has constituted arguably the most severe global health crisis the 21st century has seen so far. Beyond its direct impact on human health, the outbreak of COVID-19 has exerted indelible influence on societies, economies, and the healthcare systems. In the early phase of the COVID-19 pandemic, it was known to cause irreversible pneumonia, high fever, and dry cough <span class="citation" data-cites="madabhavi2020covid">(<a href="#ref-madabhavi2020covid" role="doc-biblioref">Madabhavi, Sarkar, and Kadakol 2020</a>)</span>. Silvestri et al.&nbsp;(2020) identified four stages of the early variants of the SARS-Cov-2 virus: upper respiratory infection, pneumonia, cytokine storm, and in the worse scenario, death <span class="citation" data-cites="stasi2020treatment">(<a href="#ref-stasi2020treatment" role="doc-biblioref">Stasi et al. 2020</a>)</span>.</p>
@@ -162,14 +125,14 @@ window.Quarto = {
 </section>
 <section id="analyses" class="level1">
 <h1>Analyses</h1>
-<section id="pandemic-period-from-jan-2020-to-nov-2024" class="level2">
-<h2 class="anchored" data-anchor-id="pandemic-period-from-jan-2020-to-nov-2024">Pandemic period from Jan 2020 to Nov 2024</h2>
+<section id="q1-pandemic-period-from-jan-2020-to-nov-2024" class="level2">
+<h2 class="anchored" data-anchor-id="q1-pandemic-period-from-jan-2020-to-nov-2024">Q1: Pandemic period from Jan 2020 to Nov 2024</h2>
 <p>The figure below displays the COVID-19 cases, deaths, and hospitalization rate per 100,000 people in each region of the US from 2020 to 2024.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/trend%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/trend%20plots-1.png" class="img-fluid figure-img" width="1152"></p>
 </figure>
 </div>
 </div>
@@ -182,8 +145,8 @@ window.Quarto = {
 <p><strong>Third Wave</strong></p>
 <p>The final and most intense wave depicted occurred during the winter of 2021-2022, fueled by the Omicron variant. While cases skyrocketed to unprecedented levels due to Omicron’s transmissibility, deaths and hospitalizations rose less dramatically than in previous waves, likely reflecting the variant’s comparatively milder effects and increased vaccination coverage. However, the healthcare system faced immense strain due to the sheer number of cases.</p>
 </section>
-<section id="deaths-rate-by-state-during-each-time-period" class="level2">
-<h2 class="anchored" data-anchor-id="deaths-rate-by-state-during-each-time-period">Deaths rate by state during each time period</h2>
+<section id="q2-deaths-rate-by-state-during-each-time-period" class="level2">
+<h2 class="anchored" data-anchor-id="q2-deaths-rate-by-state-during-each-time-period">Q2: Deaths rate by state during each time period</h2>
 <p>From Oct 1st 2020 to Apr 1st 2021, overall this wave was arguably the most severe wave among all 3. The highest death rate per 100,000 people was reported in South Dakota (SD), with an average of 188.91 deaths among 100,000 people. Following South Dakota were North Dakota (177.97), Oklahoma (175.32), and Arkansas (150.17). There were also states which managed to contain the death rate below 50 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 9.12 deaths on average per 100,000 people, followed by Vermont (11.18), Alaska (26.48), Washington (39.58), Oregon (42.04), Puerto Rico (43.66), and Maine (47.19).</p>
 <p>From July 1st 2021 to Dec 1st 2021, the COVID-19 variant seemed to be less virulent. The highest death rate per 100,000 people was reported in West Virginia (WV), with an average of 113.13 deaths among 100,000 people. Following West Virginia were Florida (111.62), Montana (111.30), and Wyoming (109.88). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Washington D.C., which was only 12.09 deaths on average per 100,000 people, followed by Vermont (12.39), Connecticut (12.39), New York (17.04), and Hawaii (36.83).</p>
 <p>For the third wave, the COVID-19 variant during the period seemed to grow more infectious and deadly. The highest death rate per 100,000 people was reported in West Virginia (WV) again, with an average of 103.73 deaths among 100,000 people. Following West Virginia were Ohio (102.05), New Mexico (96.78), and Kentucky (93.82). There were also states which managed to contain the death rate below 40 per 100,000. For example, the lowest death rate was reported in Hawaii, which was only 20.76 deaths on average per 100,000 people, followed by Alaska (27.69), Puerto Rico (28.21), Vermont (29.85), and Utah (33.22). Figures can be found in <strong>Supplementary Methods</strong>.</p>
@@ -193,104 +156,89 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/avg%20death%20rate%20across%203%20waves-1.png" class="img-fluid figure-img" width="1152"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="covid-19-became-less-or-more-virulent-across-different-periods" class="level2">
-<h2 class="anchored" data-anchor-id="covid-19-became-less-or-more-virulent-across-different-periods">COVID-19 became less or more virulent across different periods</h2>
-<p>To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: <strong>cases fatality rate (CFR)</strong>, <strong>hospitalization rate (HR)</strong>, and <strong>death per population (DP)</strong>. The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with figures and visualizations.</p>
-<section id="pair-wise-comparison-of-the-key-metrics" class="level3">
-<h3 class="anchored" data-anchor-id="pair-wise-comparison-of-the-key-metrics">Pair-wise comparison of the key metrics</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="aggregated-metrics-across-wave" class="level3">
-<h3 class="anchored" data-anchor-id="aggregated-metrics-across-wave">Aggregated Metrics Across Wave</h3>
+<section id="q3-covid-19-became-less-or-more-virulent-across-different-periods" class="level2">
+<h2 class="anchored" data-anchor-id="q3-covid-19-became-less-or-more-virulent-across-different-periods">Q3: COVID-19 became less or more virulent across different periods</h2>
+<p>To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: <strong>cases fatality rate (CFR)</strong>, <strong>hospitalization rate (HR)</strong>, and <strong>death per population (DP)</strong>. The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with tables and visualizations.</p>
+<section id="cases-fatality-rate-hospitalization-rate-and-death-per-population" class="level3">
+<h3 class="anchored" data-anchor-id="cases-fatality-rate-hospitalization-rate-and-death-per-population">Cases fatality rate, hospitalization rate, and death per population</h3>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">Wave</th>
-<th style="text-align: right;">Total Cases</th>
-<th style="text-align: right;">Total Deaths</th>
-<th style="text-align: right;">Total Hospitalization</th>
-<th style="text-align: right;">Total Population</th>
-<th style="text-align: right;">CFR</th>
-<th style="text-align: right;">HR</th>
-<th style="text-align: right;">DP</th>
+<th style="text-align: left;">Total Cases</th>
+<th style="text-align: left;">Total Deaths</th>
+<th style="text-align: left;">Total Hospitalization</th>
+<th style="text-align: left;">Total Population</th>
+<th style="text-align: left;">CFR</th>
+<th style="text-align: left;">HR</th>
+<th style="text-align: left;">DP</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Wave 1</td>
-<td style="text-align: right;">22403089</td>
-<td style="text-align: right;">348013</td>
-<td style="text-align: right;">1714882</td>
-<td style="text-align: right;">334955562</td>
-<td style="text-align: right;">1553.415</td>
-<td style="text-align: right;">7654.668</td>
-<td style="text-align: right;">103.89826</td>
+<td style="text-align: left;">22,403,089</td>
+<td style="text-align: left;">348,013</td>
+<td style="text-align: left;">1,714,882</td>
+<td style="text-align: left;">334,955,562</td>
+<td style="text-align: left;">1,553.42</td>
+<td style="text-align: left;">7,654.67</td>
+<td style="text-align: left;">103.90</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Wave 2</td>
-<td style="text-align: right;">14304772</td>
-<td style="text-align: right;">194568</td>
-<td style="text-align: right;">1122040</td>
-<td style="text-align: right;">335157329</td>
-<td style="text-align: right;">1360.161</td>
-<td style="text-align: right;">7843.816</td>
-<td style="text-align: right;">58.05274</td>
+<td style="text-align: left;">14,304,772</td>
+<td style="text-align: left;">194,568</td>
+<td style="text-align: left;">1,122,040</td>
+<td style="text-align: left;">335,157,329</td>
+<td style="text-align: left;">1,360.16</td>
+<td style="text-align: left;">7,843.82</td>
+<td style="text-align: left;">58.05</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Wave 3</td>
-<td style="text-align: right;">30709203</td>
-<td style="text-align: right;">194326</td>
-<td style="text-align: right;">1183261</td>
-<td style="text-align: right;">336099114</td>
-<td style="text-align: right;">632.794</td>
-<td style="text-align: right;">3853.115</td>
-<td style="text-align: right;">57.81806</td>
+<td style="text-align: left;">30,709,203</td>
+<td style="text-align: left;">194,326</td>
+<td style="text-align: left;">1,183,261</td>
+<td style="text-align: left;">336,099,114</td>
+<td style="text-align: left;">632.79</td>
+<td style="text-align: left;">3,853.12</td>
+<td style="text-align: left;">57.82</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p>We also compared the average performance of each state across all 3 waves.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>To evaluate virulence, we calculate Case Fatality Rate (CFR) across waves. CFR is calculated as <span class="math inline">\(CFR = \frac{Cumulative Deaths}{Cumulative Cases} \cdot 100\)</span>. We can clearly see from the plot that COVID-19 became less virulent across the three waves, as evidenced by the declining CFR from Wave 1 to Wave 3. While the initial wave saw a relatively high median CFR around 1.5%, this dropped progressively in subsequent waves, reaching below 1% by Wave 3. The reduction in fatality rates is likely due to increased vaccination coverage, improved medical responses, and healthcare system adaptations.</p>
+<p><strong>Wave 1</strong></p>
+<p>During Wave 1, the United States experienced a total of 22,403,089 cases, with 348,013 deaths and 1,714,882 hospitalizations. The total population during this period was 334,955,562. Key metrics calculated include:</p>
+<ul>
+<li>Case Fatality Rate (CFR): 1,553.42 per 100,000 cases.</li>
+<li>Hospitalization Rate (HR): 7,654.67 per 100,000 cases.</li>
+<li>Death Proportion (DP): 103.90 deaths per 100,000 population.</li>
+</ul>
+<p><strong>Wave 2</strong></p>
+<p>Wave 2 saw a decrease in total cases and deaths compared to Wave 1, with 14,304,772 cases, 194,568 deaths, and 1,122,040 hospitalizations. The total population for this wave was 335,157,329. Metrics for this wave include:</p>
+<ul>
+<li>Case Fatality Rate (CFR): 1,360.16 per 100,000 cases.</li>
+<li>Hospitalization Rate (HR): 7,843.82 per 100,000 cases.</li>
+<li>Death Proportion (DP): 58.05 deaths per 100,000 population.</li>
+</ul>
+<p><strong>Wave 3</strong></p>
+<p>Wave 3 reported the highest total cases at 30,709,203, but a similar total death count compared to Wave 2, with 194,326 deaths and 1,183,261 hospitalizations. The total population during this wave was 336,099,114. Metrics calculated for Wave 3 include:</p>
+<ul>
+<li>Case Fatality Rate (CFR): 632.79 per 100,000 cases.</li>
+<li>Hospitalization Rate (HR): 3,853.12 per 100,000 cases.</li>
+<li>Death Proportion (DP): 57.82 deaths per 100,000 population.</li>
+</ul>
+<p>For each wave, we computed the CFR, HR, and the DP. It can be observed that total cases peaked in Wave 3, while total deaths and hospitalizations decreased relative to Wave 1. The CFR showed a pronounced decline across waves, decreasing from 1,553.42 in Wave 1 to 632.79 in Wave 3 (59.26%). The HR also declined significantly by Wave 3, from 7,654.67 in Wave 1 to 3,853.12 in Wave 3. Similarly, the DP decreased steadily across the waves, dropping from 103.90 in Wave 1 to 57.82 in Wave 3.</p>
 </section>
 </section>
 <section id="q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" class="level2">
@@ -299,7 +247,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1152"></p>
 </figure>
 </div>
 </div>
@@ -1277,74 +1225,321 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name   total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                      &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 South Dakota              16419.    908473              1807. Wave 1
-2 Mississippi               51634.   2943234.             1754. Wave 1
-3 Oklahoma                  70165.   4020842.             1745. Wave 1
-4 Arkansas                  52177.   3047415.             1712. Wave 1
-5 New Mexico                35110.   2114723.             1660. Wave 1</code></pre>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 24%">
+<col style="width: 13%">
+<col style="width: 21%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">state_name</th>
+<th style="text-align: right;">total_excess_deaths</th>
+<th style="text-align: right;">population</th>
+<th style="text-align: right;">excess_death_rate</th>
+<th style="text-align: left;">Wave</th>
+<th style="text-align: left;">wave</th>
+<th style="text-align: right;">rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">South Dakota</td>
+<td style="text-align: right;">16419.314</td>
+<td style="text-align: right;">908473.0</td>
+<td style="text-align: right;">1807.353</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mississippi</td>
+<td style="text-align: right;">51633.512</td>
+<td style="text-align: right;">2943234.4</td>
+<td style="text-align: right;">1754.312</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Oklahoma</td>
+<td style="text-align: right;">70164.746</td>
+<td style="text-align: right;">4020841.8</td>
+<td style="text-align: right;">1745.026</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Arkansas</td>
+<td style="text-align: right;">52176.618</td>
+<td style="text-align: right;">3047415.4</td>
+<td style="text-align: right;">1712.160</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New Mexico</td>
+<td style="text-align: right;">35110.491</td>
+<td style="text-align: right;">2114723.2</td>
+<td style="text-align: right;">1660.288</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hawaii</td>
+<td style="text-align: right;">1447.598</td>
+<td style="text-align: right;">1439376.6</td>
+<td style="text-align: right;">100.571</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Washington</td>
+<td style="text-align: right;">34028.332</td>
+<td style="text-align: right;">7780112.0</td>
+<td style="text-align: right;">437.376</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">51</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Hampshire</td>
+<td style="text-align: right;">6775.909</td>
+<td style="text-align: right;">1396105.8</td>
+<td style="text-align: right;">485.344</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Maine</td>
+<td style="text-align: right;">6793.006</td>
+<td style="text-align: right;">1385767.6</td>
+<td style="text-align: right;">490.198</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Massachusetts</td>
+<td style="text-align: right;">37083.374</td>
+<td style="text-align: right;">6994548.2</td>
+<td style="text-align: right;">530.175</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: left;">Wave 1</td>
+<td style="text-align: right;">48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">West Virginia</td>
+<td style="text-align: right;">29595.602</td>
+<td style="text-align: right;">1775810.4</td>
+<td style="text-align: right;">1666.597</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alaska</td>
+<td style="text-align: right;">11892.841</td>
+<td style="text-align: right;">733124.0</td>
+<td style="text-align: right;">1622.214</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Montana</td>
+<td style="text-align: right;">17743.049</td>
+<td style="text-align: right;">1119461.6</td>
+<td style="text-align: right;">1584.963</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wyoming</td>
+<td style="text-align: right;">8220.787</td>
+<td style="text-align: right;">581598.8</td>
+<td style="text-align: right;">1413.481</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mississippi</td>
+<td style="text-align: right;">41573.242</td>
+<td style="text-align: right;">2943234.4</td>
+<td style="text-align: right;">1412.502</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Jersey</td>
+<td style="text-align: right;">13175.832</td>
+<td style="text-align: right;">9275981.8</td>
+<td style="text-align: right;">142.042</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Massachusetts</td>
+<td style="text-align: right;">11776.964</td>
+<td style="text-align: right;">6994548.2</td>
+<td style="text-align: right;">168.373</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">51</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Maryland</td>
+<td style="text-align: right;">11487.566</td>
+<td style="text-align: right;">6171589.2</td>
+<td style="text-align: right;">186.136</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Connecticut</td>
+<td style="text-align: right;">8306.713</td>
+<td style="text-align: right;">3610627.6</td>
+<td style="text-align: right;">230.063</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New York</td>
+<td style="text-align: right;">50117.643</td>
+<td style="text-align: right;">19713122.4</td>
+<td style="text-align: right;">254.235</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: left;">Wave 2</td>
+<td style="text-align: right;">48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">West Virginia</td>
+<td style="text-align: right;">22867.470</td>
+<td style="text-align: right;">1775810.4</td>
+<td style="text-align: right;">1287.720</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New Mexico</td>
+<td style="text-align: right;">23042.651</td>
+<td style="text-align: right;">2114723.2</td>
+<td style="text-align: right;">1089.630</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Oklahoma</td>
+<td style="text-align: right;">41694.305</td>
+<td style="text-align: right;">4020841.8</td>
+<td style="text-align: right;">1036.955</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kentucky</td>
+<td style="text-align: right;">45350.159</td>
+<td style="text-align: right;">4516205.0</td>
+<td style="text-align: right;">1004.165</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Arizona</td>
+<td style="text-align: right;">70906.708</td>
+<td style="text-align: right;">7355304.6</td>
+<td style="text-align: right;">964.021</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hawaii</td>
+<td style="text-align: right;">4758.577</td>
+<td style="text-align: right;">1439376.6</td>
+<td style="text-align: right;">330.600</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New York</td>
+<td style="text-align: right;">66754.672</td>
+<td style="text-align: right;">19713122.4</td>
+<td style="text-align: right;">338.631</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">51</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Utah</td>
+<td style="text-align: right;">13825.447</td>
+<td style="text-align: right;">3377227.8</td>
+<td style="text-align: right;">409.373</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Massachusetts</td>
+<td style="text-align: right;">29029.613</td>
+<td style="text-align: right;">6994548.2</td>
+<td style="text-align: right;">415.032</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Washington</td>
+<td style="text-align: right;">36644.443</td>
+<td style="text-align: right;">7780112.0</td>
+<td style="text-align: right;">471.001</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: left;">Wave 3</td>
+<td style="text-align: right;">48</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 Hawaii                      1448.   1439377.              101. Wave 1
-2 Washington                 34028.   7780112               437. Wave 1
-3 New Hampshire               6776.   1396106.              485. Wave 1
-4 Maine                       6793.   1385768.              490. Wave 1
-5 Massachusetts              37083.   6994548.              530. Wave 1</code></pre>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 West Virginia              29596.   1775810.             1667. Wave 2
-2 Alaska                     11893.    733124              1622. Wave 2
-3 Montana                    17743.   1119462.             1585. Wave 2
-4 Wyoming                     8221.    581599.             1413. Wave 2
-5 Mississippi                41573.   2943234.             1413. Wave 2</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 New Jersey                 13176.   9275982.              142. Wave 2
-2 Massachusetts              11777.   6994548.              168. Wave 2
-3 Maryland                   11488.   6171589.              186. Wave 2
-4 Connecticut                 8307.   3610628.              230. Wave 2
-5 New York                   50118.  19713122.              254. Wave 2</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 West Virginia              22867.   1775810.             1288. Wave 3
-2 New Mexico                 23043.   2114723.             1090. Wave 3
-3 Oklahoma                   41694.   4020842.             1037. Wave 3
-4 Kentucky                   45350.   4516205              1004. Wave 3
-5 Arizona                    70907.   7355305.              964. Wave 3</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  state_name    total_excess_deaths population excess_death_rate Wave  
-  &lt;chr&gt;                       &lt;dbl&gt;      &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt; 
-1 Hawaii                      4759.   1439377.              331. Wave 3
-2 New York                   66755.  19713122.              339. Wave 3
-3 Utah                       13825.   3377228.              409. Wave 3
-4 Massachusetts              29030.   6994548.              415. Wave 3
-5 Washington                 36644.   7780112               471. Wave 3</code></pre>
-</div>
-</div>
-<p>Wave 1 (Oct 1, 2020 – Apr 1, 2021): Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts Wave 2 (Jul 1, 2021 – Dec 1, 2021): Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York Wave 3 (Dec 2, 2021 – Apr 1, 2022): Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington Overall Patterns: Consistently High Excess Mortality States: States like Oklahoma, Mississippi, and West Virginia frequently appeared among the highest excess mortality ranks. Possible reasons include challenges such as lower vaccination uptake, fewer healthcare resources in rural regions, delayed or less stringent public health measures, and possibly higher prevalence of pre-existing health conditions. Consistently Low Excess Mortality States: Hawaii, Washington, and Massachusetts repeatedly ranked among the states with the lowest excess mortality. These states are known for stronger healthcare infrastructure, better access to medical services, early and sustained public health interventions, and higher vaccination rates. Compliance with mitigation measures and strategic public policies likely helped keep mortality rates lower. Influence of Public Health Policies and Vaccination: Over time, the availability and uptake of vaccines played a crucial role. States that improved vaccine coverage tended to see decreasing excess mortality in later waves, while states slower to vaccinate or implement effective preventive measures often struggled.</p>
+<p>Wave 1 (Oct 1, 2020 – Apr 1, 2021):</p>
+<p>Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico</p>
+<p>Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts</p>
+<p>Wave 2 (Jul 1, 2021 – Dec 1, 2021):</p>
+<p>Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi</p>
+<p>Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York</p>
+<p>Wave 3 (Dec 2, 2021 – Apr 1, 2022):</p>
+<p>Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona</p>
+<p>Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington</p>
+<p>Throughout the pandemic, certain states consistently experienced higher excess mortality rates, notably Oklahoma, Mississippi, and West Virginia. These states faced unique challenges, including lower vaccination uptake, limited access to healthcare in rural areas, and delayed or less stringent public health measures. Additionally, a higher prevalence of pre-existing health conditions such as obesity, diabetes, and cardiovascular diseases likely exacerbated the impact of COVID-19. These structural and behavioral factors contributed to their frequent appearance among the states with the highest excess mortality across all waves.</p>
+<p>In contrast, states like Hawaii, Washington, and Massachusetts consistently ranked among those with the lowest excess mortality rates. These states benefitted from strong healthcare systems, better access to medical resources, and early implementation of comprehensive public health strategies. High vaccination rates, coupled with effective public policies and greater compliance with mitigation measures, played a critical role in reducing mortality. These factors highlight how proactive and sustained public health interventions can mitigate the toll of the pandemic, even in the face of widespread challenges.</p>
+<p>The availability and uptake of vaccines emerged as a decisive factor influencing trends in excess mortality over time. States that prioritized vaccine distribution and achieved higher coverage witnessed declining excess mortality rates in later waves. Conversely, states slower to adopt widespread vaccination or preventive measures often struggled to control mortality rates. These findings underscore the vital role of public health policies and vaccination in shaping outcomes during a public health crisis, emphasizing the importance of equitable and efficient health resource allocation to protect vulnerable populations.</p>
 </section>
 </section>
 <section id="supplementary-methods" class="level1">
@@ -1370,6 +1565,32 @@ window.Quarto = {
 <div>
 <figure class="figure">
 <p><img src="final-project_files/figure-html/death%20rate%20by%20state-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="pair-wise-comparison-of-the-cfr-hr-and-dp-using-statistical-tests" class="level2">
+<h2 class="anchored" data-anchor-id="pair-wise-comparison-of-the-cfr-hr-and-dp-using-statistical-tests">Pair-wise comparison of the CFR, HR, and DP using statistical tests</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final-project_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final-project_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final-project_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>

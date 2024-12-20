@@ -12,9 +12,7 @@ execute:
 bibliography: references.bib
 ---
 
-# Load libraries
-
-```{r}
+```{r echo=FALSE}
 require(tidyverse)
 require(dplyr)
 require(lubridate)
@@ -22,9 +20,7 @@ require(knitr)
 require(ggsignif)
 ```
 
-# Load data
-
-```{r}
+```{r echo=FALSE}
 rm(list = ls())
 load('../data/dat.rda')
 load('../data/deaths_all.rda')
@@ -50,11 +46,14 @@ The dataset used in this paper is from the CDC, containing COVID-19 cases, COVID
 
 # Analyses
 
-## Pandemic period from Jan 2020 to Nov 2024
+## Q1: Pandemic period from Jan 2020 to Nov 2024
 
 The figure below displays the COVID-19 cases, deaths, and hospitalization rate per 100,000 people in each region of the US from 2020 to 2024.
 
 ```{r trend plots, echo=FALSE, warning=FALSE}
+#| fig-width: 12
+#| fig-height: 8
+
 # Define custom labels for the facets
 dat.labs <- c("cases" = "COVID-19 Cases", "deaths" = "Deaths", "hosp" = "Hospitalizations")
 
@@ -74,6 +73,7 @@ dat %>%
     strip.text = element_text(face = "bold", size = 14), # Bold facet labels
     legend.position = "bottom", # Move legend to bottom for better space usage
     legend.title = element_text(face = "bold"), # Bold legend title
+    title = element_text(face = "bold"),
     axis.title = element_text(face = "bold"), # Bold axis titles
     axis.text.y = element_text(size = 10), # Slightly larger axis text for readability
     axis.text.x = element_text(size = 8, angle = 10),
@@ -104,7 +104,7 @@ The summer and early winter of 2021 saw a resurgence in COVID-19 activity, drive
 
 The final and most intense wave depicted occurred during the winter of 2021-2022, fueled by the Omicron variant. While cases skyrocketed to unprecedented levels due to Omicron's transmissibility, deaths and hospitalizations rose less dramatically than in previous waves, likely reflecting the variant's comparatively milder effects and increased vaccination coverage. However, the healthcare system faced immense strain due to the sheer number of cases.
 
-## Deaths rate by state during each time period
+## Q2: Deaths rate by state during each time period
 
 ```{r separately save each time period}
 wave1dat <- dat %>%
@@ -152,7 +152,10 @@ We also compared the performance of each state across all 3 waves by taking the 
 
 Generally, it can be seen that states in the northeastern part or the west coast of the US performed better than those in the middle or west US. It can also be observed that less populated states such as Vermont and Washington had lower death rates. But exceptions are also evident, for New York is rather populated but it was among the states with the lowest average death rates.
 
-```{r}
+```{r avg death rate across 3 waves}
+#| fig-width: 12
+#| fig-height: 8
+
 wave1dat$wave <- "Wave 1"
 wave2dat$wave <- "Wave 2"
 wave3dat$wave <- "Wave 3"
@@ -173,6 +176,7 @@ allWaves %>%
     axis.text = element_text(size = 6), # Slightly larger axis text
     legend.title = element_text(face = "bold"), # Bold legend title
     panel.grid.minor = element_blank(),
+    title = element_text(face = "bold"),
     legend.position = "right" # Position legend to the right
   ) +
   labs(
@@ -183,176 +187,66 @@ allWaves %>%
   )
 ```
 
-## COVID-19 became less or more virulent across different periods
+## Q3: COVID-19 became less or more virulent across different periods
 
-To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: **cases fatality rate (CFR)**, **hospitalization rate (HR)**, and **death per population (DP)**. The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with figures and visualizations.
+To evaluate if COVID-19 became less or more virulent across different time periods, we will employ three key metrics: **cases fatality rate (CFR)**, **hospitalization rate (HR)**, and **death per population (DP)**. The CFR is defined as deaths per case, HR is defined as hospitalizations per case, and DP is defined as deaths per population. In the following analyses, we will analyze these key metrics with 
+tables and visualizations.
 
-### Pair-wise comparison of the key metrics
-
-```{r warning=FALSE}
+```{r create dataset with wave indicator}
+## Create dataset with wave indicator ##
 pooled.dat <- dat %>%
-  mutate(Wave = case_when(
+  mutate(wave = case_when(
     date >= make_date(2020, 10, 1) & date <= make_date(2021, 4, 1) ~ "Wave 1",
     date >= make_date(2021, 7, 1) & date <= make_date(2021, 12, 1) ~ "Wave 2",
     date >= make_date(2021, 12, 2) & date <= make_date(2022, 4, 1) ~ "Wave 3",
     .default = NA
   )) %>%
-  filter(!is.na(Wave)) %>%
-  group_by(Wave, state) %>%
+  filter(!is.na(wave)) %>%
+  group_by(wave, state) %>%
   summarise("Total Cases" = sum(cases, na.rm = T),
             "Total Deaths" = sum(deaths, na.rm = T),
             "Total Hospitalization" = sum(hosp, na.rm = T),
-            "Total Population" = mean(population, na.rm = T), .groups = "drop") %>%
-  ungroup()
+            "Total Population" = mean(population, na.rm = T), .groups = "drop")
 
+## Calculate the key metrics ##
 metric.dat <- pooled.dat %>%
   mutate(CFR = `Total Deaths` * 100000 / `Total Cases`,
          HR = `Total Hospitalization` * 100000 / `Total Cases`,
          DP = `Total Deaths` * 100000 / `Total Population`)
-
-
-metric.dat %>%
-  ggplot(aes(x = Wave, y = CFR, fill = Wave)) +
-  geom_boxplot() +
-  geom_signif(
-    comparisons = list(
-      c("Wave 1", "Wave 2"),
-      c("Wave 1", "Wave 3"),
-      c("Wave 2", "Wave 3")
-    ),
-    y_position = c(2500, 2700, 3000), # Adjust for clear separation
-    test = wilcox.test,
-    map_signif_level = function(p) {
-      if (p >= 0.001) {
-        sprintf("p-value = %.3f", p)
-      } else {
-        "p < 0.001"
-      }
-    }
-  ) +
-  theme_minimal(base_size = 14) + # Slightly increase the base font size
-  theme(
-    legend.position = "none",
-    axis.title = element_text(size = 14, face = "bold"),
-    axis.text = element_text(size = 12),
-    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
-    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
-  ) +
-  labs(
-    title = "Case Fatality Rate (CFR) Across Waves",
-    x = "Wave",
-    y = "Case Fatality Rate (per 100,000)"
-  ) +
-  annotate(
-    "text",
-    x = 0, y = 3200, # Adjust position based on your data range
-    label = "Test: Wilcoxon Rank-Sum Test",
-    hjust = 0, size = 3, color = "black", fontface = "italic"
-  )
-
-metric.dat %>%
-  ggplot(aes(x = Wave, y = HR, fill = Wave)) +
-  geom_boxplot() +
-  geom_signif(
-    comparisons = list(
-      c("Wave 1", "Wave 2"),
-      c("Wave 1", "Wave 3"),
-      c("Wave 2", "Wave 3")
-    ),
-    y_position = c(16000, 18000, 20000), # Adjust for clear separation
-    test = wilcox.test,
-    map_signif_level = function(p) {
-      if (p >= 0.001) {
-        sprintf("p-value = %.3f", p)
-      } else {
-        "p < 0.001"
-      }
-    }
-  ) +
-  theme_minimal(base_size = 14) + # Slightly increase the base font size
-  theme(
-    legend.position = "none",
-    axis.title = element_text(size = 14, face = "bold"),
-    axis.text = element_text(size = 12),
-    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
-    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
-  ) +
-  labs(
-    title = "Hospitalization Rate (HR) Across Waves",
-    x = "Wave",
-    y = "Hospitalization Rate (per 100,000)"
-  ) +
-  annotate(
-    "text",
-    x = 0, y = 21000, # Adjust position based on your data range
-    label = "Test: Wilcoxon Rank-Sum Test",
-    hjust = 0, size = 3, color = "black", fontface = "italic"
-  )
-
-metric.dat %>%
-  ggplot(aes(x = Wave, y = DP, fill = Wave)) +
-  geom_boxplot() +
-  geom_signif(
-    comparisons = list(
-      c("Wave 1", "Wave 2"),
-      c("Wave 1", "Wave 3"),
-      c("Wave 2", "Wave 3")
-    ),
-    y_position = c(200, 220, 240), # Adjust for clear separation
-    test = wilcox.test,
-    map_signif_level = function(p) {
-      if (p >= 0.001) {
-        sprintf("p-value = %.3f", p)
-      } else {
-        "p < 0.001"
-      }
-    }
-  ) +
-  theme_minimal(base_size = 14) + # Slightly increase the base font size
-  theme(
-    legend.position = "none",
-    axis.title = element_text(size = 14, face = "bold"),
-    axis.text = element_text(size = 12),
-    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
-    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
-  ) +
-  labs(
-    title = "Death per Population (DP) Across Waves",
-    x = "Wave",
-    y = "Death per Population (per 100,000)"
-  ) +
-  annotate(
-    "text",
-    x = 0, y = 250, # Adjust position based on your data range
-    label = "Test: Wilcoxon Rank-Sum Test",
-    hjust = 0, size = 3, color = "black", fontface = "italic"
-  )
-
-# kruskal.test(CFR ~ Wave, data = metric.dat)
-# pairwise.wilcox.test(metric.dat$CFR, metric.dat$Wave,
-#                  p.adjust.method = "BH")
 ```
 
-### Aggregated Metrics Across Wave
+### Cases fatality rate, hospitalization rate, and death per population
 
 ```{r}
 # Define custom labels for the facets
 dat.labs <- c("CFR" = "Cases Fatality Rate", "HR" = "Hospitalization Rate", "DP" = "Death per Population")
 
+library(scales)
+
 pooled.dat %>%
-  group_by(Wave) %>%
-  summarise("Total Cases" = sum(`Total Cases`, na.rm = T),
-            "Total Deaths" = sum(`Total Deaths`, na.rm = T),
-            "Total Hospitalization" = sum(`Total Hospitalization`, na.rm = T),
-            "Total Population" = sum(`Total Population`, na.rm = T)) %>%
+  group_by(wave) %>%
+  summarise("Total Cases" = sum(`Total Cases`, na.rm = TRUE),
+            "Total Deaths" = sum(`Total Deaths`, na.rm = TRUE),
+            "Total Hospitalization" = sum(`Total Hospitalization`, na.rm = TRUE),
+            "Total Population" = sum(`Total Population`, na.rm = TRUE)) %>%
   ungroup() %>%
   mutate(CFR = `Total Deaths` * 100000 / `Total Cases`,
          HR = `Total Hospitalization` * 100000 / `Total Cases`,
          DP = `Total Deaths` * 100000 / `Total Population`) %>%
+  mutate(
+    `Total Cases` = comma(`Total Cases`),
+    `Total Deaths` = comma(`Total Deaths`),
+    `Total Hospitalization` = comma(`Total Hospitalization`),
+    `Total Population` = comma(`Total Population`),
+    CFR = comma(CFR, accuracy = 0.01),
+    HR = comma(HR, accuracy = 0.01),
+    DP = comma(DP, accuracy = 0.01)
+  ) %>%
+  rename(Wave = wave) %>%
   kable("simple")
 
 # pooled.dat %>%
-#   group_by(Wave) %>%
+#   group_by(wave) %>%
 #   summarise("Total Cases" = sum(`Total Cases`, na.rm = T),
 #             "Total Deaths" = sum(`Total Deaths`, na.rm = T),
 #             "Total Hospitalization" = sum(`Total Hospitalization`, na.rm = T),
@@ -366,11 +260,11 @@ pooled.dat %>%
 #     names_to = "metric",
 #     values_to = "rate"
 #   ) %>%
-#   ggplot(aes(x = Wave, y = rate, fill = metric)) +
+#   ggplot(aes(x = wave, y = rate, fill = metric)) +
 #   geom_col(show.legend = FALSE) +
 #   facet_wrap(
-#     ~ metric, 
-#     scales = "free", 
+#     ~ metric,
+#     scales = "free",
 #     labeller = labeller(metric = dat.labs)
 #   ) +
 #   scale_fill_brewer(palette = "Set2") +
@@ -388,62 +282,38 @@ pooled.dat %>%
 #   )
 ```
 
-We also compared the average performance of each state across all 3 waves.
+**Wave 1**
 
-```{r}
-# Calculate CFR for each wave
-wave1_cfr <- dat |>
-  filter(date >= make_date(2020, 10, 1), date <= make_date(2021, 4, 1)) |>
-  group_by(state) |>
-  summarise(
-    cum_cases = sum(cases, na.rm = TRUE),
-    cum_deaths = sum(deaths, na.rm = TRUE),
-    cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
-  )
+During Wave 1, the United States experienced a total of 22,403,089 cases, with 348,013 deaths and 1,714,882 hospitalizations. The total population during this period was 334,955,562. Key metrics calculated include:
 
-wave2_cfr <- dat |>
-  filter(date >= make_date(2021, 7, 1), date <= make_date(2021, 12, 1)) |>
-  group_by(state) |>
-  summarise(
-    cum_cases = sum(cases, na.rm = TRUE),
-    cum_deaths = sum(deaths, na.rm = TRUE),
-    cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
-  )
+* Case Fatality Rate (CFR): 1,553.42 per 100,000 cases.
+* Hospitalization Rate (HR): 7,654.67 per 100,000 cases.
+* Death Proportion (DP): 103.90 deaths per 100,000 population.
 
-wave3_cfr <- dat |>
-  filter(date >= make_date(2021, 12, 2), date <= make_date(2022, 4, 1)) |>
-  group_by(state) |>
-  summarise(
-    cum_cases = sum(cases, na.rm = TRUE),
-    cum_deaths = sum(deaths, na.rm = TRUE),
-    cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
-  )
+**Wave 2**
 
-# Combine CFR data
-wave1_cfr$wave <- "Wave 1"
-wave2_cfr$wave <- "Wave 2"
-wave3_cfr$wave <- "Wave 3"
-cfr_data <- bind_rows(wave1_cfr, wave2_cfr, wave3_cfr)
+Wave 2 saw a decrease in total cases and deaths compared to Wave 1, with 14,304,772 cases, 194,568 deaths, and 1,122,040 hospitalizations. The total population for this wave was 335,157,329. Metrics for this wave include:
 
-# Visualize CFR trends
-cfr_data |>
-  ggplot(aes(x = wave, y = cfr, fill = wave)) +
-  geom_boxplot(outlier.shape = NA) +
-  theme_minimal(base_size = 14) +
-  labs(
-    x = "Wave",
-    y = "Case Fatality Rate (CFR) (%)",
-    title = "Case Fatality Rate by Wave",
-    subtitle = "Comparison of CFR across 3 Waves"
-  )
-```
+* Case Fatality Rate (CFR): 1,360.16 per 100,000 cases.
+* Hospitalization Rate (HR): 7,843.82 per 100,000 cases.
+* Death Proportion (DP): 58.05 deaths per 100,000 population.
 
-To evaluate virulence, we calculate Case Fatality Rate (CFR) across waves. CFR is calculated as $CFR = \frac{Cumulative Deaths}{Cumulative Cases} \cdot 100$. 
-We can clearly see from the plot that COVID-19 became less virulent across the three waves, as evidenced by the declining CFR from Wave 1 to Wave 3. While the initial wave saw a relatively high median CFR around 1.5%, this dropped progressively in subsequent waves, reaching below 1% by Wave 3. The reduction in fatality rates is likely due to increased vaccination coverage, improved medical responses, and healthcare system adaptations.
+**Wave 3**
+
+Wave 3 reported the highest total cases at 30,709,203, but a similar total death count compared to Wave 2, with 194,326 deaths and 1,183,261 hospitalizations. The total population during this wave was 336,099,114. Metrics calculated for Wave 3 include:
+
+* Case Fatality Rate (CFR): 632.79 per 100,000 cases.
+* Hospitalization Rate (HR): 3,853.12 per 100,000 cases.
+* Death Proportion (DP): 57.82 deaths per 100,000 population.
+
+For each wave, we computed the CFR, HR, and the DP. It can be observed that total cases peaked in Wave 3, while total deaths and hospitalizations decreased relative to Wave 1. The CFR showed a pronounced decline across waves, decreasing from 1,553.42 in Wave 1 to 632.79 in Wave 3 (59.26%). The HR also declined significantly by Wave 3, from 7,654.67 in Wave 1 to 3,853.12 in Wave 3. Similarly, the DP decreased steadily across the waves, dropping from 103.90 in Wave 1 to 57.82 in Wave 3.
 
 ## Q4: Estimate excess mortality for each week for each state. Check if excess mortality can be explained by COVID-19
 
 ```{r}
+#| fig-width: 12
+#| fig-height: 8
+
 library(tidyr)
 library(purrr)
 library(broom)
@@ -533,7 +403,15 @@ p_all_states <- analysis_data %>%
        x = "Date", 
        y = "Number of Deaths",
        color = "") +
-  theme_minimal()
+  theme_minimal(base_size = 14) + # Minimal theme for better readability
+  theme(
+    axis.title.y = element_blank(), # Remove y-axis title for a cleaner look
+    axis.title.x = element_text(face = "bold"), # Bold x-axis title
+    axis.text = element_text(size = 6), # Slightly larger axis text
+    legend.title = element_text(face = "bold"), # Bold legend title
+    panel.grid.minor = element_blank(),
+    legend.position = "right" # Position legend to the right
+  )
 
 print(p_all_states)
 
@@ -660,6 +538,7 @@ Second, we conducted additional analysis of fitting the linear model with COVID-
 Overall, we can conclude that COVID-19 fairly explains the excess mortality in the United States during 2020-2023 well!
 
 ## Q5. For each period compute the excess mortality rates by state. Describe which states did better or worse during the different periods.
+
 ```{r}
 analysis_data <- analysis_data %>%
   left_join(dat %>% distinct(state_name, population), by = "state_name", relationship = "many-to-many")
@@ -727,42 +606,52 @@ ggplot(all_excess, aes(x = reorder(state_name, excess_death_rate), y = excess_de
 ```
 
 ```{r}
-# We can then identify top 5 and bottom 5 states by excess mortality rate for each wave
-top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
-bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+# Top and bottom 5 for each wave
+top5_wave1 <- wave1_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(wave = "Wave 1", rank = row_number())
+bottom5_wave1 <- wave1_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(wave = "Wave 1", rank = 53 - row_number())
 
-top5_wave2 <- wave2_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
-bottom5_wave2 <- wave2_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+top5_wave2 <- wave2_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(wave = "Wave 2", rank = row_number())
+bottom5_wave2 <- wave2_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(wave = "Wave 2", rank = 53 - row_number())
 
-top5_wave3 <- wave3_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5)
-bottom5_wave3 <- wave3_excess %>% arrange(excess_death_rate) %>% slice_head(n=5)
+top5_wave3 <- wave3_excess %>% arrange(desc(excess_death_rate)) %>% slice_head(n=5) %>% mutate(wave = "Wave 3", rank = row_number())
+bottom5_wave3 <- wave3_excess %>% arrange(excess_death_rate) %>% slice_head(n=5) %>% mutate(wave = "Wave 3", rank = 53 - row_number())
 
-# Print out summaries
-top5_wave1
-bottom5_wave1
+# Combine all data
+combined_data <- bind_rows(
+  top5_wave1,
+  bottom5_wave1,
+  top5_wave2,
+  bottom5_wave2,
+  top5_wave3,
+  bottom5_wave3
+)
 
-top5_wave2
-bottom5_wave2
-
-top5_wave3
-bottom5_wave3
+# View the combined data
+kable(combined_data, digit = 3)
 ```
 Wave 1 (Oct 1, 2020 – Apr 1, 2021):
+
 Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico
+
 Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts
+
 Wave 2 (Jul 1, 2021 – Dec 1, 2021):
+
 Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi
+
 Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York
+
 Wave 3 (Dec 2, 2021 – Apr 1, 2022):
+
 Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona
+
 Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington
-Overall Patterns:
-Consistently High Excess Mortality States:
-States like Oklahoma, Mississippi, and West Virginia frequently appeared among the highest excess mortality ranks. Possible reasons include challenges such as lower vaccination uptake, fewer healthcare resources in rural regions, delayed or less stringent public health measures, and possibly higher prevalence of pre-existing health conditions.
-Consistently Low Excess Mortality States:
-Hawaii, Washington, and Massachusetts repeatedly ranked among the states with the lowest excess mortality. These states are known for stronger healthcare infrastructure, better access to medical services, early and sustained public health interventions, and higher vaccination rates. Compliance with mitigation measures and strategic public policies likely helped keep mortality rates lower.
-Influence of Public Health Policies and Vaccination:
-Over time, the availability and uptake of vaccines played a crucial role. States that improved vaccine coverage tended to see decreasing excess mortality in later waves, while states slower to vaccinate or implement effective preventive measures often struggled.
+
+Throughout the pandemic, certain states consistently experienced higher excess mortality rates, notably Oklahoma, Mississippi, and West Virginia. These states faced unique challenges, including lower vaccination uptake, limited access to healthcare in rural areas, and delayed or less stringent public health measures. Additionally, a higher prevalence of pre-existing health conditions such as obesity, diabetes, and cardiovascular diseases likely exacerbated the impact of COVID-19. These structural and behavioral factors contributed to their frequent appearance among the states with the highest excess mortality across all waves.
+
+In contrast, states like Hawaii, Washington, and Massachusetts consistently ranked among those with the lowest excess mortality rates. These states benefitted from strong healthcare systems, better access to medical resources, and early implementation of comprehensive public health strategies. High vaccination rates, coupled with effective public policies and greater compliance with mitigation measures, played a critical role in reducing mortality. These factors highlight how proactive and sustained public health interventions can mitigate the toll of the pandemic, even in the face of widespread challenges.
+
+The availability and uptake of vaccines emerged as a decisive factor influencing trends in excess mortality over time. States that prioritized vaccine distribution and achieved higher coverage witnessed declining excess mortality rates in later waves. Conversely, states slower to adopt widespread vaccination or preventive measures often struggled to control mortality rates. These findings underscore the vital role of public health policies and vaccination in shaping outcomes during a public health crisis, emphasizing the importance of equitable and efficient health resource allocation to protect vulnerable populations.
 
 # Supplementary Methods
 
@@ -831,4 +720,179 @@ wave3dat %>%
     title = "Cumulative COVID-19 Death Rates by State",
     subtitle = "Data from Dec 2nd 2021 to Apr 1st 2022"
   )
+```
+
+## Pair-wise comparison of the CFR, HR, and DP using statistical tests
+
+```{r warning=FALSE}
+
+## Plot the statistical significance ##
+metric.dat %>%
+  ggplot(aes(x = wave, y = CFR, fill = wave)) +
+  geom_boxplot() +
+  geom_signif(
+    comparisons = list(
+      c("Wave 1", "Wave 2"),
+      c("Wave 1", "Wave 3"),
+      c("Wave 2", "Wave 3")
+    ),
+    y_position = c(2500, 2700, 3000), # Adjust for clear separation
+    test = wilcox.test,
+    map_signif_level = function(p) {
+      if (p >= 0.001) {
+        sprintf("p-value = %.3f", p)
+      } else {
+        "p < 0.001"
+      }
+    }
+  ) +
+  theme_minimal(base_size = 14) + # Slightly increase the base font size
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+  ) +
+  labs(
+    title = "Case Fatality Rate (CFR) Across Waves",
+    x = "Wave",
+    y = "Case Fatality Rate (per 100,000)"
+  ) +
+  annotate(
+    "text",
+    x = 0, y = 3200, # Adjust position based on your data range
+    label = "Test: Wilcoxon Rank-Sum Test",
+    hjust = 0, size = 3, color = "black", fontface = "italic"
+  )
+
+metric.dat %>%
+  ggplot(aes(x = wave, y = HR, fill = wave)) +
+  geom_boxplot() +
+  geom_signif(
+    comparisons = list(
+      c("Wave 1", "Wave 2"),
+      c("Wave 1", "Wave 3"),
+      c("Wave 2", "Wave 3")
+    ),
+    y_position = c(16000, 18000, 20000), # Adjust for clear separation
+    test = wilcox.test,
+    map_signif_level = function(p) {
+      if (p >= 0.001) {
+        sprintf("p-value = %.3f", p)
+      } else {
+        "p < 0.001"
+      }
+    }
+  ) +
+  theme_minimal(base_size = 14) + # Slightly increase the base font size
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+  ) +
+  labs(
+    title = "Hospitalization Rate (HR) Across Waves",
+    x = "Wave",
+    y = "Hospitalization Rate (per 100,000)"
+  ) +
+  annotate(
+    "text",
+    x = 0, y = 21000, # Adjust position based on your data range
+    label = "Test: Wilcoxon Rank-Sum Test",
+    hjust = 0, size = 3, color = "black", fontface = "italic"
+  )
+
+metric.dat %>%
+  ggplot(aes(x = wave, y = DP, fill = wave)) +
+  geom_boxplot() +
+  geom_signif(
+    comparisons = list(
+      c("Wave 1", "Wave 2"),
+      c("Wave 1", "Wave 3"),
+      c("Wave 2", "Wave 3")
+    ),
+    y_position = c(200, 220, 240), # Adjust for clear separation
+    test = wilcox.test,
+    map_signif_level = function(p) {
+      if (p >= 0.001) {
+        sprintf("p-value = %.3f", p)
+      } else {
+        "p < 0.001"
+      }
+    }
+  ) +
+  theme_minimal(base_size = 14) + # Slightly increase the base font size
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    # plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+  ) +
+  labs(
+    title = "Death per Population (DP) Across Waves",
+    x = "Wave",
+    y = "Death per Population (per 100,000)"
+  ) +
+  annotate(
+    "text",
+    x = 0, y = 250, # Adjust position based on your data range
+    label = "Test: Wilcoxon Rank-Sum Test",
+    hjust = 0, size = 3, color = "black", fontface = "italic"
+  )
+
+# kruskal.test(CFR ~ Wave, data = metric.dat)
+# pairwise.wilcox.test(metric.dat$CFR, metric.dat$Wave,
+#                  p.adjust.method = "BH")
+```
+
+```{r backup code}
+# # Calculate CFR for each wave
+# wave1_cfr <- dat |>
+#   filter(date >= make_date(2020, 10, 1), date <= make_date(2021, 4, 1)) |>
+#   group_by(state) |>
+#   summarise(
+#     cum_cases = sum(cases, na.rm = TRUE),
+#     cum_deaths = sum(deaths, na.rm = TRUE),
+#     cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
+#   )
+# 
+# wave2_cfr <- dat |>
+#   filter(date >= make_date(2021, 7, 1), date <= make_date(2021, 12, 1)) |>
+#   group_by(state) |>
+#   summarise(
+#     cum_cases = sum(cases, na.rm = TRUE),
+#     cum_deaths = sum(deaths, na.rm = TRUE),
+#     cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
+#   )
+# 
+# wave3_cfr <- dat |>
+#   filter(date >= make_date(2021, 12, 2), date <= make_date(2022, 4, 1)) |>
+#   group_by(state) |>
+#   summarise(
+#     cum_cases = sum(cases, na.rm = TRUE),
+#     cum_deaths = sum(deaths, na.rm = TRUE),
+#     cfr = ifelse(cum_cases > 0, cum_deaths / cum_cases * 100, NA)
+#   )
+# 
+# # Combine CFR data
+# wave1_cfr$wave <- "Wave 1"
+# wave2_cfr$wave <- "Wave 2"
+# wave3_cfr$wave <- "Wave 3"
+# cfr_data <- bind_rows(wave1_cfr, wave2_cfr, wave3_cfr)
+# 
+# # Visualize CFR trends
+# cfr_data |>
+#   ggplot(aes(x = wave, y = cfr, fill = wave)) +
+#   geom_boxplot(outlier.shape = NA) +
+#   theme_minimal(base_size = 14) +
+#   labs(
+#     x = "Wave",
+#     y = "Case Fatality Rate (CFR) (%)",
+#     title = "Case Fatality Rate by Wave",
+#     subtitle = "Comparison of CFR across 3 Waves"
+#   )
 ```

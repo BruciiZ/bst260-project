@@ -222,5 +222,3 @@ deaths <- deaths %>%
   summarise(all_cause_deaths = sum(`Number of Deaths`, na.rm = TRUE), .groups = "drop")
 
 save(deaths, file = "../data/deaths_all.rda")
-
-
