@@ -139,9 +139,9 @@ div.csl-indent {
 </div>
 <p>As can be seen from the trend plot which depicts the rates of COVID-19 cases, deaths, and hospitalizations from 01/25/2021 to 11/30/2024, there seems to be 3 waves of COVID-19 spread. The first one occurs from Oct 2020 to Apr 2021, where a peak in cases, deaths, and hospitalizations can be observed. Likewise, it appears that there was another wave between Jul 2021 to early Dec 2021. Lastly, there was a wave from early Dec 2021 to Apr 2022.</p>
 <p><strong>First Wave</strong></p>
-<p>This period marked the first significant rise in COVID-19 rates, with sharp increases across all metrics—cases, deaths, and hospitalizations. The wave coincides with the colder months when indoor gatherings increased and may also reflect the impact of delayed public health measures or variants circulating during this time. The peak of this wave aligns with the early rollout of vaccines, which likely contributed to its decline as more people gained access to immunization.</p>
+<p>This period marked the first significant rise in COVID-19 rates, with sharp increases across all metrics: cases, deaths, and hospitalizations. The wave coincides with the colder months when indoor gatherings increased and may also reflect the impact of delayed public health measures or variants circulating during this time.</p>
 <p><strong>Second Wave</strong></p>
-<p>The summer and early winter of 2021 saw a resurgence in COVID-19 activity, driven largely by the spread of the Delta variant. This wave demonstrates a rapid increase in hospitalizations and deaths following the initial rise in cases. Despite vaccination efforts, breakthrough infections and the highly contagious nature of Delta played significant roles in this period. Public health measures such as mask mandates were reinstituted in some areas, but the surge continued through the fall.</p>
+<p>The summer and early winter of 2021 saw a resurgence in COVID-19 activity, driven largely by the spread of the Delta variant. This wave demonstrates a rapid increase in hospitalizations and deaths following the initial rise in cases. Despite vaccination efforts, breakthrough infections and the highly contagious nature of Delta played significant roles in this period.</p>
 <p><strong>Third Wave</strong></p>
 <p>The final and most intense wave depicted occurred during the winter of 2021-2022, fueled by the Omicron variant. While cases skyrocketed to unprecedented levels due to Omicron’s transmissibility, deaths and hospitalizations rose less dramatically than in previous waves, likely reflecting the variant’s comparatively milder effects and increased vaccination coverage. However, the healthcare system faced immense strain due to the sheer number of cases.</p>
 </section>
@@ -239,6 +239,9 @@ div.csl-indent {
 <li>Death Proportion (DP): 57.82 deaths per 100,000 population.</li>
 </ul>
 <p>For each wave, we computed the CFR, HR, and the DP. It can be observed that total cases peaked in Wave 3, while total deaths and hospitalizations decreased relative to Wave 1. The CFR showed a pronounced decline across waves, decreasing from 1,553.42 in Wave 1 to 632.79 in Wave 3 (59.26%). The HR also declined significantly by Wave 3, from 7,654.67 in Wave 1 to 3,853.12 in Wave 3. Similarly, the DP decreased steadily across the waves, dropping from 103.90 in Wave 1 to 57.82 in Wave 3.</p>
+<p>We conducted pairwise statistical tests on the CFR, HR, and DP metrics to evaluate differences across the pandemic waves. Since these metrics did not follow a normal distribution, we utilized the Wilcoxon rank-sum test, a non-parametric alternative to the independent t-test. The analysis revealed a statistically significant decline in the CFR from Wave 1 to Wave 2, with a p-value of less than 0.001. Similarly, the CFR dropped significantly from Wave 2 to Wave 3. When comparing Wave 1 to Wave 3, the difference was also statistically significant at the 0.05 significance level.</p>
+<p>For the HR, there was no statistically significant difference between Wave 1 and Wave 2, as indicated by a p-value of 0.757. However, a notable decline in HR was observed in Wave 3 compared to both Wave 1 and Wave 2, with p-values of less than 0.001. These findings demonstrate a clear downward trend in the CFR across all three waves, while the HR remained relatively stable between the first two waves before showing a significant reduction in the third wave.</p>
+<p>Finally for the DP, there was a statistically significant difference between Wave 1 and Wave 2, with a p-value of less than 0.001. A highly significant difference was also observed between Wave 1 and Wave 3, indicating a sharp decline in DP over time. However, the comparison between Wave 2 and Wave 3 revealed no statistically significant difference, as evidenced by a p-value of 0.647.</p>
 </section>
 </section>
 <section id="q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" class="level2">
@@ -1550,21 +1553,21 @@ div.csl-indent {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/death%20rate%20by%20state-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/death%20rate%20by%20state-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/death%20rate%20by%20state-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/death%20rate%20by%20state-2.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/death%20rate%20by%20state-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/death%20rate%20by%20state-3.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -1576,21 +1579,21 @@ div.csl-indent {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
