@@ -302,10 +302,7 @@ Wave 3 reported the highest total cases at 30,709,203, but a similar total death
 * Hospitalization Rate (HR): 3,853.12 per 100,000 cases.
 * Death Proportion (DP): 57.82 deaths per 100,000 population.
 
-Total cases peaked in Wave 3, while total deaths and hospitalizations decreased relative to Wave 1.
-The Case Fatality Rate (CFR) showed a marked decline across waves, decreasing from 1,553.42 in Wave 1 to 632.79 in Wave 3.
-The Hospitalization Rate (HR) also declined significantly by Wave 3, from 7,654.67 in Wave 1 to 3,853.12 in Wave 3.
-Death Proportion (DP) decreased steadily across the waves, dropping from 103.90 in Wave 1 to 57.82 in Wave 3.
+For each wave, we computed the CFR, HR, and the DP. It can be observed that total cases peaked in Wave 3, while total deaths and hospitalizations decreased relative to Wave 1. The CFR showed a pronounced decline across waves, decreasing from 1,553.42 in Wave 1 to 632.79 in Wave 3 (59.26%). The HR also declined significantly by Wave 3, from 7,654.67 in Wave 1 to 3,853.12 in Wave 3. Similarly, the DP decreased steadily across the waves, dropping from 103.90 in Wave 1 to 57.82 in Wave 3.
 
 ## Q4: Estimate excess mortality for each week for each state. Check if excess mortality can be explained by COVID-19
 
