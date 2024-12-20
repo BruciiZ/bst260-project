@@ -465,87 +465,6 @@ print(p_all_states)
 #   ggsave(filename = paste0("excess_vs_covid_", st, ".png"), plot = p_state, width = 8, height = 5)
 # }
 
-##############################
-# 7. Statistical Tests by State
-##############################
-all_states <- unique(analysis_data$state_name)
-
-# Initialize a list to store the combined results for each state
-all_state_results <- list()
-
-for (st in all_states) {
-  # Filter data for this state
-  state_data <- analysis_data %>%
-    filter(state_name == st)
-  
-  # Check if there's enough data for a model
-  valid_points <- sum(!is.na(state_data$excess_deaths) & !is.na(state_data$covid_deaths))
-  if (valid_points < 2) {
-    # Not enough data to run a model, store placeholder
-    all_state_results[[st]] <- data.frame(
-      state_name = st,
-      term = NA_character_,
-      estimate = NA_real_,
-      std.error = NA_real_,
-      statistic = NA_real_,
-      p.value = NA_real_,
-      r.squared = NA_real_
-    )
-    next
-  }
-  
-  # Try fitting the model
-  fit_result <- tryCatch({
-    lm(excess_deaths ~ covid_deaths, data = state_data)
-  }, error = function(e) NULL)
-  
-  if (is.null(fit_result)) {
-    # Model failed, store placeholder
-    all_state_results[[st]] <- data.frame(
-      state_name = st,
-      term = NA_character_,
-      estimate = NA_real_,
-      std.error = NA_real_,
-      statistic = NA_real_,
-      p.value = NA_real_,
-      r.squared = NA_real_
-    )
-    next
-  }
-  
-  # Get coefficient details
-  tidied <- broom::tidy(fit_result)
-  # Get model-level statistics (including r.squared)
-  glanced <- broom::glance(fit_result)
-  
-  # Add state_name and r.squared to each coefficient row
-  tidied$state_name <- st
-  tidied$r.squared <- glanced$r.squared
-  
-  all_state_results[[st]] <- tidied
-}
-
-# Combine all states into one data frame
-final_results <- do.call(rbind, all_state_results)
-
-# `final_results` now contains:
-# state_name, term (Intercept or covid_deaths), estimate, std.error, statistic, p.value, and r.squared
-
-final_results <- final_results %>%
-  filter(!state_name %in% c("New York City", "United States"))
-library(knitr)
-
-final_results <- final_results %>%
-  select(state_name, term, estimate, std.error, statistic, p.value, r.squared)
-
-# Now neatly display the table
-final_results %>%
-  kable(digits = 3, caption = "Model Results by State") 
-
-# Save plot to figs folder as a PNG
-# ggsave(filename = "../output/excess_vs_covid_all_states.png", plot = p_all_states, width = 10, height = 8)
-# write.csv(final_results, "../output/excess_mortality_models.csv", row.names = FALSE)
-
 
 ##############################
 # 8. Interpret Results
@@ -933,3 +852,88 @@ metric.dat %>%
 #     subtitle = "Comparison of CFR across 3 Waves"
 #   )
 ```
+
+##Regression (fitted) table of all states
+```{r warning = FALSE}
+##############################
+# 7. Statistical Tests by State
+##############################
+all_states <- unique(analysis_data$state_name)
+
+# Initialize a list to store the combined results for each state
+all_state_results <- list()
+
+for (st in all_states) {
+  # Filter data for this state
+  state_data <- analysis_data %>%
+    filter(state_name == st)
+  
+  # Check if there's enough data for a model
+  valid_points <- sum(!is.na(state_data$excess_deaths) & !is.na(state_data$covid_deaths))
+  if (valid_points < 2) {
+    # Not enough data to run a model, store placeholder
+    all_state_results[[st]] <- data.frame(
+      state_name = st,
+      term = NA_character_,
+      estimate = NA_real_,
+      std.error = NA_real_,
+      statistic = NA_real_,
+      p.value = NA_real_,
+      r.squared = NA_real_
+    )
+    next
+  }
+  
+  # Try fitting the model
+  fit_result <- tryCatch({
+    lm(excess_deaths ~ covid_deaths, data = state_data)
+  }, error = function(e) NULL)
+  
+  if (is.null(fit_result)) {
+    # Model failed, store placeholder
+    all_state_results[[st]] <- data.frame(
+      state_name = st,
+      term = NA_character_,
+      estimate = NA_real_,
+      std.error = NA_real_,
+      statistic = NA_real_,
+      p.value = NA_real_,
+      r.squared = NA_real_
+    )
+    next
+  }
+  
+  # Get coefficient details
+  tidied <- broom::tidy(fit_result)
+  # Get model-level statistics (including r.squared)
+  glanced <- broom::glance(fit_result)
+  
+  # Add state_name and r.squared to each coefficient row
+  tidied$state_name <- st
+  tidied$r.squared <- glanced$r.squared
+  
+  all_state_results[[st]] <- tidied
+}
+
+# Combine all states into one data frame
+final_results <- do.call(rbind, all_state_results)
+
+# `final_results` now contains:
+# state_name, term (Intercept or covid_deaths), estimate, std.error, statistic, p.value, and r.squared
+
+final_results <- final_results %>%
+  filter(!state_name %in% c("New York City", "United States"))
+library(knitr)
+
+final_results <- final_results %>%
+  select(state_name, term, estimate, std.error, statistic, p.value, r.squared)
+
+# Now neatly display the table
+final_results %>%
+  kable(digits = 3, caption = "Model Results by State") 
+
+# Save plot to figs folder as a PNG
+# ggsave(filename = "../output/excess_vs_covid_all_states.png", plot = p_all_states, width = 10, height = 8)
+# write.csv(final_results, "../output/excess_mortality_models.csv", row.names = FALSE)
+```
+
