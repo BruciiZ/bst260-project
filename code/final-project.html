@@ -109,6 +109,7 @@ window.Quarto = {
   <li><a href="#q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" id="toc-q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19" class="nav-link" data-scroll-target="#q4-estimate-excess-mortality-for-each-week-for-each-state.-check-if-excess-mortality-can-be-explained-by-covid-19">Q4: Estimate excess mortality for each week for each state. Check if excess mortality can be explained by COVID-19</a></li>
   <li><a href="#q5.-for-each-period-compute-the-excess-mortality-rates-by-state.-describe-which-states-did-better-or-worse-during-the-different-periods." id="toc-q5.-for-each-period-compute-the-excess-mortality-rates-by-state.-describe-which-states-did-better-or-worse-during-the-different-periods." class="nav-link" data-scroll-target="#q5.-for-each-period-compute-the-excess-mortality-rates-by-state.-describe-which-states-did-better-or-worse-during-the-different-periods.">Q5. For each period compute the excess mortality rates by state. Describe which states did better or worse during the different periods.</a></li>
   </ul></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
   <li><a href="#supplementary-methods" id="toc-supplementary-methods" class="nav-link" data-scroll-target="#supplementary-methods">Supplementary Methods</a>
   <ul class="collapse">
   <li><a href="#death-rate-of-each-state-3-waves" id="toc-death-rate-of-each-state-3-waves" class="nav-link" data-scroll-target="#death-rate-of-each-state-3-waves">Death rate of each state (3 waves)</a></li>
@@ -314,7 +315,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final-project_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="final-project_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1152"></p>
 </figure>
 </div>
 </div>
@@ -323,22 +324,20 @@ window.Quarto = {
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 17%">
-<col style="width: 24%">
-<col style="width: 13%">
-<col style="width: 21%">
-<col style="width: 8%">
-<col style="width: 8%">
+<col style="width: 18%">
+<col style="width: 22%">
+<col style="width: 14%">
+<col style="width: 28%">
+<col style="width: 9%">
 <col style="width: 6%">
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">state_name</th>
-<th style="text-align: right;">total_excess_deaths</th>
+<th style="text-align: left;">state</th>
+<th style="text-align: right;">excess_mortality</th>
 <th style="text-align: right;">population</th>
-<th style="text-align: right;">excess_death_rate</th>
+<th style="text-align: right;">excess_mortality_rate</th>
 <th style="text-align: left;">Wave</th>
-<th style="text-align: left;">wave</th>
 <th style="text-align: right;">rank</th>
 </tr>
 </thead>
@@ -349,7 +348,6 @@ window.Quarto = {
 <td style="text-align: right;">908473.0</td>
 <td style="text-align: right;">1807.353</td>
 <td style="text-align: left;">Wave 1</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
@@ -357,7 +355,6 @@ window.Quarto = {
 <td style="text-align: right;">51633.512</td>
 <td style="text-align: right;">2943234.4</td>
 <td style="text-align: right;">1754.312</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">2</td>
 </tr>
@@ -367,7 +364,6 @@ window.Quarto = {
 <td style="text-align: right;">4020841.8</td>
 <td style="text-align: right;">1745.026</td>
 <td style="text-align: left;">Wave 1</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">3</td>
 </tr>
 <tr class="even">
@@ -375,7 +371,6 @@ window.Quarto = {
 <td style="text-align: right;">52176.618</td>
 <td style="text-align: right;">3047415.4</td>
 <td style="text-align: right;">1712.160</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">4</td>
 </tr>
@@ -385,7 +380,6 @@ window.Quarto = {
 <td style="text-align: right;">2114723.2</td>
 <td style="text-align: right;">1660.288</td>
 <td style="text-align: left;">Wave 1</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">5</td>
 </tr>
 <tr class="even">
@@ -393,7 +387,6 @@ window.Quarto = {
 <td style="text-align: right;">1447.598</td>
 <td style="text-align: right;">1439376.6</td>
 <td style="text-align: right;">100.571</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">52</td>
 </tr>
@@ -403,7 +396,6 @@ window.Quarto = {
 <td style="text-align: right;">7780112.0</td>
 <td style="text-align: right;">437.376</td>
 <td style="text-align: left;">Wave 1</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">51</td>
 </tr>
 <tr class="even">
@@ -411,7 +403,6 @@ window.Quarto = {
 <td style="text-align: right;">6775.909</td>
 <td style="text-align: right;">1396105.8</td>
 <td style="text-align: right;">485.344</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">50</td>
 </tr>
@@ -421,7 +412,6 @@ window.Quarto = {
 <td style="text-align: right;">1385767.6</td>
 <td style="text-align: right;">490.198</td>
 <td style="text-align: left;">Wave 1</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">49</td>
 </tr>
 <tr class="even">
@@ -429,7 +419,6 @@ window.Quarto = {
 <td style="text-align: right;">37083.374</td>
 <td style="text-align: right;">6994548.2</td>
 <td style="text-align: right;">530.175</td>
-<td style="text-align: left;">Wave 1</td>
 <td style="text-align: left;">Wave 1</td>
 <td style="text-align: right;">48</td>
 </tr>
@@ -439,7 +428,6 @@ window.Quarto = {
 <td style="text-align: right;">1775810.4</td>
 <td style="text-align: right;">1666.597</td>
 <td style="text-align: left;">Wave 2</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
@@ -447,7 +435,6 @@ window.Quarto = {
 <td style="text-align: right;">11892.841</td>
 <td style="text-align: right;">733124.0</td>
 <td style="text-align: right;">1622.214</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">2</td>
 </tr>
@@ -457,7 +444,6 @@ window.Quarto = {
 <td style="text-align: right;">1119461.6</td>
 <td style="text-align: right;">1584.963</td>
 <td style="text-align: left;">Wave 2</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">3</td>
 </tr>
 <tr class="even">
@@ -465,7 +451,6 @@ window.Quarto = {
 <td style="text-align: right;">8220.787</td>
 <td style="text-align: right;">581598.8</td>
 <td style="text-align: right;">1413.481</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">4</td>
 </tr>
@@ -475,7 +460,6 @@ window.Quarto = {
 <td style="text-align: right;">2943234.4</td>
 <td style="text-align: right;">1412.502</td>
 <td style="text-align: left;">Wave 2</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">5</td>
 </tr>
 <tr class="even">
@@ -483,7 +467,6 @@ window.Quarto = {
 <td style="text-align: right;">13175.832</td>
 <td style="text-align: right;">9275981.8</td>
 <td style="text-align: right;">142.042</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">52</td>
 </tr>
@@ -493,7 +476,6 @@ window.Quarto = {
 <td style="text-align: right;">6994548.2</td>
 <td style="text-align: right;">168.373</td>
 <td style="text-align: left;">Wave 2</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">51</td>
 </tr>
 <tr class="even">
@@ -501,7 +483,6 @@ window.Quarto = {
 <td style="text-align: right;">11487.566</td>
 <td style="text-align: right;">6171589.2</td>
 <td style="text-align: right;">186.136</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">50</td>
 </tr>
@@ -511,7 +492,6 @@ window.Quarto = {
 <td style="text-align: right;">3610627.6</td>
 <td style="text-align: right;">230.063</td>
 <td style="text-align: left;">Wave 2</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">49</td>
 </tr>
 <tr class="even">
@@ -519,7 +499,6 @@ window.Quarto = {
 <td style="text-align: right;">50117.643</td>
 <td style="text-align: right;">19713122.4</td>
 <td style="text-align: right;">254.235</td>
-<td style="text-align: left;">Wave 2</td>
 <td style="text-align: left;">Wave 2</td>
 <td style="text-align: right;">48</td>
 </tr>
@@ -529,7 +508,6 @@ window.Quarto = {
 <td style="text-align: right;">1775810.4</td>
 <td style="text-align: right;">1287.720</td>
 <td style="text-align: left;">Wave 3</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
@@ -537,7 +515,6 @@ window.Quarto = {
 <td style="text-align: right;">23042.651</td>
 <td style="text-align: right;">2114723.2</td>
 <td style="text-align: right;">1089.630</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">2</td>
 </tr>
@@ -547,7 +524,6 @@ window.Quarto = {
 <td style="text-align: right;">4020841.8</td>
 <td style="text-align: right;">1036.955</td>
 <td style="text-align: left;">Wave 3</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">3</td>
 </tr>
 <tr class="even">
@@ -555,7 +531,6 @@ window.Quarto = {
 <td style="text-align: right;">45350.159</td>
 <td style="text-align: right;">4516205.0</td>
 <td style="text-align: right;">1004.165</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">4</td>
 </tr>
@@ -565,7 +540,6 @@ window.Quarto = {
 <td style="text-align: right;">7355304.6</td>
 <td style="text-align: right;">964.021</td>
 <td style="text-align: left;">Wave 3</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">5</td>
 </tr>
 <tr class="even">
@@ -573,7 +547,6 @@ window.Quarto = {
 <td style="text-align: right;">4758.577</td>
 <td style="text-align: right;">1439376.6</td>
 <td style="text-align: right;">330.600</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">52</td>
 </tr>
@@ -583,7 +556,6 @@ window.Quarto = {
 <td style="text-align: right;">19713122.4</td>
 <td style="text-align: right;">338.631</td>
 <td style="text-align: left;">Wave 3</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">51</td>
 </tr>
 <tr class="even">
@@ -591,7 +563,6 @@ window.Quarto = {
 <td style="text-align: right;">13825.447</td>
 <td style="text-align: right;">3377227.8</td>
 <td style="text-align: right;">409.373</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">50</td>
 </tr>
@@ -601,7 +572,6 @@ window.Quarto = {
 <td style="text-align: right;">6994548.2</td>
 <td style="text-align: right;">415.032</td>
 <td style="text-align: left;">Wave 3</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">49</td>
 </tr>
 <tr class="even">
@@ -610,26 +580,22 @@ window.Quarto = {
 <td style="text-align: right;">7780112.0</td>
 <td style="text-align: right;">471.001</td>
 <td style="text-align: left;">Wave 3</td>
-<td style="text-align: left;">Wave 3</td>
 <td style="text-align: right;">48</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p>Wave 1 (Oct 1, 2020 – Apr 1, 2021):</p>
-<p>Highest Excess Mortality Rates: South Dakota, Mississippi, Oklahoma, Arkansas, New Mexico</p>
-<p>Lowest Excess Mortality Rates: Hawaii, Washington, New Hampshire, Maine, Massachusetts</p>
-<p>Wave 2 (Jul 1, 2021 – Dec 1, 2021):</p>
-<p>Highest Excess Mortality Rates: West Virginia, Alaska, Montana, Wyoming, Mississippi</p>
-<p>Lowest Excess Mortality Rates: New Jersey, Massachusetts, Maryland, Connecticut, New York</p>
-<p>Wave 3 (Dec 2, 2021 – Apr 1, 2022):</p>
-<p>Highest Excess Mortality Rates: West Virginia, New Mexico, Oklahoma, Kentucky, Arizona</p>
-<p>Lowest Excess Mortality Rates: Hawaii, New York, Utah, Massachusetts, Washington</p>
-<p>Throughout the pandemic, certain states consistently experienced higher excess mortality rates, notably Oklahoma, Mississippi, and West Virginia. These states faced unique challenges, including lower vaccination uptake, limited access to healthcare in rural areas, and delayed or less stringent public health measures. Additionally, a higher prevalence of pre-existing health conditions such as obesity, diabetes, and cardiovascular diseases likely exacerbated the impact of COVID-19. These structural and behavioral factors contributed to their frequent appearance among the states with the highest excess mortality across all waves.</p>
-<p>In contrast, states like Hawaii, Washington, and Massachusetts consistently ranked among those with the lowest excess mortality rates. These states benefitted from strong healthcare systems, better access to medical resources, and early implementation of comprehensive public health strategies. High vaccination rates, coupled with effective public policies and greater compliance with mitigation measures, played a critical role in reducing mortality. These factors highlight how proactive and sustained public health interventions can mitigate the toll of the pandemic, even in the face of widespread challenges.</p>
-<p>The availability and uptake of vaccines emerged as a decisive factor influencing trends in excess mortality over time. States that prioritized vaccine distribution and achieved higher coverage witnessed declining excess mortality rates in later waves. Conversely, states slower to adopt widespread vaccination or preventive measures often struggled to control mortality rates. These findings underscore the vital role of public health policies and vaccination in shaping outcomes during a public health crisis, emphasizing the importance of equitable and efficient health resource allocation to protect vulnerable populations.</p>
+<p>We calculated each state’s excess mortality during three waves by estimating mortality based on the linear model fitted with the 2015-2019 mortality data and subtracting this from observed deaths.</p>
+<p>For the first wave(Oct 1, 2020 – Apr 1, 2021): South Dakota, Mississippi, Oklahoma, Arkansas, and New Mexico had highest excess mortality rates. Hawaii, Washington, New Hampshire, Maine, and Massachusetts had lowest excess mortality rates. South Dakota and Mississippi showed significant excess mortality, because in these areas, they have limited healthcare access. And, Hawaii and Washington showed lower rates which they had early public health interventions and stronger healthcare systems.</p>
+<p>For the second wave(Jul 1, 2021 – Dec 1, 2021): starting from wave 2, the Covid_19 vaccine came out. West Virginia, Alaska, Montana, Wyoming, and Mississippi had the highest rates. New Jersey, Massachusetts, Maryland, Connecticut, and New York had the lowest rates. West Virginia and Mississippi had highest excess mortality rates because they have limited healthcare infrastructure and lower vaccine rate. States like New Jersey and Massachusetts have access to various healthcare resources where higher vaccination rates and effective policy which contributed to their lower rates.</p>
+<p>For the third wave(Dec 2, 2021 – Apr 1, 2022): West Virginia, New Mexico, Oklahoma, Kentucky, and Arizona had the highest excess mortality rates. States with the lowest rates were Hawaii, New York, Utah, Massachusetts, and Washington. West Virginia and Oklahoma continued to have highest excess mortality. On the other hand, Hawaii and Massachusetts consistently performed well due to their effective public health policies.</p>
+<p>Overall, the results above shows that COVID-19 explains excess mortality in the United States during 3 waves and also how vaccination and public health systems are involved in the prevention of excess deaths during the pandemic.</p>
 </section>
+</section>
+<section id="discussion" class="level1">
+<h1>Discussion</h1>
+<p>In this study, we analyzed COVID-19 data across the United States from January 2020 to November 2024, focusing on evaluating state-level performance during the pandemic. Our approach combined statistical modeling, excess mortality estimation, and comparisons across three defined pandemic waves.</p>
 </section>
 <section id="supplementary-methods" class="level1">
 <h1>Supplementary Methods</h1>
